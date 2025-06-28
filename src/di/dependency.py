@@ -2,31 +2,44 @@ import inspect
 from collections.abc import Callable
 from contextlib import asynccontextmanager
 from inspect import isawaitable
-from typing import Any, AsyncContextManager, AsyncGenerator, AsyncIterator
+from typing import Any, AsyncContextManager, AsyncGenerator, AsyncIterator, Generator, Iterator, ContextManager
 
 from src.di.exc import InvalidGeneratorError
 
 
-def _wrap_async_gen(agen: AsyncGenerator):
+def _get_async_cm_from_iterator(gen: AsyncIterator | Iterator):
     @asynccontextmanager
     async def wrapper():
         try:
-            yield await agen.__anext__()
-        except StopAsyncIteration:
-            raise InvalidGeneratorError("Async generator didn't yield any value")
+            yield await gen.__anext__() if hasattr(gen, "__anext__") else next(gen)
+        except (StopAsyncIteration, StopIteration):
+            raise InvalidGeneratorError("Generator didn't yield any value")
 
         try:
-            await agen.__anext__()
-        except StopAsyncIteration:
+            await gen.__anext__() if hasattr(gen, "__anext__") else next(gen)
+        except (StopAsyncIteration, StopIteration):
             pass
         else:
-            raise InvalidGeneratorError("Async generator yielded more than one value")
+            raise InvalidGeneratorError("Generator yielded more than one value")
 
     return wrapper()
 
 
+def _get_async_cm_from_cm(sync_cm: ContextManager[Any]):
+    @asynccontextmanager
+    async def wrapper():
+        with sync_cm as value:
+            yield value
+
+    return wrapper()
+
+
+DependencyFuncType = Callable[
+    ..., Any | AsyncContextManager | ContextManager | AsyncGenerator | Generator | AsyncIterator | Iterator]
+
+
 class Dependency:
-    def __init__(self, func: Callable[..., Any] | AsyncContextManager | AsyncGenerator, *, use_cache=True):
+    def __init__(self, func: DependencyFuncType, *, use_cache=True):
         self.func = func
         self.use_cache = use_cache
 
@@ -34,14 +47,17 @@ class Dependency:
     def signature(self) -> inspect.Signature:
         return inspect.signature(self.func)
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, *args, **kwargs) -> AsyncContextManager[Any]:
         res = self.func(*args, **kwargs)
 
         if isinstance(res, AsyncContextManager):
             return res
 
-        if isinstance(res, (AsyncGenerator, AsyncIterator)):
-            return _wrap_async_gen(res)
+        if isinstance(res, ContextManager):
+            return _get_async_cm_from_cm(res)
+
+        if isinstance(res, (AsyncIterator, Iterator)):
+            return _get_async_cm_from_iterator(res)
 
         @asynccontextmanager
         async def wrapper():
