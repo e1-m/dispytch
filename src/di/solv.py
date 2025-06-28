@@ -6,16 +6,21 @@ from src.di.dependency import Dependency
 from src.di.exc import CyclicDependencyError
 
 
-def get_dependencies(sig: inspect.Signature) -> dict[str, Dependency]:
+@asynccontextmanager
+async def get_solved_dependencies(func: Callable[..., Any]):
+    async with AsyncExitStack() as stack:
+        yield await _solve_dependencies(inspect.signature(func), stack, {}, set())
+
+
+def _get_dependencies(sig: inspect.Signature) -> dict[str, Dependency]:
     deps = {}
     for name, param in sig.parameters.items():
-        annotation = param.annotation
         default = param.default
-
         if isinstance(default, Dependency):
             deps[name] = default
             continue
 
+        annotation = param.annotation
         if get_origin(annotation) is Annotated:
             base_type, *metadata = get_args(annotation)
 
@@ -27,19 +32,13 @@ def get_dependencies(sig: inspect.Signature) -> dict[str, Dependency]:
     return deps
 
 
-@asynccontextmanager
-async def get_solved_dependencies(func: Callable[..., Any]):
-    async with AsyncExitStack() as stack:
-        yield await _solve_dependencies(inspect.signature(func), stack, {}, set())
-
-
 async def _solve_dependencies(sig: inspect.Signature,
                               stack: AsyncExitStack,
                               resolved: dict[int, Any],
                               resolving: set[int]) -> dict[str, Any]:
     results = {}
 
-    if not (dependencies := get_dependencies(sig)):
+    if not (dependencies := _get_dependencies(sig)):
         return results
 
     for key, dep in dependencies.items():
