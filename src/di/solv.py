@@ -31,12 +31,13 @@ def get_dependencies(func: Callable[..., Any]) -> dict[str, Dependency]:
 @asynccontextmanager
 async def get_solved_dependencies(func: Callable[..., Any]):
     async with AsyncExitStack() as stack:
-        yield await _solve_dependencies(func, stack, {})
+        yield await _solve_dependencies(func, stack, {}, set())
 
 
 async def _solve_dependencies(func: Callable[..., Any],
                               stack: AsyncExitStack,
-                              resolved: dict[int, Any]) -> dict[str, Any]:
+                              resolved: dict[int, Any],
+                              resolving: set[int]) -> dict[str, Any]:
     results = {}
 
     if not (dependencies := get_dependencies(func)):
@@ -47,7 +48,12 @@ async def _solve_dependencies(func: Callable[..., Any],
             results[key] = resolved[hash(dep)]
             continue
 
-        sub_deps = await _solve_dependencies(dep.func, stack, resolved)
+        if hash(dep) in resolving:
+            raise RuntimeError(f"Dependency cycle detected: {dep.func.__name__}")
+
+        resolving.add(hash(dep))
+        sub_deps = await _solve_dependencies(dep.func, stack, resolved, resolving)
+        resolving.remove(hash(dep))
 
         ctx = dep(**sub_deps)
 
