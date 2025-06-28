@@ -45,3 +45,6 @@ class Dependency:
             yield value
 
         return wrapper()
+
+    def __hash__(self):
+        return hash(self.func)
