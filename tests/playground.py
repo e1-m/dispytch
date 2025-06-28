@@ -1,18 +1,24 @@
 import asyncio
-from contextlib import asynccontextmanager
+from typing import Annotated
 
 from aiokafka import AIOKafkaConsumer
 
 from src.consumer import KafkaConsumer
 from src.deserializer import JSONDeserializer
+from src.di.dependency import Dependency
 from src.event_listener import EventListener
 
 
-@asynccontextmanager
-async def test_dep():
-    print('test_dep entered')
-    yield 5
-    print('test_dep exited')
+async def test_inner():
+    print('test_inner entered')
+    yield 2
+    print('test_inner exited')
+
+
+async def test_outer(test: Annotated[int, Dependency(test_inner)]):
+    print('test_outer entered')
+    yield 5 + test
+    print('test_outer exited')
 
 
 async def main():
@@ -21,11 +27,11 @@ async def main():
     consumer = KafkaConsumer(kafka_consumer, deserializer=JSONDeserializer())
     event_listener = EventListener(consumer)
 
-    @event_listener.handler(topic='test_events', event='test_event', inject={'test': test_dep})
-    async def test_event_handler(event, test):
+    @event_listener.handler(topic='test_events', event='test_event')
+    async def test_event_handler(event, test: Annotated[int, Dependency(test_outer)]):
         print(event)
         print(test)
-        await asyncio.sleep(5)
+        await asyncio.sleep(2)
 
     await event_listener.listen()
 

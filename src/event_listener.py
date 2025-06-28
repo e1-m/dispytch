@@ -1,10 +1,9 @@
 import asyncio
 import logging
 from collections import defaultdict
-from contextlib import AsyncExitStack
-from typing import Callable, Any, AsyncContextManager
 
 from src.consumer.consumer import Consumer
+from src.di.solv import get_solved_dependencies
 from src.schemas.event import Event
 
 
@@ -12,7 +11,6 @@ class EventListener:
     def __init__(self, consumer: Consumer):
         self.consumer = consumer
         self.callbacks = defaultdict(dict)
-        self.dependencies: dict[str, dict[str, Callable[..., AsyncContextManager[Any]]]] = {}
 
     async def listen(self):
         async for event in self.consumer.listen():
@@ -27,17 +25,13 @@ class EventListener:
             logging.error(f"Exception in {event.type} event handler: \n{e}")
 
     async def _trigger_callback_with_injected_dependencies(self, event: Event):
-        async with AsyncExitStack() as stack:
-            kwargs = {
-                key: await stack.enter_async_context(dep()) for key, dep in
-                self.dependencies[event.topic + event.type].items()
-            }
+        callback = self.callbacks[event.topic][event.type]
 
-            await self.callbacks[event.topic][event.type](event.body, **kwargs)
+        async with get_solved_dependencies(callback) as deps:
+            await callback(event.body, **deps)
 
-    def handler(self, *, topic, event, inject: dict[str, Callable[..., AsyncContextManager[Any]]] = None):
+    def handler(self, *, topic, event):
         def decorator(callback):
             self.callbacks[topic][event] = callback
-            self.dependencies[topic + event] = inject or {}
 
         return decorator
