@@ -3,6 +3,7 @@ from contextlib import AsyncExitStack, asynccontextmanager
 from typing import Callable, Any, get_origin, Annotated, get_args
 
 from src.di.dependency import Dependency
+from src.di.exc import CyclicDependencyError
 
 
 def get_dependencies(sig: inspect.Signature) -> dict[str, Dependency]:
@@ -47,7 +48,7 @@ async def _solve_dependencies(sig: inspect.Signature,
             continue
 
         if hash(dep) in resolving:
-            raise RuntimeError(f"Dependency cycle detected: {dep.func.__name__}")
+            raise CyclicDependencyError(f"Dependency cycle detected: {dep}")
 
         resolving.add(hash(dep))
         sub_deps = await _solve_dependencies(dep.signature, stack, resolved, resolving)

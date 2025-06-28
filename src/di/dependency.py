@@ -4,6 +4,8 @@ from contextlib import asynccontextmanager
 from inspect import isawaitable
 from typing import Any, AsyncContextManager, AsyncGenerator, AsyncIterator
 
+from src.di.exc import InvalidGeneratorError
+
 
 def _wrap_async_gen(agen: AsyncGenerator):
     @asynccontextmanager
@@ -11,14 +13,14 @@ def _wrap_async_gen(agen: AsyncGenerator):
         try:
             yield await agen.__anext__()
         except StopAsyncIteration:
-            raise RuntimeError("Async generator didn't yield any value")
+            raise InvalidGeneratorError("Async generator didn't yield any value")
 
         try:
             await agen.__anext__()
         except StopAsyncIteration:
             pass
         else:
-            raise RuntimeError("Async generator yielded more than one value")
+            raise InvalidGeneratorError("Async generator yielded more than one value")
 
     return wrapper()
 
