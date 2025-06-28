@@ -1,3 +1,4 @@
+import inspect
 from collections.abc import Callable
 from contextlib import asynccontextmanager
 from inspect import isawaitable
@@ -26,6 +27,10 @@ class Dependency:
     def __init__(self, func: Callable[..., Any] | AsyncContextManager | AsyncGenerator, *, use_cache=True):
         self.func = func
         self.use_cache = use_cache
+
+    @property
+    def signature(self) -> inspect.Signature:
+        return inspect.signature(self.func)
 
     def __call__(self, *args, **kwargs):
         res = self.func(*args, **kwargs)

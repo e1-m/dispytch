@@ -5,9 +5,7 @@ from typing import Callable, Any, get_origin, Annotated, get_args
 from src.di.dependency import Dependency
 
 
-def get_dependencies(func: Callable[..., Any]) -> dict[str, Dependency]:
-    sig = inspect.signature(func)
-
+def get_dependencies(sig: inspect.Signature) -> dict[str, Dependency]:
     deps = {}
     for name, param in sig.parameters.items():
         annotation = param.annotation
@@ -31,16 +29,16 @@ def get_dependencies(func: Callable[..., Any]) -> dict[str, Dependency]:
 @asynccontextmanager
 async def get_solved_dependencies(func: Callable[..., Any]):
     async with AsyncExitStack() as stack:
-        yield await _solve_dependencies(func, stack, {}, set())
+        yield await _solve_dependencies(inspect.signature(func), stack, {}, set())
 
 
-async def _solve_dependencies(func: Callable[..., Any],
+async def _solve_dependencies(sig: inspect.Signature,
                               stack: AsyncExitStack,
                               resolved: dict[int, Any],
                               resolving: set[int]) -> dict[str, Any]:
     results = {}
 
-    if not (dependencies := get_dependencies(func)):
+    if not (dependencies := get_dependencies(sig)):
         return results
 
     for key, dep in dependencies.items():
@@ -52,7 +50,7 @@ async def _solve_dependencies(func: Callable[..., Any],
             raise RuntimeError(f"Dependency cycle detected: {dep.func.__name__}")
 
         resolving.add(hash(dep))
-        sub_deps = await _solve_dependencies(dep.func, stack, resolved, resolving)
+        sub_deps = await _solve_dependencies(dep.signature, stack, resolved, resolving)
         resolving.remove(hash(dep))
 
         ctx = dep(**sub_deps)
