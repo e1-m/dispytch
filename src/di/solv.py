@@ -84,9 +84,7 @@ async def _solve_dependencies(func: Callable[..., Any],
         sub_deps = await _solve_dependencies(dep.func, stack, resolved, resolving, ctx=ctx)
         resolving.remove(hash(dep))
 
-        ctx = dep(**sub_deps)
-
-        value = await stack.enter_async_context(ctx)
+        value = await stack.enter_async_context(dep(**sub_deps))
 
         if dep.use_cache:
             resolved[hash(dep)] = value
