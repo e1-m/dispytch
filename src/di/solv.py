@@ -1,6 +1,6 @@
 import inspect
 from contextlib import AsyncExitStack, asynccontextmanager
-from typing import Callable, Any, get_origin, Annotated, get_args, Type, get_type_hints
+from typing import Callable, Any, get_origin, Annotated, get_args, get_type_hints
 
 from pydantic import BaseModel
 
@@ -15,7 +15,7 @@ async def get_solved_dependencies(func: Callable[..., Any], ctx: EventHandlerCon
         yield await _solve_dependencies(func, stack, {}, set(), ctx=ctx if ctx else EventHandlerContext(event={}))
 
 
-def _get_dependencies(func: Callable[..., Any]) -> dict[str, Dependency]:
+def _get_user_defined_dependencies(func: Callable[..., Any]) -> dict[str, Dependency]:
     deps = {}
 
     sig = inspect.signature(func)
@@ -43,13 +43,23 @@ def _get_event_requests_as_dependencies(func: Callable[..., Any], ctx: EventHand
 
         if get_origin(annotation) is Event:
             event_body_model, *_ = get_args(annotation)
-            if issubclass(event_body_model, BaseModel):
-                event_data = ctx.event.copy()
-                event_data.pop('body', None)
+            if not issubclass(event_body_model, BaseModel):
+                raise TypeError(f"Event body model must be a subclass of BaseModel, got {event_body_model}")
 
-                event = Event(body=event_body_model(**ctx.event['body']), **event_data)
-                event_requests[name] = Dependency(lambda e=event: e)
+            event_data = ctx.event.copy()
+            event_data.pop('body', None)
+
+            event = Event(body=event_body_model(**ctx.event['body']), **event_data)
+            event_requests[name] = Dependency(lambda e=event: e)
+
     return event_requests
+
+
+def _get_dependencies(func: Callable[..., Any], ctx: EventHandlerContext) -> dict[str, Dependency]:
+    dependencies = _get_user_defined_dependencies(func)
+    dependencies.update(_get_event_requests_as_dependencies(func, ctx))
+
+    return dependencies
 
 
 async def _solve_dependencies(func: Callable[..., Any],
@@ -59,10 +69,7 @@ async def _solve_dependencies(func: Callable[..., Any],
                               ctx: EventHandlerContext) -> dict[str, Any]:
     results = {}
 
-    dependencies = _get_dependencies(func)
-    dependencies.update(_get_event_requests_as_dependencies(func, ctx))
-
-    if not dependencies:
+    if not (dependencies := _get_dependencies(func, ctx)):
         return results
 
     for key, dep in dependencies.items():

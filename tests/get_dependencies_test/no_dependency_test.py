@@ -1,4 +1,4 @@
-from src.di.solv import _get_dependencies as get_dependencies  # noqa
+from src.di.solv import _get_user_defined_dependencies as get_dependencies  # noqa
 
 
 def test_empty_signature():
