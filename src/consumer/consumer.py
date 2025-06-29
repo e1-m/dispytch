@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import AsyncIterator
 
-from src.schemas.event import Event
+from src.listener.models import Event
 
 
 class Consumer(ABC):

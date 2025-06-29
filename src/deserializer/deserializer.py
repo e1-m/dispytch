@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from src.schemas.payload import Payload
+from src.consumer.models import Payload
 
 
 class Deserializer(ABC):

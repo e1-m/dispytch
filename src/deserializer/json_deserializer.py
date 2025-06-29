@@ -2,7 +2,7 @@ import json
 
 from src.deserializer.deserializer import Deserializer
 from src.deserializer.exc import FieldMissingError
-from src.schemas.payload import Payload
+from src.consumer.models import Payload
 
 
 class JSONDeserializer(Deserializer):

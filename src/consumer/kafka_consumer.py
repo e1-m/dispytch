@@ -3,8 +3,8 @@ from typing import AsyncIterator
 from aiokafka import AIOKafkaConsumer
 
 from src.consumer import Consumer
+from src.listener.models import Event
 from src.deserializer.deserializer import Deserializer
-from src.schemas.event import Event
 
 
 class KafkaConsumer(Consumer):
