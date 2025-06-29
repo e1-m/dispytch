@@ -3,6 +3,7 @@ import logging
 from collections import defaultdict
 
 from src.consumer.consumer import Consumer
+from src.di.models import EventHandlerContext
 from src.di.solv import get_solved_dependencies
 from src.listener.models import Handler, Event as ConsumerEvent
 
@@ -25,10 +26,10 @@ class EventListener:
             logging.error(f"Exception in {event.type} event handler: \n{e}")
 
     async def _trigger_callback_with_injected_dependencies(self, event: ConsumerEvent):
-        callback = self.handlers[event.topic][event.type]
+        handler = self.handlers[event.topic][event.type]
 
-        async with get_solved_dependencies(callback) as deps:
-            await callback(event.body, **deps)
+        async with get_solved_dependencies(handler.func, EventHandlerContext(event=event.model_dump())) as deps:
+            await handler(event.body, **deps)
 
     def handler(self, *, topic, event):
         def decorator(callback):

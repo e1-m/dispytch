@@ -1,4 +1,3 @@
-import inspect
 from typing import Annotated
 
 from src.di.solv import _get_dependencies as get_dependencies  # noqa
@@ -18,8 +17,7 @@ def test_mixed_parameters():
     ):
         pass
 
-    sig = inspect.signature(mixed_func)
-    result = get_dependencies(sig)
+    result = get_dependencies(mixed_func)
 
     assert len(result) == 2
     assert result["annotated_param"] == dep1
@@ -41,8 +39,7 @@ def test_complex_signature():
     ):
         pass
 
-    sig = inspect.signature(complex_func)
-    result = get_dependencies(sig)
+    result = get_dependencies(complex_func)
 
     assert len(result) == 2
     assert result["dep_param"] == dep1

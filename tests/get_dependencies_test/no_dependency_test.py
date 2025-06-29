@@ -1,5 +1,3 @@
-import inspect
-
 from src.di.solv import _get_dependencies as get_dependencies  # noqa
 
 
@@ -9,8 +7,7 @@ def test_empty_signature():
     def empty_func():
         pass
 
-    sig = inspect.signature(empty_func)
-    result = get_dependencies(sig)
+    result = get_dependencies(empty_func)
 
     assert result == {}
 
@@ -21,7 +18,6 @@ def test_no_dependencies():
     def regular_func(a: int, b: str, c=None, d=1):
         pass
 
-    sig = inspect.signature(regular_func)
-    result = get_dependencies(sig)
+    result = get_dependencies(regular_func)
 
     assert result == {}

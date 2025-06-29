@@ -1,4 +1,3 @@
-import inspect
 from typing import Annotated
 
 from src.di.solv import _get_dependencies as get_dependencies  # noqa
@@ -12,8 +11,7 @@ def test_dependency_as_default_value():
     def func_with_dep_default(service=dep):
         pass
 
-    sig = inspect.signature(func_with_dep_default)
-    result = get_dependencies(sig)
+    result = get_dependencies(func_with_dep_default)
 
     assert len(result) == 1
     assert "service" in result
@@ -28,8 +26,7 @@ def test_multiple_dependencies_as_defaults():
     def func_with_multiple_deps(service1=dep1, service2=dep2):
         pass
 
-    sig = inspect.signature(func_with_multiple_deps)
-    result = get_dependencies(sig)
+    result = get_dependencies(func_with_multiple_deps)
 
     assert len(result) == 2
     assert result["service1"] == dep1
@@ -44,8 +41,7 @@ def test_dependency_default_takes_precedence_over_annotation():
     def func_with_both(param: Annotated[str, annotated_dep] = default_dep):
         pass
 
-    sig = inspect.signature(func_with_both)
-    result = get_dependencies(sig)
+    result = get_dependencies(func_with_both)
 
     # Should use the default dependency, not the annotated one
     assert len(result) == 1

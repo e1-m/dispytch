@@ -2,22 +2,28 @@ import asyncio
 from typing import Annotated
 
 from aiokafka import AIOKafkaConsumer
+from pydantic import BaseModel
 
 from src.consumer import KafkaConsumer
 from src.deserializer import JSONDeserializer
 from src.di.dependency import Dependency
-from src.event_listener import EventListener
+from src.di.models import Event
+from src.listener.event_listener import EventListener
 
 
-async def test_inner():
+class TestEventBody(BaseModel):
+    test: int
+
+
+async def test_inner(event: Event[TestEventBody]):
     print('test_inner entered')
-    yield 2
+    yield event.body.test
     print('test_inner exited')
 
 
-async def test_outer(test: Annotated[int, Dependency(test_inner)]):
+async def test_outer(test: Annotated[int, Dependency(test_inner)], test2: Annotated[int, Dependency(test_inner)]):
     print('test_outer entered')
-    yield 5 + test
+    yield 5 + test + test2
     print('test_outer exited')
 
 

@@ -1,4 +1,3 @@
-import inspect
 from typing import Annotated
 
 from src.di.solv import _get_dependencies as get_dependencies  # noqa
@@ -12,8 +11,7 @@ def test_annotated_dependency():
     def func_with_annotated(service: Annotated[str, dep]):
         pass
 
-    sig = inspect.signature(func_with_annotated)
-    result = get_dependencies(sig)
+    result = get_dependencies(func_with_annotated)
 
     assert len(result) == 1
     assert "service" in result
@@ -28,8 +26,7 @@ def test_annotated_multiple_metadata_with_dependency():
     def func_with_meta(service: Annotated[int, other_meta, dep, "more_meta"]):
         pass
 
-    sig = inspect.signature(func_with_meta)
-    result = get_dependencies(sig)
+    result = get_dependencies(func_with_meta)
 
     assert len(result) == 1
     assert result["service"] == dep
@@ -41,8 +38,7 @@ def test_annotated_no_dependency_in_metadata():
     def func_with_meta_no_dep(service: Annotated[str, "metadata", 42]):
         pass
 
-    sig = inspect.signature(func_with_meta_no_dep)
-    result = get_dependencies(sig)
+    result = get_dependencies(func_with_meta_no_dep)
 
     assert result == {}
 
@@ -57,8 +53,7 @@ def test_annotated_first_dependency_wins():
     ):
         pass
 
-    sig = inspect.signature(func_with_multiple_deps_in_annotation)
-    result = get_dependencies(sig)
+    result = get_dependencies(func_with_multiple_deps_in_annotation)
 
     assert len(result) == 1
     assert result["param"] == dep1  # First dependency should win
