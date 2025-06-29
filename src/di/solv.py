@@ -44,12 +44,12 @@ def _get_event_requests_as_dependencies(func: Callable[..., Any], ctx: EventHand
         if get_origin(annotation) is Event:
             event_body_model, *_ = get_args(annotation)
             if not issubclass(event_body_model, BaseModel):
-                raise TypeError(f"Event body model must be a subclass of BaseModel, got {event_body_model}")
+                raise TypeError(f"Event body model must be a subclass of pydantic.BaseModel, got {event_body_model}")
 
-            event_data = ctx.event.copy()
-            event_data.pop('body', None)
+            metadata = ctx.event.copy()
+            body = metadata.pop('body')
 
-            event = Event(body=event_body_model(**ctx.event['body']), **event_data)
+            event = Event(body=event_body_model(**body), **metadata)
             event_requests[name] = Dependency(lambda e=event: e)
 
     return event_requests
