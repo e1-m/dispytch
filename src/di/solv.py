@@ -8,7 +8,7 @@ from src.di.exc import CyclicDependencyError
 
 @asynccontextmanager
 async def get_solved_dependencies(func: Callable[..., Any]):
-    async with AsyncExitStack() as stack:
+    async with AsyncExitStack() as stack:  # noqa
         yield await _solve_dependencies(inspect.signature(func), stack, {}, set())
 
 
@@ -57,7 +57,9 @@ async def _solve_dependencies(sig: inspect.Signature,
 
         value = await stack.enter_async_context(ctx)
 
-        resolved[hash(dep)] = value
+        if dep.use_cache:
+            resolved[hash(dep)] = value
+
         results[key] = value
 
     return results
