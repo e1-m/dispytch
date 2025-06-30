@@ -12,8 +12,8 @@ from src.di.models import EventHandlerContext, Event
 
 @asynccontextmanager
 async def get_solved_dependencies(func: Callable[..., Any], ctx: EventHandlerContext = None):
-    tree = _build_dependency_tree(func, ctx)
-    async with tree.resolve() as deps:
+    tree = _build_dependency_tree(func)
+    async with tree.resolve(ctx) as deps:
         yield deps
 
 
@@ -39,7 +39,7 @@ def _get_user_defined_dependencies(func: Callable[..., Any]) -> dict[str, Depend
     return deps
 
 
-def _get_event_requests_as_dependencies(func: Callable[..., Any], ctx: EventHandlerContext) -> dict[str, Dependency]:
+def _get_event_requests_as_dependencies(func: Callable[..., Any]) -> dict[str, Dependency]:
     deps = {}
 
     hints = get_type_hints(func)
@@ -57,18 +57,20 @@ def _get_event_requests_as_dependencies(func: Callable[..., Any], ctx: EventHand
         else:
             continue
 
-        metadata = ctx.event.copy()
-        body = metadata.pop('body')
+        def context_to_event(ctx: EventHandlerContext, model=event_body_model) -> Event:
+            metadata = ctx.event.copy()
+            body = metadata.pop('body')
 
-        event = Event(body=event_body_model(**body), **metadata)
-        deps[name] = Dependency(lambda e=event: e)
+            return Event(body=model(**body), **metadata)
+
+        deps[name] = Dependency(context_to_event)
 
     return deps
 
 
-def _get_dependencies(func: Callable[..., Any], ctx: EventHandlerContext) -> dict[str, Dependency]:
+def _get_dependencies(func: Callable[..., Any]) -> dict[str, Dependency]:
     dependencies = _get_user_defined_dependencies(func)
-    dependencies.update(_get_event_requests_as_dependencies(func, ctx))
+    dependencies.update(_get_event_requests_as_dependencies(func))
 
     return dependencies
 
@@ -81,8 +83,8 @@ class DependencyNode:
         self.children = children
         self._task = None
 
-    async def resolve(self, stack: AsyncExitStack):
-        tasks = [asyncio.create_task(child.dependency.resolve(stack)) for child in self.children]
+    async def resolve(self, stack: AsyncExitStack, ctx: EventHandlerContext):
+        tasks = [asyncio.create_task(child.dependency.resolve(stack, ctx)) for child in self.children]
 
         resolved = await asyncio.gather(*tasks)
 
@@ -93,7 +95,7 @@ class DependencyNode:
         if self._task is None:
             self._task = asyncio.create_task(
                 stack.enter_async_context(
-                    self.dependency(**kwargs)
+                    self.dependency(**kwargs, ctx=ctx)
                 ))
 
         return await self._task
@@ -111,26 +113,25 @@ class DependencyTree:
         self.stack = stack
 
     @asynccontextmanager
-    async def resolve(self):
+    async def resolve(self, ctx: EventHandlerContext):
         async with self.stack:
-            tasks = [asyncio.create_task(node.dependency.resolve(self.stack)) for node in self.root_nodes]
+            tasks = [asyncio.create_task(node.dependency.resolve(self.stack, ctx)) for node in self.root_nodes]
 
             resolved = await asyncio.gather(*tasks)
 
             yield {node.param_name: dep for node, dep in zip(self.root_nodes, resolved)}
 
 
-def _build_dependency_tree(func: Callable[..., Any], ctx: EventHandlerContext) -> DependencyTree:
-    return DependencyTree(_build_dependency_nodes(func, {}, set(), ctx=ctx), AsyncExitStack())  # noqa
+def _build_dependency_tree(func: Callable[..., Any]) -> DependencyTree:
+    return DependencyTree(_build_dependency_nodes(func, {}, set()), AsyncExitStack())  # noqa
 
 
 def _build_dependency_nodes(func: Callable[..., Any],
                             resolved: dict[int, DependencyNode],
-                            resolving: set[int], *,
-                            ctx: EventHandlerContext) -> list[ChildNode]:
+                            resolving: set[int]) -> list[ChildNode]:
     children = []
 
-    if not (dependencies := _get_dependencies(func, ctx)):
+    if not (dependencies := _get_dependencies(func)):
         return children
 
     for param_name, dependency in dependencies.items():
@@ -142,8 +143,7 @@ def _build_dependency_nodes(func: Callable[..., Any],
             raise CyclicDependencyError(f"Dependency cycle detected: {dependency}")
 
         resolving.add(hash(dependency))
-        current_node = DependencyNode(dependency,
-                                      _build_dependency_nodes(dependency.func, resolved, resolving, ctx=ctx))
+        current_node = DependencyNode(dependency, _build_dependency_nodes(dependency.func, resolved, resolving))
         resolving.remove(hash(dependency))
 
         if dependency.use_cache:
@@ -161,7 +161,7 @@ async def _solve_dependencies(func: Callable[..., Any],
                               ctx: EventHandlerContext) -> dict[str, Any]:
     results = {}
 
-    if not (dependencies := _get_dependencies(func, ctx)):
+    if not (dependencies := _get_dependencies(func)):
         return results
 
     for param_name, dependency in dependencies.items():
@@ -176,7 +176,7 @@ async def _solve_dependencies(func: Callable[..., Any],
         sub_deps = await _solve_dependencies(dependency.func, stack, resolved, resolving, ctx=ctx)
         resolving.remove(hash(dependency))
 
-        value = await stack.enter_async_context(dependency(**sub_deps))
+        value = await stack.enter_async_context(dependency(**sub_deps, ctx=ctx))
 
         if dependency.use_cache:
             resolved[hash(dependency)] = value

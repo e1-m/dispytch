@@ -1,4 +1,3 @@
-from src.di.models import EventHandlerContext
 from src.di.solv import _get_event_requests_as_dependencies as get_event_dependencies  # noqa
 
 
@@ -8,7 +7,7 @@ def test_empty_signature():
     def empty_func():
         pass
 
-    result = get_event_dependencies(empty_func, EventHandlerContext(event={}))
+    result = get_event_dependencies(empty_func)
 
     assert result == {}
 
@@ -19,6 +18,6 @@ def test_no_dependencies():
     def regular_func(a: int, b: str, c=None, d=1):
         pass
 
-    result = get_event_dependencies(regular_func, EventHandlerContext(event={}))
+    result = get_event_dependencies(regular_func)
 
     assert result == {}

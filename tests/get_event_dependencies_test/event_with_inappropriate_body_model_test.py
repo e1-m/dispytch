@@ -1,6 +1,6 @@
 import pytest
 
-from src.di.models import Event, EventHandlerContext
+from src.di.models import Event
 from src.di.solv import _get_event_requests_as_dependencies as get_event_dependencies  # noqa
 
 
@@ -17,4 +17,4 @@ def test_non_basemodel_event_body():
         pass
 
     with pytest.raises(TypeError):
-        get_event_dependencies(func_with_non_basemodel_event, EventHandlerContext(event={}))
+        get_event_dependencies(func_with_non_basemodel_event)

@@ -48,7 +48,11 @@ class Dependency:
         return inspect.signature(self.func)
 
     def __call__(self, *args, **kwargs) -> AsyncContextManager[Any]:
-        res = self.func(*args, **kwargs)
+        sig = inspect.signature(self.func)
+        accepted_params = sig.parameters.keys()
+        filtered_kwargs = {k: v for k, v in kwargs.items() if k in accepted_params}
+
+        res = self.func(*args, **filtered_kwargs)
 
         if isinstance(res, AsyncContextManager):
             return res
