@@ -41,7 +41,11 @@ def _get_user_defined_dependencies(func: Callable[..., Any]) -> dict[str, Depend
 
 def _get_event_requests_as_dependencies(func: Callable[..., Any], ctx: EventHandlerContext) -> dict[str, Dependency]:
     deps = {}
-    for name, annotation in get_type_hints(func).items():
+
+    hints = get_type_hints(func)
+    hints.pop('return', None)
+
+    for name, annotation in hints.items():
         if get_origin(annotation) is Event:
             event_body_model, *_ = get_args(annotation)
             if not issubclass(event_body_model, BaseModel):
