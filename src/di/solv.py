@@ -77,23 +77,23 @@ async def _solve_dependencies(func: Callable[..., Any],
     if not (dependencies := _get_dependencies(func, ctx)):
         return results
 
-    for key, dep in dependencies.items():
-        if dep.use_cache and hash(dep) in resolved:
-            results[key] = resolved[hash(dep)]
+    for param_name, dependency in dependencies.items():
+        if dependency.use_cache and hash(dependency) in resolved:
+            results[param_name] = resolved[hash(dependency)]
             continue
 
-        if hash(dep) in resolving:
-            raise CyclicDependencyError(f"Dependency cycle detected: {dep}")
+        if hash(dependency) in resolving:
+            raise CyclicDependencyError(f"Dependency cycle detected: {dependency}")
 
-        resolving.add(hash(dep))
-        sub_deps = await _solve_dependencies(dep.func, stack, resolved, resolving, ctx=ctx)
-        resolving.remove(hash(dep))
+        resolving.add(hash(dependency))
+        sub_deps = await _solve_dependencies(dependency.func, stack, resolved, resolving, ctx=ctx)
+        resolving.remove(hash(dependency))
 
-        value = await stack.enter_async_context(dep(**sub_deps))
+        value = await stack.enter_async_context(dependency(**sub_deps))
 
-        if dep.use_cache:
-            resolved[hash(dep)] = value
+        if dependency.use_cache:
+            resolved[hash(dependency)] = value
 
-        results[key] = value
+        results[param_name] = value
 
     return results
