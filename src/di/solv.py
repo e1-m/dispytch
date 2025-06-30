@@ -1,3 +1,4 @@
+import asyncio
 import inspect
 from contextlib import AsyncExitStack, asynccontextmanager
 from typing import Callable, Any, get_origin, Annotated, get_args, get_type_hints
@@ -66,6 +67,52 @@ def _get_dependencies(func: Callable[..., Any], ctx: EventHandlerContext) -> dic
 
     return dependencies
 
+
+class DependencyNode:
+    def __init__(self,
+                 dependency: Dependency,
+                 children: list['ChildNode']):
+        self.dependency = dependency
+        self.children = children
+        self._task = None
+
+    async def resolve(self, stack: AsyncExitStack):
+        tasks = [asyncio.create_task(child.dependency.resolve(stack)) for child in self.children]
+
+        resolved = await asyncio.gather(*tasks)
+
+        kwargs = {child.param_name: res
+                  for child, res
+                  in zip(self.children, resolved)}
+
+        if self._task is None:
+            self._task = asyncio.create_task(
+                stack.enter_async_context(
+                    self.dependency(**kwargs)
+                ))
+
+        return await self._task
+
+
+class ChildNode:
+    def __init__(self, param_name: str, dependency: DependencyNode):
+        self.param_name = param_name
+        self.dependency = dependency
+
+
+class DependencyTree:
+    def __init__(self, root_nodes: list[ChildNode], stack: AsyncExitStack):
+        self.root_nodes = root_nodes
+        self.stack = stack
+
+    @asynccontextmanager
+    async def resolve(self):
+        async with self.stack:
+            tasks = [asyncio.create_task(node.dependency.resolve(self.stack)) for node in self.root_nodes]
+
+            resolved = await asyncio.gather(*tasks)
+
+            yield {node.param_name: dep for node, dep in zip(self.root_nodes, resolved)}
 
 async def _solve_dependencies(func: Callable[..., Any],
                               stack: AsyncExitStack,
