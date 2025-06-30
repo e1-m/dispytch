@@ -43,10 +43,6 @@ class Dependency:
         self.func = func
         self.use_cache = use_cache
 
-    @property
-    def signature(self) -> inspect.Signature:
-        return inspect.signature(self.func)
-
     def __call__(self, *args, **kwargs) -> AsyncContextManager[Any]:
         sig = inspect.signature(self.func)
         accepted_params = sig.parameters.keys()
