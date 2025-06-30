@@ -169,6 +169,20 @@ async def test_additional_event_data_ignored(event_dict_with_additional_data):
             assert event.body.timestamp == '2023-01-01T00:00:00Z'
 
 
+@pytest.mark.asyncio
+async def test_getting_all_event_data_as_dict(event_dict_with_additional_data):
+    def func_with_event(event_param: Event):
+        pass
+
+    result = get_event_dependencies(func_with_event, EventHandlerContext(event=event_dict_with_additional_data))
+
+    async with result["event_param"]() as event:
+        assert isinstance(event, Event)
+        assert isinstance(event.body, dict)
+
+        assert event.body == event_dict_with_additional_data['body']
+
+
 def test_mixed_event_and_regular_params(event_dict):
     def func_with_mixed_params(
             event_param: Event[EventBody],
