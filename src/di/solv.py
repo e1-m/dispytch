@@ -38,21 +38,26 @@ def _get_user_defined_dependencies(func: Callable[..., Any]) -> dict[str, Depend
 
 
 def _get_event_requests_as_dependencies(func: Callable[..., Any], ctx: EventHandlerContext) -> dict[str, Dependency]:
-    event_requests = {}
+    deps = {}
     for name, annotation in get_type_hints(func).items():
-
         if get_origin(annotation) is Event:
             event_body_model, *_ = get_args(annotation)
             if not issubclass(event_body_model, BaseModel):
                 raise TypeError(f"Event body model must be a subclass of pydantic.BaseModel, got {event_body_model}")
 
-            metadata = ctx.event.copy()
-            body = metadata.pop('body')
+        elif annotation is Event:
+            event_body_model = dict
 
-            event = Event(body=event_body_model(**body), **metadata)
-            event_requests[name] = Dependency(lambda e=event: e)
+        else:
+            continue
 
-    return event_requests
+        metadata = ctx.event.copy()
+        body = metadata.pop('body')
+
+        event = Event(body=event_body_model(**body), **metadata)
+        deps[name] = Dependency(lambda e=event: e)
+
+    return deps
 
 
 def _get_dependencies(func: Callable[..., Any], ctx: EventHandlerContext) -> dict[str, Dependency]:
