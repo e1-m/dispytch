@@ -99,12 +99,12 @@ async def test_multiple_event_dependencies(event_dict):
     assert "e1" in result
     assert "e2" in result
 
-    async with result["e1"](EventHandlerContext(event=event_dict)) as event1:
+    async with result["e1"](ctx=EventHandlerContext(event=event_dict)) as event1:
         assert isinstance(event1, Event)
         assert isinstance(event1.body, EventBody)
         assert_dict_was_interpreted(event1, event_dict)
 
-    async with result["e2"](EventHandlerContext(event=event_dict)) as event2:
+    async with result["e2"](ctx=EventHandlerContext(event=event_dict)) as event2:
         assert isinstance(event2, Event)
         assert isinstance(event2.body, EventBodyWithOptional)
         assert_dict_was_interpreted(event2, event_dict)
@@ -125,7 +125,7 @@ async def test_multiple_event_dependencies_with_different_fields_of_event_needed
     assert "e1" in result
     assert "e2" in result
 
-    async with result["e1"](EventHandlerContext(event=event_dict)) as event1:
+    async with result["e1"](ctx=EventHandlerContext(event=event_dict)) as event1:
         assert isinstance(event1, Event)
         assert isinstance(event1.body, OnlyNameNeededModel)
         assert event1.body.name == event_dict['body']['name']
@@ -133,7 +133,7 @@ async def test_multiple_event_dependencies_with_different_fields_of_event_needed
         with pytest.raises(AttributeError):
             assert event1.body.value
 
-    async with result["e2"](EventHandlerContext(event=event_dict)) as event2:
+    async with result["e2"](ctx=EventHandlerContext(event=event_dict)) as event2:
         assert isinstance(event2, Event)
         assert isinstance(event2.body, OnlyValueNeededModel)
         assert event2.body.value == event_dict['body']['value']
@@ -150,7 +150,7 @@ async def test_empty_event_body(event_dict_with_empty_body):
     result = get_event_dependencies(func_with_event)
 
     with pytest.raises(ValidationError):
-        async with result["event_param"](EventHandlerContext(event=event_dict_with_empty_body)) as event:
+        async with result["event_param"](ctx=EventHandlerContext(event=event_dict_with_empty_body)) as event:
             pass
 
 
@@ -161,7 +161,7 @@ async def test_additional_event_data_ignored(event_dict_with_additional_data):
 
     result = get_event_dependencies(func_with_event)
 
-    async with result["event_param"](EventHandlerContext(event=event_dict_with_additional_data)) as event:
+    async with result["event_param"](ctx=EventHandlerContext(event=event_dict_with_additional_data)) as event:
         assert isinstance(event, Event)
         assert isinstance(event.body, EventBody)
         assert_dict_was_interpreted(event, event_dict_with_additional_data)
@@ -180,7 +180,7 @@ async def test_getting_all_event_data_as_dict(event_dict_with_additional_data):
 
     result = get_event_dependencies(func_with_event)
 
-    async with result["event_param"](EventHandlerContext(event=event_dict_with_additional_data)) as event:
+    async with result["event_param"](ctx=EventHandlerContext(event=event_dict_with_additional_data)) as event:
         assert isinstance(event, Event)
         assert isinstance(event.body, dict)
 

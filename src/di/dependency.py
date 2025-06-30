@@ -5,6 +5,7 @@ from inspect import isawaitable
 from typing import Any, AsyncContextManager, AsyncGenerator, AsyncIterator, Generator, Iterator, ContextManager
 
 from src.di.exc import InvalidGeneratorError
+from src.di.models import EventHandlerContext
 
 
 def _get_async_cm_from_iterator(gen: AsyncIterator | Iterator):
@@ -43,12 +44,18 @@ class Dependency:
         self.func = func
         self.use_cache = use_cache
 
-    def __call__(self, *args, **kwargs) -> AsyncContextManager[Any]:
+    def _get_context_param_name(self) -> str | None:
         sig = inspect.signature(self.func)
-        accepted_params = sig.parameters.keys()
-        filtered_kwargs = {k: v for k, v in kwargs.items() if k in accepted_params}
+        for name, param in sig.parameters.items():
+            if param.annotation is EventHandlerContext:
+                return name
+        return None
 
-        res = self.func(*args, **filtered_kwargs)
+    def __call__(self, *, ctx: EventHandlerContext = None, **kwargs) -> AsyncContextManager[Any]:
+        if ctx_param_name := self._get_context_param_name():
+            kwargs[ctx_param_name] = ctx
+
+        res = self.func(**kwargs)
 
         if isinstance(res, AsyncContextManager):
             return res
