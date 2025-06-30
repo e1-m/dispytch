@@ -12,8 +12,9 @@ from src.di.models import EventHandlerContext, Event
 
 @asynccontextmanager
 async def get_solved_dependencies(func: Callable[..., Any], ctx: EventHandlerContext = None):
-    async with AsyncExitStack() as stack:  # noqa
-        yield await _solve_dependencies(func, stack, {}, set(), ctx=ctx if ctx else EventHandlerContext(event={}))
+    tree = _build_dependency_tree(func, ctx)
+    async with tree.resolve() as deps:
+        yield deps
 
 
 def _get_user_defined_dependencies(func: Callable[..., Any]) -> dict[str, Dependency]:
@@ -113,6 +114,41 @@ class DependencyTree:
             resolved = await asyncio.gather(*tasks)
 
             yield {node.param_name: dep for node, dep in zip(self.root_nodes, resolved)}
+
+
+def _build_dependency_tree(func: Callable[..., Any], ctx: EventHandlerContext) -> DependencyTree:
+    return DependencyTree(_build_dependency_nodes(func, {}, set(), ctx=ctx), AsyncExitStack())  # noqa
+
+
+def _build_dependency_nodes(func: Callable[..., Any],
+                            resolved: dict[int, DependencyNode],
+                            resolving: set[int], *,
+                            ctx: EventHandlerContext) -> list[ChildNode]:
+    children = []
+
+    if not (dependencies := _get_dependencies(func, ctx)):
+        return children
+
+    for param_name, dependency in dependencies.items():
+        if dependency.use_cache and hash(dependency) in resolved:
+            children.append(ChildNode(param_name, resolved[hash(dependency)]))
+            continue
+
+        if hash(dependency) in resolving:
+            raise CyclicDependencyError(f"Dependency cycle detected: {dependency}")
+
+        resolving.add(hash(dependency))
+        current_node = DependencyNode(dependency,
+                                      _build_dependency_nodes(dependency.func, resolved, resolving, ctx=ctx))
+        resolving.remove(hash(dependency))
+
+        if dependency.use_cache:
+            resolved[hash(dependency)] = current_node
+
+        children.append(ChildNode(param_name, current_node))
+
+    return children
+
 
 async def _solve_dependencies(func: Callable[..., Any],
                               stack: AsyncExitStack,
