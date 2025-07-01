@@ -1,7 +1,9 @@
 from typing import Annotated
 
-from src.di.solv.extractor import _get_user_defined_dependencies as get_dependencies
+from src.di.models import Event
+from src.di.solv.extractor import extract_dependencies
 from src.di.dependency import Dependency
+from tests.extract_dependencies_test.event_dependency_test import EventBody
 
 
 def test_mixed_parameters():
@@ -17,7 +19,7 @@ def test_mixed_parameters():
     ):
         pass
 
-    result = get_dependencies(mixed_func)
+    result = extract_dependencies(mixed_func)
 
     assert len(result) == 2
     assert result["annotated_param"] == dep1
@@ -39,8 +41,27 @@ def test_complex_signature():
     ):
         pass
 
-    result = get_dependencies(complex_func)
+    result = extract_dependencies(complex_func)
 
     assert len(result) == 2
     assert result["dep_param"] == dep1
     assert result["annotated_dep"] == dep2
+
+
+def test_mixed_event_and_regular_params():
+    def func_with_mixed_params(
+            event_param: Event[EventBody],
+            regular_param: int,
+            another_param: str = "default",
+            dep_param=Dependency(lambda: "fake_dependency"),
+    ):
+        pass
+
+    result = extract_dependencies(func_with_mixed_params)
+
+    assert len(result) == 2
+    assert "event_param" in result
+    assert "dep_param" in result
+
+    assert "regular_param" not in result
+    assert "another_param" not in result

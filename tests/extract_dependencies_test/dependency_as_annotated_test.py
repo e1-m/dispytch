@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from src.di.solv.extractor import _get_user_defined_dependencies as get_dependencies
+from src.di.solv.extractor import extract_dependencies
 from src.di.dependency import Dependency
 
 
@@ -11,7 +11,7 @@ def test_annotated_dependency():
     def func_with_annotated(service: Annotated[str, dep]):
         pass
 
-    result = get_dependencies(func_with_annotated)
+    result = extract_dependencies(func_with_annotated)
 
     assert len(result) == 1
     assert "service" in result
@@ -26,7 +26,7 @@ def test_annotated_multiple_metadata_with_dependency():
     def func_with_meta(service: Annotated[int, other_meta, dep, "more_meta"]):
         pass
 
-    result = get_dependencies(func_with_meta)
+    result = extract_dependencies(func_with_meta)
 
     assert len(result) == 1
     assert result["service"] == dep
@@ -38,7 +38,7 @@ def test_annotated_no_dependency_in_metadata():
     def func_with_meta_no_dep(service: Annotated[str, "metadata", 42]):
         pass
 
-    result = get_dependencies(func_with_meta_no_dep)
+    result = extract_dependencies(func_with_meta_no_dep)
 
     assert result == {}
 
@@ -53,7 +53,7 @@ def test_annotated_first_dependency_wins():
     ):
         pass
 
-    result = get_dependencies(func_with_multiple_deps_in_annotation)
+    result = extract_dependencies(func_with_multiple_deps_in_annotation)
 
     assert len(result) == 1
     assert result["param"] == dep1  # First dependency should win

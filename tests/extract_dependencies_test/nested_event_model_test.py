@@ -3,7 +3,7 @@ from pydantic import BaseModel
 
 from src.di.dependency import Dependency
 from src.di.models import Event, EventHandlerContext
-from src.di.solv.extractor import _get_event_requests_as_dependencies as get_event_dependencies
+from src.di.solv.extractor import extract_dependencies
 
 
 class Sender(BaseModel):
@@ -47,7 +47,7 @@ async def test_nested_event(event_dict):
     def func_with_event(event_param: Event[EventBody]):
         pass
 
-    result = get_event_dependencies(func_with_event)
+    result = extract_dependencies(func_with_event)
 
     assert len(result) == 1
 

@@ -7,14 +7,14 @@ from src.di.dependency import Dependency
 from src.di.models import Event, EventHandlerContext
 
 
-def get_dependencies(func: Callable[..., Any]) -> dict[str, Dependency]:
-    dependencies = _get_user_defined_dependencies(func)
-    dependencies.update(_get_event_requests_as_dependencies(func))
+def extract_dependencies(func: Callable[..., Any]) -> dict[str, Dependency]:
+    dependencies = _extract_user_defined_dependencies(func)
+    dependencies.update(_extract_event_dependencies(func))
 
     return dependencies
 
 
-def _get_user_defined_dependencies(func: Callable[..., Any]) -> dict[str, Dependency]:
+def _extract_user_defined_dependencies(func: Callable[..., Any]) -> dict[str, Dependency]:
     deps = {}
 
     sig = inspect.signature(func)
@@ -36,7 +36,7 @@ def _get_user_defined_dependencies(func: Callable[..., Any]) -> dict[str, Depend
     return deps
 
 
-def _get_event_requests_as_dependencies(func: Callable[..., Any]) -> dict[str, Dependency]:
+def _extract_event_dependencies(func: Callable[..., Any]) -> dict[str, Dependency]:
     deps = {}
 
     hints = get_type_hints(func)

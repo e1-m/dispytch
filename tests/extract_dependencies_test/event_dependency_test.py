@@ -2,7 +2,7 @@ import pytest
 from pydantic import BaseModel, ValidationError
 
 from src.di.models import EventHandlerContext, Event
-from src.di.solv.extractor import _get_event_requests_as_dependencies as get_event_dependencies
+from src.di.solv.extractor import extract_dependencies
 from src.di.dependency import Dependency
 
 
@@ -72,7 +72,7 @@ async def test_event_dependency(event_dict):
     def func_with_event(event_param: Event[EventBody]):
         pass
 
-    result = get_event_dependencies(func_with_event)
+    result = extract_dependencies(func_with_event)
 
     assert len(result) == 1
 
@@ -93,7 +93,7 @@ async def test_multiple_event_dependencies(event_dict):
     ):
         pass
 
-    result = get_event_dependencies(func_with_multiple_events)
+    result = extract_dependencies(func_with_multiple_events)
 
     assert len(result) == 2
     assert "e1" in result
@@ -119,7 +119,7 @@ async def test_multiple_event_dependencies_with_different_fields_of_event_needed
     ):
         pass
 
-    result = get_event_dependencies(func_with_multiple_events)
+    result = extract_dependencies(func_with_multiple_events)
 
     assert len(result) == 2
     assert "e1" in result
@@ -147,7 +147,7 @@ async def test_empty_event_body(event_dict_with_empty_body):
     def func_with_event(event_param: Event[EventBody]):
         pass
 
-    result = get_event_dependencies(func_with_event)
+    result = extract_dependencies(func_with_event)
 
     with pytest.raises(ValidationError):
         async with result["event_param"](ctx=EventHandlerContext(event=event_dict_with_empty_body)) as event:
@@ -159,7 +159,7 @@ async def test_additional_event_data_ignored(event_dict_with_additional_data):
     def func_with_event(event_param: Event[EventBody]):
         pass
 
-    result = get_event_dependencies(func_with_event)
+    result = extract_dependencies(func_with_event)
 
     async with result["event_param"](ctx=EventHandlerContext(event=event_dict_with_additional_data)) as event:
         assert isinstance(event, Event)
@@ -178,28 +178,10 @@ async def test_getting_all_event_data_as_dict(event_dict_with_additional_data):
     def func_with_event(event_param: Event):
         pass
 
-    result = get_event_dependencies(func_with_event)
+    result = extract_dependencies(func_with_event)
 
     async with result["event_param"](ctx=EventHandlerContext(event=event_dict_with_additional_data)) as event:
         assert isinstance(event, Event)
         assert isinstance(event.body, dict)
 
         assert event.body == event_dict_with_additional_data['body']
-
-
-def test_mixed_event_and_regular_params(event_dict):
-    def func_with_mixed_params(
-            event_param: Event[EventBody],
-            regular_param: int,
-            another_param: str = "default",
-            dep_param=Dependency(lambda: "fake_dependency"),
-    ):
-        pass
-
-    result = get_event_dependencies(func_with_mixed_params)
-
-    assert len(result) == 1
-    assert "event_param" in result
-    assert "regular_param" not in result
-    assert "another_param" not in result
-    assert "dep_param" not in result

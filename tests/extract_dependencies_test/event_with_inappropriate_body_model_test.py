@@ -1,7 +1,7 @@
 import pytest
 
 from src.di.models import Event
-from src.di.solv.extractor import _get_event_requests_as_dependencies as get_event_dependencies
+from src.di.solv.extractor import extract_dependencies
 
 
 class NotBaseModel:
@@ -17,4 +17,4 @@ def test_non_basemodel_event_body():
         pass
 
     with pytest.raises(TypeError):
-        get_event_dependencies(func_with_non_basemodel_event)
+        extract_dependencies(func_with_non_basemodel_event)

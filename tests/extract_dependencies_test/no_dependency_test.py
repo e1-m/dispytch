@@ -1,4 +1,4 @@
-from src.di.solv.extractor import _get_event_requests_as_dependencies as get_event_dependencies
+from src.di.solv.extractor import extract_dependencies
 
 
 def test_empty_signature():
@@ -7,7 +7,7 @@ def test_empty_signature():
     def empty_func():
         pass
 
-    result = get_event_dependencies(empty_func)
+    result = extract_dependencies(empty_func)
 
     assert result == {}
 
@@ -18,6 +18,6 @@ def test_no_dependencies():
     def regular_func(a: int, b: str, c=None, d=1):
         pass
 
-    result = get_event_dependencies(regular_func)
+    result = extract_dependencies(regular_func)
 
     assert result == {}

@@ -2,7 +2,7 @@ from functools import lru_cache
 from typing import Callable, Any
 
 from src.di.exc import CyclicDependencyError
-from src.di.solv.extractor import get_dependencies
+from src.di.solv.extractor import extract_dependencies
 from src.di.solv.tree import DependencyTree, DependencyNode, ChildNode
 
 
@@ -16,7 +16,7 @@ def _build_dependency_branches(func: Callable[..., Any],
                                resolving: set[int]) -> list[ChildNode]:
     children = []
 
-    if not (dependencies := get_dependencies(func)):
+    if not (dependencies := extract_dependencies(func)):
         return children
 
     for param_name, dependency in dependencies.items():
