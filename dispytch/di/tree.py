@@ -1,7 +1,7 @@
 import asyncio
 from contextlib import AsyncExitStack, asynccontextmanager
 
-from dispytch import Dependency
+from dispytch.di.dependency import Dependency
 from dispytch.di.models import EventHandlerContext
 
 

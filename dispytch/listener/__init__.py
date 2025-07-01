@@ -1,1 +1,1 @@
-from .listener import EventListener
+from .listener import EventListener as EventListener
