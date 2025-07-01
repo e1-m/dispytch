@@ -11,10 +11,15 @@ class DependencyNode:
                  children: list['ChildNode']):
         self.dependency = dependency
         self.children = children
-        self._task = None
+        self._tasks: dict[AsyncExitStack, asyncio.Task] = {}
 
+    @asynccontextmanager
     async def resolve(self, stack: AsyncExitStack, ctx: EventHandlerContext):
-        tasks = [asyncio.create_task(child.dependency.resolve(stack, ctx)) for child in self.children]
+        tasks = [asyncio.create_task(
+            stack.enter_async_context(
+                node.dependency.resolve(stack, ctx)
+            )
+        ) for node in self.children]
 
         resolved = await asyncio.gather(*tasks)
 
@@ -22,13 +27,14 @@ class DependencyNode:
                   for child, res
                   in zip(self.children, resolved)}
 
-        if self._task is None:
-            self._task = asyncio.create_task(
+        if self._tasks.get(stack, None) is None:
+            self._tasks[stack] = asyncio.create_task(
                 stack.enter_async_context(
                     self.dependency(**kwargs, ctx=ctx)
                 ))
 
-        return await self._task
+        yield await self._tasks[stack]
+        self._tasks.pop(stack, None)
 
 
 class ChildNode:
@@ -44,7 +50,11 @@ class DependencyTree:
     @asynccontextmanager
     async def resolve(self, ctx: EventHandlerContext):
         async with AsyncExitStack() as stack:  # noqa
-            tasks = [asyncio.create_task(node.dependency.resolve(stack, ctx)) for node in self.root_nodes]
+            tasks = [asyncio.create_task(
+                stack.enter_async_context(
+                    node.dependency.resolve(stack, ctx)
+                )
+            ) for node in self.root_nodes]
 
             resolved = await asyncio.gather(*tasks)
 
