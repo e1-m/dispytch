@@ -5,7 +5,8 @@ from collections import defaultdict
 from src.consumer.consumer import Consumer
 from src.di.models import EventHandlerContext
 from src.di.solv.solver import solve_dependencies
-from src.listener.models import Handler, Event as ConsumerEvent
+from src.listener.models import Event as ConsumerEvent
+from src.listener.handler import Handler
 
 
 class EventListener:
@@ -31,8 +32,9 @@ class EventListener:
         async with solve_dependencies(handler.func, EventHandlerContext(event=event.model_dump())) as deps:
             await handler(event.body, **deps)
 
-    def handler(self, *, topic, event):
+    def handler(self, *, topic, event, retries=0, retry_on=None):
         def decorator(callback):
-            self.handlers[topic][event] = Handler(callback)
+            self.handlers[topic][event] = Handler(callback, retries, retry_on)
+            return callback
 
         return decorator
