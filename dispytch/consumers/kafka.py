@@ -2,9 +2,8 @@ from typing import AsyncIterator
 
 from aiokafka import AIOKafkaConsumer
 
-from src.consumer import Consumer
-from src.listener.models import Event
-from src.deserializer.deserializer import Deserializer
+from dispytch.listener.consumer import Consumer, Event
+from dispytch.consumers.deserializer import Deserializer
 
 
 class KafkaConsumer(Consumer):

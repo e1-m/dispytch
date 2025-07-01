@@ -3,8 +3,8 @@ from contextlib import asynccontextmanager, AsyncExitStack
 
 import pytest
 
-from src.di.solv.solver import solve_dependencies
-from src.di.dependency import Dependency
+from dispytch.di.solver import solve_dependencies
+from dispytch.di.dependency import Dependency
 
 
 @pytest.mark.asyncio

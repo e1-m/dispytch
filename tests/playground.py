@@ -4,11 +4,7 @@ from typing import Annotated
 from aiokafka import AIOKafkaConsumer
 from pydantic import BaseModel
 
-from src.consumer import KafkaConsumer
-from src.deserializer import JSONDeserializer
-from src.di.dependency import Dependency
-from src.di.models import Event
-from src.listener.event_listener import EventListener
+from dispytch import EventListener, Event, Dependency, JSONDeserializer, KafkaConsumer
 
 
 class TestEventBody(BaseModel):

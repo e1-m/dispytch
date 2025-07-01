@@ -1,8 +1,7 @@
 import json
 
-from src.deserializer.deserializer import Deserializer
-from src.deserializer.exc import FieldMissingError
-from src.consumer.models import Payload
+from dispytch.consumers.deserializer import Deserializer, Payload
+from dispytch.deserializers.exc import FieldMissingError
 
 
 class JSONDeserializer(Deserializer):

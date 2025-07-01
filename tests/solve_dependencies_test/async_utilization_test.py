@@ -2,8 +2,8 @@ import asyncio
 
 import pytest
 
-from src.di.dependency import Dependency
-from src.di.solv.solver import solve_dependencies
+from dispytch.di.dependency import Dependency
+from dispytch.di.solver import solve_dependencies
 
 
 @pytest.mark.asyncio

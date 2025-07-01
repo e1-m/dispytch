@@ -1,4 +1,4 @@
-from src.di.solv.extractor import extract_dependencies
+from dispytch.di.extractor import extract_dependencies
 
 
 def test_empty_signature():

@@ -1,9 +1,10 @@
 from functools import lru_cache
 from typing import Callable, Any
 
-from src.di.exc import CyclicDependencyError
-from src.di.solv.extractor import extract_dependencies
-from src.di.solv.tree import DependencyTree, DependencyNode, ChildNode
+from dispytch.di.exc import CyclicDependencyError
+from dispytch.di.extractor import extract_dependencies
+
+from dispytch.di.tree import DependencyNode, ChildNode, DependencyTree
 
 
 @lru_cache

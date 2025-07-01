@@ -1,7 +1,7 @@
 import pytest
 
-from src.di.dependency import Dependency
-from src.di.exc import InvalidGeneratorError
+from dispytch.di.dependency import Dependency
+from dispytch.di.exc import InvalidGeneratorError
 
 
 @pytest.mark.asyncio

@@ -1,7 +1,13 @@
 from abc import ABC, abstractmethod
 from typing import AsyncIterator
 
-from src.listener.models import Event
+from pydantic import BaseModel
+
+
+class Event(BaseModel):
+    topic: str
+    type: str
+    body: dict
 
 
 class Consumer(ABC):

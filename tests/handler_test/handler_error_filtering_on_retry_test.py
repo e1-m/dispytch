@@ -2,7 +2,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from src.listener.handler import Handler
+from dispytch.listener.handler import Handler
 
 
 def test_handler_with_retries_all_exceptions():

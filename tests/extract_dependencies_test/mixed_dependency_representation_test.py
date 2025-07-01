@@ -1,9 +1,15 @@
 from typing import Annotated
 
-from src.di.models import Event
-from src.di.solv.extractor import extract_dependencies
-from src.di.dependency import Dependency
-from tests.extract_dependencies_test.event_dependency_test import EventBody
+from pydantic import BaseModel
+
+from dispytch.di.models import Event
+from dispytch.di.extractor import extract_dependencies
+from dispytch.di.dependency import Dependency
+
+
+class EventBody(BaseModel):
+    name: str
+    value: int
 
 
 def test_mixed_parameters():

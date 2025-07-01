@@ -3,8 +3,8 @@ from typing import Callable, Any, get_origin, Annotated, get_args, get_type_hint
 
 from pydantic import BaseModel
 
-from src.di.dependency import Dependency
-from src.di.models import Event, EventHandlerContext
+from dispytch import Dependency, Event
+from dispytch.di.models import EventHandlerContext
 
 
 def extract_dependencies(func: Callable[..., Any]) -> dict[str, Dependency]:

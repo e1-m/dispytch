@@ -1,7 +1,7 @@
 from typing import Annotated
 
-from src.di.solv.extractor import extract_dependencies
-from src.di.dependency import Dependency
+from dispytch.di.extractor import extract_dependencies
+from dispytch.di.dependency import Dependency
 
 
 def test_dependency_as_default_value():

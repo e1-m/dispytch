@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager, contextmanager
 
 import pytest
 
-from src.di.dependency import Dependency
+from dispytch.di.dependency import Dependency
 
 
 @pytest.mark.asyncio

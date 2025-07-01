@@ -1,6 +1,11 @@
 from abc import ABC, abstractmethod
 
-from src.consumer.models import Payload
+from pydantic import BaseModel
+
+
+class Payload(BaseModel):
+    type: str
+    body: dict
 
 
 class Deserializer(ABC):

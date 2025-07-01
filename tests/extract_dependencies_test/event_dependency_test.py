@@ -1,9 +1,9 @@
 import pytest
 from pydantic import BaseModel, ValidationError
 
-from src.di.models import EventHandlerContext, Event
-from src.di.solv.extractor import extract_dependencies
-from src.di.dependency import Dependency
+from dispytch.di.models import EventHandlerContext, Event
+from dispytch.di.extractor import extract_dependencies
+from dispytch.di.dependency import Dependency
 
 
 @pytest.fixture

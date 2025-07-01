@@ -1,9 +1,9 @@
 import pytest
 from pydantic import BaseModel
 
-from src.di.dependency import Dependency
-from src.di.models import Event, EventHandlerContext
-from src.di.solv.extractor import extract_dependencies
+from dispytch.di.dependency import Dependency
+from dispytch.di.models import Event, EventHandlerContext
+from dispytch.di.extractor import extract_dependencies
 
 
 class Sender(BaseModel):

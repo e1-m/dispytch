@@ -1,8 +1,8 @@
 import asyncio
 from contextlib import AsyncExitStack, asynccontextmanager
 
-from src.di.dependency import Dependency
-from src.di.models import EventHandlerContext
+from dispytch import Dependency
+from dispytch.di.models import EventHandlerContext
 
 
 class DependencyNode:
@@ -34,7 +34,7 @@ class DependencyNode:
                 ))
 
         yield await self._tasks[stack]
-        self._tasks.pop(stack, None)
+        self._tasks.pop(stack, None)  # noqa. because of pop returning awaitable it says `couritine is not awaited`
 
 
 class ChildNode:

@@ -2,11 +2,10 @@ import asyncio
 import logging
 from collections import defaultdict
 
-from src.consumer.consumer import Consumer
-from src.di.models import EventHandlerContext
-from src.di.solv.solver import solve_dependencies
-from src.listener.models import Event as ConsumerEvent
-from src.listener.handler import Handler
+from dispytch.di.models import EventHandlerContext
+from dispytch.di.solver import solve_dependencies
+from dispytch.listener.consumer import Consumer, Event as ConsumerEvent
+from dispytch.listener.handler import Handler
 
 
 class EventListener:

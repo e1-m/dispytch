@@ -1,7 +1,7 @@
 import pytest
 
-from src.di.models import Event
-from src.di.solv.extractor import extract_dependencies
+from dispytch.di.models import Event
+from dispytch.di.extractor import extract_dependencies
 
 
 class NotBaseModel:

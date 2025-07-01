@@ -1,4 +1,4 @@
-from src.di.dependency import Dependency
+from dispytch.di.dependency import Dependency
 
 
 def test_dependency_hashing_with_same_function():

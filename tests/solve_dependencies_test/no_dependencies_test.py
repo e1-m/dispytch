@@ -1,6 +1,6 @@
 import pytest
 
-from src.di.solv.solver import solve_dependencies
+from dispytch.di.solver import solve_dependencies
 
 
 @pytest.mark.asyncio

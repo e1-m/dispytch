@@ -4,8 +4,8 @@ from contextlib import asynccontextmanager
 from inspect import isawaitable
 from typing import Any, AsyncContextManager, AsyncGenerator, AsyncIterator, Generator, Iterator, ContextManager
 
-from src.di.exc import InvalidGeneratorError
-from src.di.models import EventHandlerContext
+from dispytch.di.exc import InvalidGeneratorError
+from dispytch.di.models import EventHandlerContext
 
 
 def _get_async_cm_from_iterator(gen: AsyncIterator | Iterator):

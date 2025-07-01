@@ -1,8 +1,8 @@
 import pytest
 
-from src.di.exc import CyclicDependencyError
-from src.di.solv.solver import solve_dependencies
-from src.di.dependency import Dependency
+from dispytch.di.exc import CyclicDependencyError
+from dispytch.di.solver import solve_dependencies
+from dispytch.di.dependency import Dependency
 
 
 @pytest.mark.asyncio
