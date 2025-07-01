@@ -1,6 +1,6 @@
 import pytest
 
-from src.di.solv import get_solved_dependencies
+from src.di.solv.solver import solve_dependencies
 
 
 @pytest.mark.asyncio
@@ -10,7 +10,7 @@ async def test_empty_function():
     def empty_func():
         pass
 
-    async with get_solved_dependencies(empty_func) as deps:
+    async with solve_dependencies(empty_func) as deps:
         assert deps == {}
 
 
@@ -21,5 +21,5 @@ async def test_function_with_no_dependencies():
     def regular_func(a: int, b: str = "default"):
         pass
 
-    async with get_solved_dependencies(regular_func) as deps:
+    async with solve_dependencies(regular_func) as deps:
         assert deps == {}

@@ -1,7 +1,7 @@
 import pytest
 
 from src.di.exc import CyclicDependencyError
-from src.di.solv import get_solved_dependencies
+from src.di.solv.solver import solve_dependencies
 from src.di.dependency import Dependency
 
 
@@ -26,5 +26,5 @@ async def test_cyclic_dependency_detection():
         pass
 
     with pytest.raises(CyclicDependencyError, match="Dependency cycle detected"):
-        async with get_solved_dependencies(target_func) as deps:
+        async with solve_dependencies(target_func) as deps:
             pass

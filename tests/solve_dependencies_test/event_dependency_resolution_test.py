@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 from src.di.dependency import Dependency
 from src.di.models import Event, EventHandlerContext
-from src.di.solv import get_solved_dependencies
+from src.di.solv.solver import solve_dependencies
 
 
 @pytest.fixture
@@ -39,7 +39,7 @@ async def test_single_event_dependency(handler_context):
     ):
         pass
 
-    async with get_solved_dependencies(target_func, handler_context) as deps:
+    async with solve_dependencies(target_func, handler_context) as deps:
         assert len(deps) == 1
 
         dep = deps["event"]
@@ -65,7 +65,7 @@ async def test_nested_event_dependency(handler_context):
     ):
         pass
 
-    async with get_solved_dependencies(target_func, handler_context) as deps:
+    async with solve_dependencies(target_func, handler_context) as deps:
         assert len(deps) == 1
         assert deps["dep"] == handler_context.event['body']['value'] + 1
 
@@ -97,7 +97,7 @@ async def test_various_body_models(handler_context):
     ):
         pass
 
-    async with get_solved_dependencies(target_func, handler_context) as deps:
+    async with solve_dependencies(target_func, handler_context) as deps:
         assert len(deps) == 3
         name = handler_context.event['body']['name']
         value = handler_context.event['body']['value'] + 1
@@ -129,7 +129,7 @@ async def test_dependency_mixed_with_event(handler_context):
     ):
         pass
 
-    async with get_solved_dependencies(target_func, handler_context) as deps:
+    async with solve_dependencies(target_func, handler_context) as deps:
         assert len(deps) == 2
 
         value = handler_context.event['body']['value'] + 1

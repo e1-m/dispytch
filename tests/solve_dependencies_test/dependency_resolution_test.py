@@ -2,7 +2,7 @@ from typing import Annotated
 
 import pytest
 
-from src.di.solv import get_solved_dependencies
+from src.di.solv.solver import solve_dependencies
 from src.di.dependency import Dependency
 
 
@@ -20,7 +20,7 @@ async def test_single_dependency():
     ):
         pass
 
-    async with get_solved_dependencies(target_func) as deps:
+    async with solve_dependencies(target_func) as deps:
         assert len(deps) == 1
         assert deps["default_svc"] == "default_service"
 
@@ -44,7 +44,7 @@ async def test_multiple_dependencies():
     ):
         pass
 
-    async with get_solved_dependencies(target_func) as deps:
+    async with solve_dependencies(target_func) as deps:
         assert len(deps) == 2
         assert deps["default_svc"] == "default_service"
         assert deps["annotated_svc"] == "annotated_service"
@@ -65,7 +65,7 @@ async def test_nested_dependencies():
     def target_func(database=db_dep):
         pass
 
-    async with get_solved_dependencies(target_func) as deps:
+    async with solve_dependencies(target_func) as deps:
         assert deps["database"] == "db_connected_to_localhost"
 
 
@@ -87,7 +87,7 @@ async def test_deep_dependency_chain():
     def target_func(service=dep):
         pass
 
-    async with get_solved_dependencies(target_func) as deps:
+    async with solve_dependencies(target_func) as deps:
         assert deps["service"] == "level3(level2(level1))"
 
 
@@ -115,5 +115,5 @@ async def test_deeply_nested_unbalanced_dependencied():
     def target_func(service=dep):
         pass
 
-    async with get_solved_dependencies(target_func) as deps:
+    async with solve_dependencies(target_func) as deps:
         assert deps["service"] == "level4(level3_first_sibling(level2(level1)) + level3_second_sibling)"

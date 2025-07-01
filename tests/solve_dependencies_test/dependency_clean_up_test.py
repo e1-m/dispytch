@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 
 import pytest
 
-from src.di.solv import get_solved_dependencies
+from src.di.solv.solver import solve_dependencies
 from src.di.dependency import Dependency
 
 
@@ -24,7 +24,7 @@ async def test_dependency_with_async_context_manager_cleanup():
     def target_func(resource=dep):
         pass
 
-    async with get_solved_dependencies(target_func) as deps:
+    async with solve_dependencies(target_func) as deps:
         assert deps["resource"] == "resource"
         assert not cleanup_called
 

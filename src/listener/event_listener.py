@@ -4,7 +4,7 @@ from collections import defaultdict
 
 from src.consumer.consumer import Consumer
 from src.di.models import EventHandlerContext
-from src.di.solv import get_solved_dependencies
+from src.di.solv.solver import solve_dependencies
 from src.listener.models import Handler, Event as ConsumerEvent
 
 
@@ -28,7 +28,7 @@ class EventListener:
     async def _trigger_callback_with_injected_dependencies(self, event: ConsumerEvent):
         handler = self.handlers[event.topic][event.type]
 
-        async with get_solved_dependencies(handler.func, EventHandlerContext(event=event.model_dump())) as deps:
+        async with solve_dependencies(handler.func, EventHandlerContext(event=event.model_dump())) as deps:
             await handler(event.body, **deps)
 
     def handler(self, *, topic, event):

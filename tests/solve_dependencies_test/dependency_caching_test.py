@@ -1,6 +1,6 @@
 import pytest
 
-from src.di.solv import get_solved_dependencies
+from src.di.solv.solver import solve_dependencies
 from src.di.dependency import Dependency
 
 
@@ -28,7 +28,7 @@ async def test_dependency_caching_within_the_same_context():
     def target_func(s1=dep1, s2=dep2):
         pass
 
-    async with get_solved_dependencies(target_func) as deps:
+    async with solve_dependencies(target_func) as deps:
         assert call_count == 1
         assert "service1_with_shared_1" == deps["s1"]
         assert "service2_with_shared_1" == deps["s2"]
@@ -53,11 +53,11 @@ async def test_dependency_caching_within_different_contexts():
         pass
 
     # First call
-    async with get_solved_dependencies(func1) as deps1:
+    async with solve_dependencies(func1) as deps1:
         assert "service_1" == deps1["service1"]
 
     # Second call should not use cached value
-    async with get_solved_dependencies(func2) as deps2:
+    async with solve_dependencies(func2) as deps2:
         assert "service_2" == deps2["service2"]
 
     assert call_count == 2  # Called twice because different contexts
@@ -93,7 +93,7 @@ async def test_dependency_caching_disabled(dep1_use_cache, dep2_use_cache):
     def target_func(c1=dep1, c2=dep2):
         pass
 
-    async with get_solved_dependencies(target_func) as deps:
+    async with solve_dependencies(target_func) as deps:
         assert call_count == 2
         assert "consumer1_service_1" in deps["c1"]
         assert "consumer2_service_2" in deps["c2"]
@@ -113,7 +113,7 @@ async def test_dependency_caching_with_different_key_words():
     def target_func(s1=shared_dep, s2=shared_dep):
         pass
 
-    async with get_solved_dependencies(target_func) as deps:
+    async with solve_dependencies(target_func) as deps:
         assert call_count == 1
         assert "shared_1" == deps["s1"]
         assert "shared_1" == deps["s2"]
