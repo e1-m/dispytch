@@ -150,7 +150,7 @@ async def test_empty_event_body(event_dict_with_empty_body):
     result = extract_dependencies(func_with_event)
 
     with pytest.raises(ValidationError):
-        async with result["event_param"](ctx=EventHandlerContext(event=event_dict_with_empty_body)) as event:
+        async with result["event_param"](ctx=EventHandlerContext(event=event_dict_with_empty_body)):
             pass
 
 

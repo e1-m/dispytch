@@ -26,5 +26,5 @@ async def test_cyclic_dependency_detection():
         pass
 
     with pytest.raises(CyclicDependencyError, match="Dependency cycle detected"):
-        async with solve_dependencies(target_func) as deps:
+        async with solve_dependencies(target_func):
             pass

@@ -105,7 +105,7 @@ async def test_deeply_nested_unbalanced_dependencied():
         return f"level3_first_sibling({dep2})"
 
     def create_level3_second_sibling():
-        return f"level3_second_sibling"
+        return "level3_second_sibling"
 
     def create_level4(dep3=Dependency(create_level3_first_sibling), dep4=Dependency(create_level3_second_sibling)):
         return f"level4({dep3} + {dep4})"

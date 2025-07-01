@@ -10,11 +10,11 @@ from dispytch.di.solver import solve_dependencies
 async def test_with_two_parallel_dependencies():
     async def create_first_service():
         await asyncio.sleep(0.1)
-        return f"first_service"
+        return "first_service"
 
     async def create_second_service():
         await asyncio.sleep(0.2)
-        return f"second_service"
+        return "second_service"
 
     dep1 = Dependency(create_first_service)
     dep2 = Dependency(create_second_service)
@@ -34,7 +34,7 @@ async def test_with_two_parallel_dependencies():
 async def test_with_shared_dependency():
     async def create_shared_service():
         await asyncio.sleep(0.1)
-        return f"shared_service"
+        return "shared_service"
 
     shared_dep = Dependency(create_shared_service)
 

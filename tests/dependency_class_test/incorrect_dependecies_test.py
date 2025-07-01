@@ -15,7 +15,7 @@ async def test_async_generator_multiple_yield():
     dep = Dependency(create_async_gen_service)
 
     with pytest.raises(InvalidGeneratorError):
-        async with dep() as dependency:
+        async with dep():
             pass
 
 
@@ -30,7 +30,7 @@ async def test_sync_generator_multiple_yield():
     dep = Dependency(create_gen_service)
 
     with pytest.raises(InvalidGeneratorError):
-        async with dep() as dependency:
+        async with dep():
             pass
 
 
@@ -48,7 +48,7 @@ async def test_not_yielding_async_generator():
         pass
 
     with pytest.raises(InvalidGeneratorError, match="didn't yield any value"):
-        async with empty_dep() as dependency:
+        async with empty_dep():
             pass
 
 
@@ -66,5 +66,5 @@ async def test_not_yielding_sync_generator():
         pass
 
     with pytest.raises(InvalidGeneratorError, match="didn't yield any value"):
-        async with empty_dep() as dependency:
+        async with empty_dep():
             pass
