@@ -5,7 +5,6 @@ from aiokafka import AIOKafkaConsumer
 from pydantic import BaseModel
 
 from dispytch import EventListener, Event, Dependency
-from dispytch.deserializers import JSONDeserializer
 from dispytch.consumers import KafkaConsumer
 
 
@@ -29,7 +28,7 @@ async def outer_dep(test: Annotated[int, Dependency(inner_dep)],
 async def main():
     kafka_consumer = AIOKafkaConsumer('test_events',
                                       bootstrap_servers='localhost:19092')
-    consumer = KafkaConsumer(kafka_consumer, deserializer=JSONDeserializer())
+    consumer = KafkaConsumer(kafka_consumer)
     event_listener = EventListener(consumer)
 
     @event_listener.handler(topic='test_events', event='test_event')

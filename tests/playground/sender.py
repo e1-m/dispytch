@@ -3,7 +3,6 @@ import asyncio
 from aiokafka import AIOKafkaProducer
 
 from dispytch.producers import KafkaProducer
-from dispytch.serializers import JSONSerializer
 from dispytch import EventEmitter, EventBase
 
 
@@ -16,7 +15,7 @@ class MyEvent(EventBase):
 
 async def main():
     kafka_producer = AIOKafkaProducer(bootstrap_servers='localhost:19092')
-    producer = KafkaProducer(kafka_producer, serializer=JSONSerializer())
+    producer = KafkaProducer(kafka_producer)
     await producer.start()
 
     event_emitter = EventEmitter(producer)
