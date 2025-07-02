@@ -29,7 +29,7 @@ class EventListener:
         handler = self.handlers[event.topic][event.type]
 
         async with solve_dependencies(handler.func, EventHandlerContext(event=event.model_dump())) as deps:
-            await handler(event.body, **deps)
+            await handler(**deps)
 
     def handler(self, *, topic, event, retries=0, retry_on=None):
         def decorator(callback):
