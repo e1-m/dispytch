@@ -10,12 +10,18 @@ from dispytch.listener.handler import Handler
 
 class EventListener:
     def __init__(self, consumer: Consumer):
+        self.tasks = set()
         self.consumer = consumer
         self.handlers = defaultdict(dict[str, Handler])
 
     async def listen(self):
         async for event in self.consumer.listen():
-            asyncio.create_task(self._handle_event(event))
+            task = asyncio.create_task(self._handle_event(event))
+            self.tasks.add(task)
+            task.add_done_callback(self.tasks.discard)
+
+        if self.tasks:
+            await asyncio.wait(self.tasks)
 
     async def _handle_event(self, event: ConsumerEvent):
         try:
