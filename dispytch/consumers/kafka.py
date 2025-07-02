@@ -12,14 +12,16 @@ class KafkaConsumer(Consumer):
         self.consumer = consumer
         self.deserializer = deserializer or JSONDeserializer()
 
-    async def listen(self) -> AsyncIterator[Event]:
-        await self.consumer.start()
-        try:
-            async for msg in self.consumer:
-                deserialized_payload = self.deserializer.deserialize(msg.value)
+    async def start(self):
+        return await self.consumer.start()
 
-                yield Event(topic=msg.topic,
-                            type=deserialized_payload.type,
-                            body=deserialized_payload.body)
-        finally:
-            await self.consumer.stop()
+    async def stop(self):
+        return await self.consumer.stop()
+
+    async def listen(self) -> AsyncIterator[Event]:
+        async for msg in self.consumer:
+            deserialized_payload = self.deserializer.deserialize(msg.value)
+
+            yield Event(topic=msg.topic,
+                        type=deserialized_payload.type,
+                        body=deserialized_payload.body)
