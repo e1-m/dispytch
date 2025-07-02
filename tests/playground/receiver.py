@@ -9,20 +9,21 @@ from dispytch.deserializers import JSONDeserializer
 from dispytch.consumers import KafkaConsumer
 
 
-class TestEventBody(BaseModel):
+class MyEventBody(BaseModel):
     test: int
 
 
-async def test_inner(event: Event[TestEventBody]):
-    print('test_inner entered')
+async def inner_dep(event: Event[MyEventBody]):
+    print('inner_dep entered')
     yield event.body.test
-    print('test_inner exited')
+    print('inner_dep exited')
 
 
-async def test_outer(test: Annotated[int, Dependency(test_inner)], test2: Annotated[int, Dependency(test_inner)]):
-    print('test_outer entered')
+async def outer_dep(test: Annotated[int, Dependency(inner_dep)],
+                    test2: Annotated[int, Dependency(inner_dep)]):
+    print('outer_dep entered')
     yield 5 + test + test2
-    print('test_outer exited')
+    print('outer_dep exited')
 
 
 async def main():
@@ -32,7 +33,7 @@ async def main():
     event_listener = EventListener(consumer)
 
     @event_listener.handler(topic='test_events', event='test_event')
-    async def test_event_handler(event, test: Annotated[int, Dependency(test_outer)]):
+    async def handle_event(event: Event[MyEventBody], test: Annotated[int, Dependency(outer_dep)]):
         print(event)
         print(test)
         await asyncio.sleep(2)
