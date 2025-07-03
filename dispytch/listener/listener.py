@@ -26,6 +26,7 @@ class EventListener:
     async def _handle_event(self, event: ConsumerEvent):
         try:
             await self._trigger_callback_with_injected_dependencies(event)
+            await self.consumer.ack(event)
         except KeyError:
             logging.info(f'No handler for event: {event.type}')
         except Exception as e:
@@ -34,7 +35,10 @@ class EventListener:
     async def _trigger_callback_with_injected_dependencies(self, event: ConsumerEvent):
         handler = self.handlers[event.topic][event.type]
 
-        async with solve_dependencies(handler.func, EventHandlerContext(event=event.model_dump())) as deps:
+        async with solve_dependencies(handler.func,
+                                      EventHandlerContext(
+                                          event=event.model_dump(exclude={'id'})
+                                      )) as deps:
             await handler(**deps)
 
     def handler(self, *, topic, event, retries=0, retry_on=None):
