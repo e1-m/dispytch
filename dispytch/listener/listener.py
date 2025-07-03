@@ -39,11 +39,11 @@ class EventListener:
                                       EventHandlerContext(
                                           event=event.model_dump(exclude={'id'})
                                       )) as deps:
-            await handler(**deps)
+            await handler.handle(**deps)
 
-    def handler(self, *, topic, event, retries=0, retry_on=None):
+    def handler(self, *, topic, event, retries=0, retry_on=None, retry_interval_sec=1):
         def decorator(callback):
-            self.handlers[topic][event] = Handler(callback, retries, retry_on)
+            self.handlers[topic][event] = Handler(callback, retries, retry_interval_sec, retry_on)
             return callback
 
         return decorator
