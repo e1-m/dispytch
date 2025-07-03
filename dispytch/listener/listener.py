@@ -41,7 +41,12 @@ class EventListener:
                                       )) as deps:
             await handler.handle(**deps)
 
-    def handler(self, *, topic, event, retries=0, retry_on=None, retry_interval_sec=1):
+    def handler(self, *,
+                topic: str,
+                event: str,
+                retries: int = 0,
+                retry_on: type[Exception] = None,
+                retry_interval_sec: float = 1.25):
         def decorator(callback):
             self.handlers[topic][event] = Handler(callback, retries, retry_interval_sec, retry_on)
             return callback

@@ -6,7 +6,7 @@ from typing import Callable, Any, Sequence
 class Handler:
     def __init__(self, func: Callable[..., Any],
                  retries: int = 0,
-                 retry_interval_sec: int = 0,
+                 retry_interval_sec: float = 0,
                  retry_on: Sequence[type[Exception]] = None):
         self.retries = abs(retries)
         self.retry_on = retry_on
