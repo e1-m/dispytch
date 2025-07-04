@@ -1,12 +1,11 @@
-import uuid
 from abc import ABC, abstractmethod
 from typing import AsyncIterator
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class Event(BaseModel):
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    id: str
     topic: str
     type: str
     body: dict

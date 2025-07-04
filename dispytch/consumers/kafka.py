@@ -28,7 +28,8 @@ class KafkaConsumer(Consumer):
         async for msg in self.consumer:
             deserialized_payload = self.deserializer.deserialize(msg.value)
 
-            event = Event(topic=msg.topic,
+            event = Event(id=deserialized_payload.id,
+                          topic=msg.topic,
                           type=deserialized_payload.type,
                           body=deserialized_payload.body)
 

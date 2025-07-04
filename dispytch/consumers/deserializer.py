@@ -4,6 +4,7 @@ from pydantic import BaseModel
 
 
 class Payload(BaseModel):
+    id: str
     type: str
     body: dict
 

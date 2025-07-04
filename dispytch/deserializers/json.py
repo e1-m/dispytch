@@ -11,7 +11,7 @@ class JSONDeserializer(Deserializer):
     def deserialize(self, payload: bytes) -> Payload:
         data = json.loads(payload.decode(self.encoding))
 
-        required_fields = ['type', 'body']
+        required_fields = ['type', 'body', 'id']
         missing = [field for field in required_fields if data.get(field) is None]
         if missing:
             raise FieldMissingError(*missing)

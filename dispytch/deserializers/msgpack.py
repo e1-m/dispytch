@@ -8,7 +8,7 @@ class MessagePackDeserializer(Deserializer):
     def deserialize(self, payload: bytes) -> Payload:
         data = msgpack.unpackb(payload, raw=False)
 
-        required_fields = ['type', 'body']
+        required_fields = ['type', 'body', 'id']
         missing = [field for field in required_fields if data.get(field) is None]
         if missing:
             raise FieldMissingError(*missing)
