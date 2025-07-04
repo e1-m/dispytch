@@ -115,7 +115,7 @@ async def example_emit(emitter):
 
 ---
 
-##⚠️ Limitations
+## ⚠️ Limitations
 While dispytch is a great choice for most usecases there are some limitations to be aware of:
 
 🧾 No schema-on-write support
