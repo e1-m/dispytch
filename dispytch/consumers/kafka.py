@@ -18,12 +18,6 @@ class KafkaConsumer(Consumer):
         self.deserializer = deserializer or JSONDeserializer()
         self._waiting_for_commit: dict[str, ConsumerRecord] = {}
 
-    async def start(self):
-        return await self.consumer.start()
-
-    async def stop(self):
-        return await self.consumer.stop()
-
     async def listen(self) -> AsyncIterator[Event]:
         async for msg in self.consumer:
             deserialized_payload = self.deserializer.deserialize(msg.value)
