@@ -6,6 +6,7 @@ from dispytch.di.models import EventHandlerContext
 from dispytch.di.solver import solve_dependencies
 from dispytch.listener.consumer import Consumer, Event as ConsumerEvent
 from dispytch.listener.handler import Handler
+from dispytch.listener.handler_group import HandlerGroup
 
 
 class EventListener:
@@ -52,3 +53,8 @@ class EventListener:
             return callback
 
         return decorator
+
+    def add_handler_group(self, group: HandlerGroup):
+        for topic in group.handlers:
+            for event in group.handlers[topic]:
+                self.handlers[topic][event] = group.handlers[topic][event]
