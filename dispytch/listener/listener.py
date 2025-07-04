@@ -9,11 +9,22 @@ from dispytch.listener.handler import Handler
 from dispytch.listener.handler_group import HandlerGroup
 
 
+async def _call_handler_with_injected_dependencies(handler: Handler, event: ConsumerEvent):
+    async with solve_dependencies(handler.func,
+                                  EventHandlerContext(
+                                      event=event.model_dump(exclude={'id'})
+                                  )) as deps:
+        try:
+            await handler.handle(**deps)
+        except Exception as e:
+            logging.exception(f"Handler {handler.func.__name__} failed for event {event.type}: {e}")
+
+
 class EventListener:
     def __init__(self, consumer: Consumer):
         self.tasks = set()
         self.consumer = consumer
-        self.handlers = defaultdict(dict[str, Handler])
+        self.handlers: dict[str, dict[str, list[Handler]]] = defaultdict(lambda: defaultdict(list))
 
     async def listen(self):
         async for event in self.consumer.listen():
@@ -25,22 +36,17 @@ class EventListener:
             await asyncio.wait(self.tasks)
 
     async def _handle_event(self, event: ConsumerEvent):
-        try:
-            await self._trigger_callback_with_injected_dependencies(event)
-            await self.consumer.ack(event)
-        except KeyError:
-            logging.info(f'No handler for event: {event.type}')
-        except Exception as e:
-            logging.error(f"Exception in {event.type} event handler: \n{e}")
+        handlers = self.handlers[event.topic][event.type]
+        if not handlers:
+            logging.info(f'There is not handler for topic `{event.topic}` and event type `{event.type}`')
+            return
 
-    async def _trigger_callback_with_injected_dependencies(self, event: ConsumerEvent):
-        handler = self.handlers[event.topic][event.type]
+        tasks = [asyncio.create_task(
+            _call_handler_with_injected_dependencies(handler, event)
+        ) for handler in handlers]
+        await asyncio.gather(*tasks)
 
-        async with solve_dependencies(handler.func,
-                                      EventHandlerContext(
-                                          event=event.model_dump(exclude={'id'})
-                                      )) as deps:
-            await handler.handle(**deps)
+        await self.consumer.ack(event)
 
     def handler(self, *,
                 topic: str,
@@ -49,7 +55,7 @@ class EventListener:
                 retry_on: type[Exception] = None,
                 retry_interval_sec: float = 1.25):
         def decorator(callback):
-            self.handlers[topic][event] = Handler(callback, retries, retry_interval_sec, retry_on)
+            self.handlers[topic][event].append(Handler(callback, retries, retry_interval_sec, retry_on))
             return callback
 
         return decorator
@@ -57,4 +63,4 @@ class EventListener:
     def add_handler_group(self, group: HandlerGroup):
         for topic in group.handlers:
             for event in group.handlers[topic]:
-                self.handlers[topic][event] = group.handlers[topic][event]
+                self.handlers[topic][event].extend(group.handlers[topic][event])
