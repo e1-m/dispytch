@@ -113,4 +113,22 @@ async def example_emit(emitter):
 * 🔄 **Flexible backends** – Kafka, RabbitMQ, or bring your own
 * 🧩 **Clean separation of concerns** – business logic ≠ plumbing
 
+---
+
+##⚠️ Limitations
+While dispytch is a great choice for most usecases there are some limitations to be aware of:
+
+🧾 No schema-on-write support
+Dispytch uses a schema-on-read model. Formats like Avro, Protobuf, or Thrift aren’t supported yet.
+
+🕵️ No dead-letter queue (DLQ)
+Failed messages are retried using built-in logic, but there’s no DLQ or fallback mechanism after final retries yet.
+
+🧩 No topic pattern matching
+Wildcard or templated subscriptions (e.g. user.*, order:{id}:events) aren’t supported in handler declarations yet. 
+Though the backend of you choice may route events to the appropriate queues/topics/channels there is no way for a dispytch handler to know it yet
+
+---
+💡 See something missing?
+Some features aren’t here yet—but with your help, they could be. Contributions welcome via PRs or discussions.
 
