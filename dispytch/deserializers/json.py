@@ -1,7 +1,7 @@
 import json
 
 from dispytch.consumers.deserializer import Deserializer, Payload
-from dispytch.deserializers.exc import FieldMissingError
+from dispytch.deserializers.validator import validate_payload
 
 
 class JSONDeserializer(Deserializer):
@@ -9,10 +9,4 @@ class JSONDeserializer(Deserializer):
         self.encoding = encoding
 
     def deserialize(self, payload: bytes) -> Payload:
-        data = json.loads(payload.decode(self.encoding))
-
-        required_fields = ['type', 'body', 'id']
-        missing = [field for field in required_fields if data.get(field) is None]
-        if missing:
-            raise FieldMissingError(*missing)
-        return Payload(**data)
+        return validate_payload(json.loads(payload.decode(self.encoding)))
