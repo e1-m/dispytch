@@ -1,10 +1,15 @@
+from typing import Optional
+
 from aiokafka import AIOKafkaProducer
 from pydantic import BaseModel
 
-from dispytch.emitter.event import KafkaEventConfig
 from dispytch.emitter.producer import Producer
 from dispytch.producers.serializer import Serializer
 from dispytch.serializers import JSONSerializer
+
+
+class KafkaEventConfig(BaseModel):
+    partition_by: Optional[str] = None
 
 
 class KafkaProducer(Producer):
@@ -19,7 +24,7 @@ class KafkaProducer(Producer):
             )
         config = config or KafkaEventConfig()
 
-        partition_key = _extract_partition_key(payload, config.partition_by)
+        partition_key = _extract_partition_key(payload, config.partition_by) if config.partition_by else None
 
         await self.producer.send(topic=topic,
                                  value=self.serializer.serialize(payload),
@@ -40,4 +45,18 @@ def _extract_partition_key(event: dict, partition_key: str):
         except KeyError:
             raise KeyError(f"Partition key '{partition_key}' not found in event")
 
+    if current is None:
+        raise ValueError(
+            f"Partition key '{partition_key}' is None"
+        )
+
+    if not _is_scalar(current):
+        raise ValueError(
+            f"Partition key '{partition_key}' is not a scalar"
+        )
+
     return current
+
+
+def _is_scalar(value):
+    return isinstance(value, (int, float, complex, bool, str, bytes))

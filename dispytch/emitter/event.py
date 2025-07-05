@@ -4,10 +4,6 @@ from typing import ClassVar, Optional
 from pydantic import BaseModel, Field
 
 
-class KafkaEventConfig(BaseModel):
-    partition_by: Optional[str] = None
-
-
 class EventBase(BaseModel):
     """
     Base class for defining events.
