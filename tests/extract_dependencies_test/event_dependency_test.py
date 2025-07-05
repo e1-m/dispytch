@@ -1,3 +1,5 @@
+import uuid
+
 import pytest
 from pydantic import BaseModel, ValidationError
 
@@ -9,6 +11,7 @@ from dispytch.di.dependency import Dependency
 @pytest.fixture
 def event_dict():
     return {
+        'id': str(uuid.uuid4()),
         'topic': 'test-topic',
         'type': 'test-type',
         'body': {
@@ -21,6 +24,7 @@ def event_dict():
 @pytest.fixture
 def event_dict_with_empty_body():
     return {
+        'id': str(uuid.uuid4()),
         'topic': 'test-topic',
         'type': 'test-type',
         'body': {}
@@ -30,6 +34,7 @@ def event_dict_with_empty_body():
 @pytest.fixture
 def event_dict_with_additional_data():
     return {
+        'id': str(uuid.uuid4()),
         'topic': 'test-topic',
         'type': 'test-type',
         'body': {

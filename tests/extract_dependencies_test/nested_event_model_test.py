@@ -1,3 +1,5 @@
+import uuid
+
 import pytest
 from pydantic import BaseModel
 
@@ -25,6 +27,7 @@ class EventBody(BaseModel):
 @pytest.fixture
 def event_dict():
     return {
+        'id': str(uuid.uuid4()),
         'topic': 'test-topic',
         'type': 'test-type',
         'body': {

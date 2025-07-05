@@ -1,3 +1,4 @@
+import uuid
 from typing import Annotated
 
 import pytest
@@ -11,6 +12,7 @@ from dispytch.di.solver import solve_dependencies
 @pytest.fixture
 def event_dict():
     return {
+        'id': str(uuid.uuid4()),
         'topic': 'test-topic',
         'type': 'test-type',
         'body': {

@@ -12,7 +12,7 @@ from dispytch.listener.handler_group import HandlerGroup
 async def _call_handler_with_injected_dependencies(handler: Handler, event: ConsumerEvent):
     async with solve_dependencies(handler.func,
                                   EventHandlerContext(
-                                      event=event.model_dump(exclude={'id'})
+                                      event=event.model_dump()
                                   )) as deps:
         try:
             await handler.handle(**deps)
