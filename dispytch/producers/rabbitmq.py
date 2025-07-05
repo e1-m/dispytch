@@ -1,5 +1,6 @@
 from aio_pika import Message
 from aio_pika.abc import AbstractExchange
+from pydantic import BaseModel
 
 from dispytch.emitter.producer import Producer
 from dispytch.producers.serializer import Serializer
@@ -13,7 +14,7 @@ class RabbitMQProducer(Producer):
         self.exchange = exchange
         self.serializer = serializer or JSONSerializer()
 
-    async def send(self, topic: str, payload: dict, **kwargs) -> None:
+    async def send(self, topic: str, payload: dict, config: BaseModel | None = None):
         await self.exchange.publish(
             Message(
                 body=self.serializer.serialize(payload)
