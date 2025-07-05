@@ -7,11 +7,17 @@ from dispytch.consumers import RabbitMQConsumer
 
 
 @pytest_asyncio.fixture()
-async def rabbitmq_connection():
+def connection_string():
     host = 'localhost'
     port = 5672
 
     connection_string = f"amqp://guest:guest@{host}:{port}"
+
+    return connection_string
+
+
+@pytest_asyncio.fixture()
+async def rabbitmq_connection(connection_string):
     connection = await aio_pika.connect(connection_string)
     yield connection
     await connection.close()
@@ -31,13 +37,21 @@ async def rabbitmq_exchange(rabbitmq_channel):
         aio_pika.ExchangeType.DIRECT
     )
     yield exchange
+    try:
+        await exchange.delete()
+    except Exception:
+        pass
 
 
 @pytest_asyncio.fixture()
 async def rabbitmq_queue(rabbitmq_channel, rabbitmq_exchange):
     queue = await rabbitmq_channel.declare_queue('test_events')
-    await queue.bind(rabbitmq_exchange, routing_key='test_event')
+    await queue.bind(rabbitmq_exchange, routing_key='test_events')
     yield queue
+    try:
+        await queue.delete()
+    except Exception:
+        pass
 
 
 @pytest_asyncio.fixture()

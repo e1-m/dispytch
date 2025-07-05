@@ -61,7 +61,7 @@ async def test_kafka_emit_and_receive(emitter: EventEmitter, listener: EventList
 
     await emitter.emit(test_event)
 
-    await asyncio.sleep(0.4)
+    await asyncio.sleep(event_processing_delay)
 
     try:
         listener_task.cancel()
