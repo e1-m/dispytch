@@ -10,5 +10,7 @@ class KafkaProducer(Producer):
         self.producer = producer
         self.serializer = serializer or JSONSerializer()
 
-    async def send(self, topic: str, payload: dict) -> None:
-        await self.producer.send(topic, value=self.serializer.serialize(payload))
+    async def send(self, topic: str, payload: dict, **kwargs) -> None:
+        await self.producer.send(topic=topic,
+                                 value=self.serializer.serialize(payload),
+                                 key=kwargs["key"])

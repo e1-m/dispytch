@@ -13,5 +13,10 @@ class RabbitMQProducer(Producer):
         self.exchange = exchange
         self.serializer = serializer or JSONSerializer()
 
-    async def send(self, topic: str, payload: dict) -> None:
-        await self.exchange.publish(Message(body=self.serializer.serialize(payload)), routing_key=topic)
+    async def send(self, topic: str, payload: dict, **kwargs) -> None:
+        await self.exchange.publish(
+            Message(
+                body=self.serializer.serialize(payload)
+            ),
+            routing_key=topic
+        )
