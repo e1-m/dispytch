@@ -46,7 +46,7 @@ def listener(request):
     ],
     indirect=True,
 )
-async def test_kafka_emit_and_receive(emitter: EventEmitter, listener: EventListener):
+async def test_emit_and_receive(emitter: EventEmitter, listener: EventListener):
     """Test basic event emission and reception with Kafka."""
     received_events = []
 
@@ -83,7 +83,7 @@ async def test_kafka_emit_and_receive(emitter: EventEmitter, listener: EventList
     ],
     indirect=True,
 )
-async def test_kafka_multiple_events(emitter: EventEmitter, listener: EventListener):
+async def test_multiple_events(emitter: EventEmitter, listener: EventListener):
     """Test handling multiple events in sequence."""
     received_events = []
 
@@ -124,11 +124,11 @@ async def test_kafka_multiple_events(emitter: EventEmitter, listener: EventListe
     ],
     indirect=True,
 )
-async def test_kafka_handler_with_retries(emitter: EventEmitter, listener: EventListener):
+async def test_handler_with_retries(emitter: EventEmitter, listener: EventListener):
     """Test handler retry functionality."""
     attempts = []
 
-    @listener.handler(topic='test_events', event='test_event', retries=2, retry_interval_sec=0)
+    @listener.handler(topic='test_events', event='test_event', retries=2, retry_interval=0)
     async def handle_event_with_retries(event: Event[MyEventBody]):
         attempts.append(1)
         if len(attempts) <= 2:
@@ -162,7 +162,7 @@ async def test_kafka_handler_with_retries(emitter: EventEmitter, listener: Event
     ],
     indirect=True,
 )
-async def test_kafka_handler_with_dependencies(emitter: EventEmitter, listener: EventListener):
+async def test_handler_with_dependencies(emitter: EventEmitter, listener: EventListener):
     """Test dependency injection in handlers."""
     results = []
 
