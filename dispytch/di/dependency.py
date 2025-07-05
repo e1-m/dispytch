@@ -35,12 +35,24 @@ def _get_async_cm_from_cm(sync_cm: ContextManager[Any]):
     return wrapper()
 
 
-DependencyFuncType = Callable[
+DependencyType = Callable[
     ..., Any | AsyncContextManager | ContextManager | AsyncGenerator | Generator | AsyncIterator | Iterator]
 
 
 class Dependency:
-    def __init__(self, func: DependencyFuncType, *, use_cache=True):
+    """Wraps a dependency provider for injection.
+
+    This container is used to define functions, generators, or async context managers
+    as injectable dependencies within the framework.
+
+    Args:
+        func: A callable, generator, or context manager that provides the dependency.
+        use_cache:
+            If True (default), the result will be cached and reused across injections.
+            If False, the dependency will be freshly resolved every time, and no caching will occur.
+    """
+
+    def __init__(self, func: DependencyType, *, use_cache=True):
         self.func = func
         self.use_cache = use_cache
 
