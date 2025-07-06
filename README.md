@@ -7,10 +7,10 @@ It’s designed to streamline the development of clean and testable event-driven
 
 * 🧠 **Async-first core** – built for modern Python I/O
 * 🔌 **FastAPI-style dependency injection** – clean, decoupled handlers
-* 🔁 **Built-in retry logic** – configurable, resilient, no boilerplate
-* 📬 **Backend-flexible** – Kafka and RabbitMQ out-of-the-box
+* 📬 **Backend-flexible** – with Kafka and RabbitMQ out-of-the-box
 * 🧱 **Composable architecture** – extend, override, or inject anything
-
+* 🧾 **Pydantic-based validation** – event schemas are validated using pydantic 
+* 🔁 **Built-in retry logic** – configurable, resilient, no boilerplate
 ---
 
 ## 📦 Installation
@@ -18,11 +18,13 @@ It’s designed to streamline the development of clean and testable event-driven
 Install using [uv](https://github.com/astral-sh/uv) with extras for your preferred backend:
 
 for Kafka support:
+
 ```bash
 uv add dispytch[kafka]
 ```
 
 For RabbitMQ support:
+
 ```bash
 uv add dispytch[rabbitmq]
 ```
@@ -111,15 +113,6 @@ async def example_emit(emitter):
     )
 
 ```
-
----
-
-## ✅ Why Dispytch?
-
-* 🧼 **Minimal boilerplate** – Just annotate and go
-* 🧪 **Testable logic** – Handlers are first-class coroutines
-* 🔄 **Flexible backends** – Kafka, RabbitMQ, or bring your own
-* 🧩 **Clean separation of concerns** – business logic ≠ plumbing
 
 ---
 
