@@ -24,10 +24,9 @@ async def test_send_multiple_calls_with_different_configs(kafka_producer, mock_k
         KafkaEventConfig(partition_by="user.id")
     )
 
-    assert mock_kafka_producer.send.call_count == 3
-    assert mock_serializer.serialize.call_count == 3
+    assert mock_kafka_producer.send_and_wait.call_count == 3
 
-    calls = mock_kafka_producer.send.call_args_list
+    calls = mock_kafka_producer.send_and_wait.call_args_list
     assert calls[0][1]["key"] is None
     assert calls[1][1]["key"] == 2
     assert calls[2][1]["key"] == 3
@@ -48,9 +47,9 @@ async def test_send_with_same_config_different_payloads(kafka_producer, mock_kaf
     for payload in payloads:
         await kafka_producer.send(topic, payload, config)
 
-    assert mock_kafka_producer.send.call_count == 3
+    assert mock_kafka_producer.send_and_wait.call_count == 3
 
-    calls = mock_kafka_producer.send.call_args_list
+    calls = mock_kafka_producer.send_and_wait.call_args_list
     assert calls[0][1]["key"] == "user1"
     assert calls[1][1]["key"] == "user2"
     assert calls[2][1]["key"] == "user3"

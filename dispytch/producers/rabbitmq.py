@@ -1,3 +1,4 @@
+from asyncio import TimeoutError
 from datetime import datetime, timedelta
 from decimal import Decimal
 from typing import Any
@@ -31,9 +32,11 @@ class RabbitMQEventConfig(BaseModel):
 class RabbitMQProducer(Producer):
     def __init__(self,
                  exchange: AbstractExchange,
-                 serializer: Serializer = None) -> None:
+                 serializer: Serializer = None,
+                 timeout: int | float | None = None) -> None:
         self.exchange = exchange
         self.serializer = serializer or JSONSerializer()
+        self.timeout = timeout
 
     async def send(self, topic: str, payload: dict, config: BaseModel | None = None):
         if config is not None and not isinstance(config, RabbitMQEventConfig):
@@ -42,22 +45,26 @@ class RabbitMQProducer(Producer):
             )
         config = config or RabbitMQEventConfig()
 
-        await self.exchange.publish(
-            Message(
-                body=self.serializer.serialize(payload),
-                delivery_mode=config.delivery_mode,
-                priority=config.priority,
-                expiration=config.expiration,
-                headers=config.headers,
-                content_type=config.content_type,
-                content_encoding=config.content_encoding,
-                correlation_id=config.correlation_id,
-                reply_to=config.reply_to,
-                message_id=config.message_id,
-                timestamp=config.timestamp,
-                type=config.type,
-                user_id=config.user_id,
-                app_id=config.app_id,
-            ),
-            routing_key=topic
-        )
+        try:
+            await self.exchange.publish(
+                Message(
+                    body=self.serializer.serialize(payload),
+                    delivery_mode=config.delivery_mode,
+                    priority=config.priority,
+                    expiration=config.expiration,
+                    headers=config.headers,
+                    content_type=config.content_type,
+                    content_encoding=config.content_encoding,
+                    correlation_id=config.correlation_id,
+                    reply_to=config.reply_to,
+                    message_id=config.message_id,
+                    timestamp=config.timestamp,
+                    type=config.type,
+                    user_id=config.user_id,
+                    app_id=config.app_id,
+                ),
+                routing_key=topic,
+                timeout=self.timeout,
+            )
+        except TimeoutError:
+            ...

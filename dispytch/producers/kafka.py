@@ -1,6 +1,7 @@
 from typing import Optional
 
 from aiokafka import AIOKafkaProducer
+from aiokafka.errors import KafkaTimeoutError
 from pydantic import BaseModel
 
 from dispytch.emitter.producer import Producer
@@ -29,12 +30,15 @@ class KafkaProducer(Producer):
 
         partition_key = _extract_partition_key(payload, config.partition_by) if config.partition_by else None
 
-        await self.producer.send(topic=topic,
-                                 value=self.serializer.serialize(payload),
-                                 key=partition_key,
-                                 partition=config.partition,
-                                 timestamp_ms=config.timestamp_ms,
-                                 headers=config.headers)
+        try:
+            await self.producer.send_and_wait(topic=topic,
+                                              value=self.serializer.serialize(payload),
+                                              key=partition_key,
+                                              partition=config.partition,
+                                              timestamp_ms=config.timestamp_ms,
+                                              headers=config.headers)
+        except KafkaTimeoutError:
+            ...
 
 
 def _extract_partition_key(event: dict, partition_key: str):

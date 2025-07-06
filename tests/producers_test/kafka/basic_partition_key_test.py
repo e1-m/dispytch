@@ -12,7 +12,7 @@ async def test_send_with_no_config(kafka_producer, mock_kafka_producer):
 
     await kafka_producer.send(topic, payload)
 
-    args, kwargs = mock_kafka_producer.send.call_args
+    args, kwargs = mock_kafka_producer.send_and_wait.call_args
 
     assert kwargs["topic"] == topic
     assert kwargs["value"] == "serialized_data"
@@ -28,7 +28,7 @@ async def test_send_with_empty_config(kafka_producer, mock_kafka_producer, mock_
 
     await kafka_producer.send(topic, payload, config)
 
-    args, kwargs = mock_kafka_producer.send.call_args
+    args, kwargs = mock_kafka_producer.send_and_wait.call_args
 
     assert kwargs["topic"] == topic
     assert kwargs["value"] == "serialized_data"
@@ -44,7 +44,7 @@ async def test_send_with_simple_partition_key(kafka_producer, mock_kafka_produce
 
     await kafka_producer.send(topic, payload, config)
 
-    args, kwargs = mock_kafka_producer.send.call_args
+    args, kwargs = mock_kafka_producer.send_and_wait.call_args
 
     assert kwargs["topic"] == topic
     assert kwargs["value"] == "serialized_data"
@@ -66,7 +66,7 @@ async def test_send_with_nested_partition_key(kafka_producer, mock_kafka_produce
 
     await kafka_producer.send(topic, payload, config)
 
-    args, kwargs = mock_kafka_producer.send.call_args
+    args, kwargs = mock_kafka_producer.send_and_wait.call_args
 
     assert kwargs["topic"] == topic
     assert kwargs["value"] == "serialized_data"
@@ -92,7 +92,7 @@ async def test_send_with_deeply_nested_partition_key(kafka_producer, mock_kafka_
 
     await kafka_producer.send(topic, payload, config)
 
-    args, kwargs = mock_kafka_producer.send.call_args
+    args, kwargs = mock_kafka_producer.send_and_wait.call_args
 
     assert kwargs["topic"] == topic
     assert kwargs["value"] == "serialized_data"
@@ -108,7 +108,7 @@ async def test_send_with_integer_partition_key(kafka_producer, mock_kafka_produc
 
     await kafka_producer.send(topic, payload, config)
 
-    args, kwargs = mock_kafka_producer.send.call_args
+    args, kwargs = mock_kafka_producer.send_and_wait.call_args
 
     assert kwargs["topic"] == topic
     assert kwargs["value"] == "serialized_data"
@@ -143,7 +143,7 @@ async def test_send_with_complex_nested_structure(kafka_producer, mock_kafka_pro
 
     await kafka_producer.send(topic, payload, config)
 
-    args, kwargs = mock_kafka_producer.send.call_args
+    args, kwargs = mock_kafka_producer.send_and_wait.call_args
 
     assert kwargs["topic"] == topic
     assert kwargs["value"] == "serialized_data"
