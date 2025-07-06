@@ -1,0 +1,33 @@
+site_name: Dispytch
+repo_url: https://github.com/e1-m/dispytch
+repo_name: e1-m/dispytch
+theme:
+  name: material
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+  features:
+    - navigation.tabs
+    - content.code.annotate
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+markdown_extensions:
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+  - pymdownx.highlight:
+      use_pygments: true
+      linenums: true
+nav:
+  - Home: index.md
+  - Getting Started:
+      - Installation: getting-started/installation.md
+      - Quickstart: getting-started/quickstart.md
