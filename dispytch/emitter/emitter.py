@@ -21,7 +21,7 @@ class EventEmitter:
 
     def __init__(self, producer: Producer):
         self.producer = producer
-        self.on_timeout = lambda e: logger.warning(f"Event {e} hit a timeout during emission")
+        self._on_timeout = lambda e: logger.warning(f"Event {e} hit a timeout during emission")
 
     async def emit(self, event: EventBase):
         try:
@@ -35,9 +35,9 @@ class EventEmitter:
                 config=event.__backend_config__
             )
         except ProducerTimeout:
-            if isawaitable(res := self.on_timeout(event)):
+            if isawaitable(res := self._on_timeout(event)):
                 await res
 
     def on_timeout(self, callback: Callable[[EventBase], None]):
-        self.on_timeout = callback
+        self._on_timeout = callback
         return callback
