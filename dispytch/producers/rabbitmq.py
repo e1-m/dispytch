@@ -14,18 +14,18 @@ from dispytch.serializers import JSONSerializer
 
 class RabbitMQEventConfig(BaseModel):
     delivery_mode: DeliveryMode | int | None = None
-    priority: int | None = None,
-    expiration: int | datetime | float | timedelta | None = None,
+    priority: int | None = None
+    expiration: int | datetime | float | timedelta | None = None
     headers: dict[str, bool | bytes | Decimal | list | dict[
-        str, Any] | float | int | None | str | datetime] | None = None,
-    content_type: str | None = None,
-    content_encoding: str | None = None,
-    correlation_id: str | None = None,
-    reply_to: str | None = None,
-    message_id: str | None = None,
-    timestamp: int | datetime | float | timedelta | None = None,
-    type: str | None = None,
-    user_id: str | None = None,
+        str, Any] | float | int | None | str | datetime] | None = None
+    content_type: str | None = None
+    content_encoding: str | None = None
+    correlation_id: str | None = None
+    reply_to: str | None = None
+    message_id: str | None = None
+    timestamp: int | datetime | float | timedelta | None = None
+    type: str | None = None
+    user_id: str | None = None
     app_id: str | None = None
 
 

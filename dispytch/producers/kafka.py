@@ -12,7 +12,7 @@ from dispytch.serializers import JSONSerializer
 class KafkaEventConfig(BaseModel):
     partition_by: Optional[str] = None
     partition: Optional[int] = None
-    timestamp_ms: Optional[int] = None,
+    timestamp_ms: Optional[int] = None
     headers: Optional[dict] = None
 
 
