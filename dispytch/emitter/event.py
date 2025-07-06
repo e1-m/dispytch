@@ -31,6 +31,6 @@ class EventBase(BaseModel):
     __topic__: ClassVar[str]
     __event_type__: ClassVar[str]
 
-    __backend_config__: ClassVar[Optional[BaseModel]] = None
+    __backend_config__: Optional[BaseModel] = None
 
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))

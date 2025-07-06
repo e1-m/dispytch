@@ -10,6 +10,9 @@ from dispytch.serializers import JSONSerializer
 
 class KafkaEventConfig(BaseModel):
     partition_by: Optional[str] = None
+    partition: Optional[int] = None
+    timestamp_ms: Optional[int] = None,
+    headers: Optional[dict] = None
 
 
 class KafkaProducer(Producer):
@@ -28,7 +31,10 @@ class KafkaProducer(Producer):
 
         await self.producer.send(topic=topic,
                                  value=self.serializer.serialize(payload),
-                                 key=partition_key)
+                                 key=partition_key,
+                                 partition=config.partition,
+                                 timestamp_ms=config.timestamp_ms,
+                                 headers=config.headers)
 
 
 def _extract_partition_key(event: dict, partition_key: str):
