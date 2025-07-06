@@ -32,9 +32,9 @@ class EventListener:
     """
 
     def __init__(self, consumer: Consumer):
-        self.tasks = set()
         self.consumer = consumer
-        self.handlers: dict[str, dict[str, list[Handler]]] = defaultdict(lambda: defaultdict(list))
+        self._tasks = set()
+        self._handlers: dict[str, dict[str, list[Handler]]] = defaultdict(lambda: defaultdict(list))
 
     async def listen(self):
         """
@@ -43,14 +43,14 @@ class EventListener:
 
         async for event in self.consumer.listen():
             task = asyncio.create_task(self._handle_event(event))
-            self.tasks.add(task)
-            task.add_done_callback(self.tasks.discard)
+            self._tasks.add(task)
+            task.add_done_callback(self._tasks.discard)
 
-        if self.tasks:
-            await asyncio.wait(self.tasks)
+        if self._tasks:
+            await asyncio.wait(self._tasks)
 
     async def _handle_event(self, event: ConsumerEvent):
-        handlers = self.handlers[event.topic][event.type]
+        handlers = self._handlers[event.topic][event.type]
         if not handlers:
             logging.info(f'There is not handler for topic `{event.topic}` and event type `{event.type}`')
             return
@@ -83,7 +83,7 @@ class EventListener:
             """
 
         def decorator(callback):
-            self.handlers[topic][event].append(Handler(callback, retries, retry_interval, retry_on))
+            self._handlers[topic][event].append(Handler(callback, retries, retry_interval, retry_on))
             return callback
 
         return decorator
@@ -97,4 +97,4 @@ class EventListener:
         """
         for topic in group.handlers:
             for event in group.handlers[topic]:
-                self.handlers[topic][event].extend(group.handlers[topic][event])
+                self._handlers[topic][event].extend(group.handlers[topic][event])
