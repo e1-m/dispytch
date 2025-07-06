@@ -7,7 +7,7 @@ from aio_pika import Message
 from aio_pika.abc import AbstractExchange, DeliveryMode
 from pydantic import BaseModel
 
-from dispytch.emitter.producer import Producer
+from dispytch.emitter.producer import Producer, ProducerTimeout
 from dispytch.producers.serializer import Serializer
 from dispytch.serializers import JSONSerializer
 
@@ -67,4 +67,4 @@ class RabbitMQProducer(Producer):
                 timeout=self.timeout,
             )
         except TimeoutError:
-            ...
+            raise ProducerTimeout()

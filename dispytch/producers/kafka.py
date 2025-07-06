@@ -4,7 +4,7 @@ from aiokafka import AIOKafkaProducer
 from aiokafka.errors import KafkaTimeoutError
 from pydantic import BaseModel
 
-from dispytch.emitter.producer import Producer
+from dispytch.emitter.producer import Producer, ProducerTimeout
 from dispytch.producers.serializer import Serializer
 from dispytch.serializers import JSONSerializer
 
@@ -38,7 +38,7 @@ class KafkaProducer(Producer):
                                               timestamp_ms=config.timestamp_ms,
                                               headers=config.headers)
         except KafkaTimeoutError:
-            ...
+            raise ProducerTimeout()
 
 
 def _extract_partition_key(event: dict, partition_key: str):
