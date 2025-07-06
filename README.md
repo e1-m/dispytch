@@ -15,8 +15,16 @@ It’s designed to streamline the development of clean and testable event-driven
 
 ## 📦 Installation
 
+Install using [uv](https://github.com/astral-sh/uv) with extras for your preferred backend:
+
+for Kafka support:
 ```bash
-pip install dispytch
+uv add dispytch[kafka]
+```
+
+For RabbitMQ support:
+```bash
+uv add dispytch[rabbitmq]
 ```
 
 ---
@@ -116,6 +124,7 @@ async def example_emit(emitter):
 ---
 
 ## ⚠️ Limitations
+
 While dispytch is a great choice for most usecases there are some limitations to be aware of:
 
 🧾 No schema-on-write support
@@ -125,8 +134,9 @@ Dispytch uses a schema-on-read model. Formats like Avro, Protobuf, or Thrift are
 Failed messages are retried using built-in logic, but there’s no DLQ or fallback mechanism after final retries yet.
 
 🧩 No topic pattern matching
-Wildcard or templated subscriptions (e.g. user.*, order:{id}:events) aren’t supported in handler declarations yet. 
-Though the backend of you choice may route events to the appropriate queues/topics/channels there is no way for a dispytch handler to know it yet
+Wildcard or templated subscriptions (e.g. user.*, order:{id}:events) aren’t supported in handler declarations yet.
+Though the backend of you choice may route events to the appropriate queues/topics/channels there is no way for a
+dispytch handler to know it yet
 
 ---
 💡 See something missing?
