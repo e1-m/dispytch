@@ -157,6 +157,21 @@ So don’t skip it. Don’t forget it. Your future self will thank you.
 
 ---
 
+## ⏱️ Handling Timeouts with `on_timeout`
+
+By default, if an event fails to emit due to a timeout, Dispytch logs a warning. If you want custom behavior (e.g.,
+metrics, retries, alerts), you can register a callback using `on_timeout()`:
+
+```python
+@emitter.on_timeout
+def handle_timeout(event):
+    print(f"Event {event.id} failed to emit!")
+```
+
+The callback can be sync or async, and receives the original `EventBase` instance that timed out.
+
+---
+
 ## 📌 Notes
 
 * Dispytch automatically **serializes the payload** as JSON by default. To change the default serializer you can
