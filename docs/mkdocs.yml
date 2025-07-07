@@ -6,12 +6,16 @@ theme:
   icon:
     repo: fontawesome/brands/github
   palette:
-    - scheme: default
-      primary: indigo
-      accent: indigo
-    - scheme: slate
-      primary: indigo
-      accent: indigo
+    - media: "(prefers-color-scheme: light)"
+      scheme: slate
+      toggle:
+        icon: material/lightbulb
+        name: Switch to light mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: default
+      toggle:
+        icon: material/lightbulb-outline
+        name: Switch to dark mode
   features:
     - navigation.tabs
     - content.code.annotate
@@ -31,3 +35,6 @@ nav:
   - Getting Started:
       - Installation: getting-started/installation.md
       - Quickstart: getting-started/quickstart.md
+  - Core Concepts:
+      - Architecture Overview: concepts/architecture.md
+      - Dependency Injection: concepts/di.md
