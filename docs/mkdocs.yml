@@ -43,3 +43,4 @@ nav:
       - Event Emitter: concepts/emitter.md
       - Event Listener: concepts/listener.md
       - Serialization & Deserialization: concepts/serialization.md
+      - Custom Producers & Consumers: concepts/own_consumers_and_producers.md
