@@ -23,6 +23,8 @@ theme:
     - search.highlight
     - content.tabs.link
 markdown_extensions:
+  - pymdownx.blocks.tab:
+      alternate_style: true
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
@@ -38,3 +40,4 @@ nav:
   - Core Concepts:
       - Architecture Overview: concepts/architecture.md
       - Dependency Injection: concepts/di.md
+      - Event Emitter: concepts/emitter.md
