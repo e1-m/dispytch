@@ -42,3 +42,4 @@ nav:
       - Dependency Injection: concepts/di.md
       - Event Emitter: concepts/emitter.md
       - Event Listener: concepts/listener.md
+      - Serialization & Deserialization: concepts/serialization.md
