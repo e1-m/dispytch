@@ -27,11 +27,7 @@ class UserRegistered(EventBase):
 ### **📤 EventEmitter**
 
 Handles outbound events.
-Wraps a backend-specific producer (Kafka, RabbitMQ, etc.), handling:
-
-* Serialization
-* Topic and partition resolution
-* Metadata injection
+Wraps a backend-specific producer (Kafka, RabbitMQ, etc.), handles serialization and topic resolution:
 
 ```python
 producer = ...  # your backend producer setup
@@ -48,7 +44,6 @@ async def emit_user_registered():
 
 A registry for event handlers.
 Lets you organize handlers by topic and event type.
-Supports dynamic registration and modular grouping.
 
 ```python
 class UserRegisteredBody(BaseModel):
@@ -69,7 +64,7 @@ async def handle_user_registered(event: Event[UserRegisteredBody]):
 ### **📥 EventListener**
 
 Handles inbound events.
-Consumes events from a backend and dispatches them to relevant handlers—fully async and designed for scale.
+Consumes events from a backend and dispatches them to relevant handlers—fully async.
 
 ```python
 

@@ -58,18 +58,6 @@ At runtime, Dispytch:
 
 ---
 
-### 🔧 Features
-
-- ✅ Supports sync and async factories (including yield-based context managers)
-
-- 🧼 Automatic lifecycle management (setup and teardown)
-
-- 📦 Context-aware factories (access the event, topic, metadata, etc.)
-
-- 🧪 Easy to mock for testing (handlers are just functions)
-
----
-
 ## 🧩 Nested Dependencies
 
 Dispytch supports dependency chains—where one dependency depends on another. Each layer is resolved automatically, with
@@ -86,7 +74,7 @@ async def get_config() -> Config:
     return Config()
 
 
-async def get_service(config: Annotated[Config, Dependency(get_config)]) -> AsyncIterator[Service]:
+async def get_service(config: Annotated[Config, Dependency(get_config)]):
     service = Service(config.threshold)
     yield service
     await service.cleanup()
@@ -105,8 +93,6 @@ async def handle_nested(
 * `get_service` declares a dependency on `get_config`
 * Dispytch resolves `get_config`, then passes the result to `get_service`
 * The final resolved `Service` is injected into the handler
-
-> You don’t need to manually resolve dependencies—Dispytch builds the graph and handles it for you.
 
 ---
 
@@ -146,12 +132,6 @@ async def handle_event_with_logger(
 
 ---
 
-### 🔍 Highlights
-
-* Dependencies can access both event metadata (__topic__, __event_type__, etc.) and the validated event body
-
-* Enables dynamic behavior based on event content or origin
-
 ### 🧰 Common Use Cases
 
 * 📋 Structured logging – Include event context in every log entry
@@ -166,7 +146,8 @@ As an alternative for the `Annotated[T, Dependency(...)]` style, Dispytch lets y
 `Dependency` instance directly as a default value for a handler parameter. Functionally the same—just a different
 flavor.
 
-> 📋 Note: This injection method **does not work** for the `Event` parameter. You must use explicit type hints for `Event` to enable proper injection.
+> 📋 Note: This injection method **does not work** for the `Event` parameter. You must use explicit type hints for
+`Event` to enable proper injection.
 
 ### ✍️ Example
 

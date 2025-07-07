@@ -171,13 +171,8 @@ So don’t skip it. Don’t forget it. Your future self will thank you.
 * The event payload must match the Pydantic schema — or decoding will fail.
 * The `event` string must match `__event_type__` of the published event.
 * Event handling is **fully async**, and multiple handlers can run concurrently.
-
----
-
-### 💡 Tips
-
-* Keep handler functions **single-purpose**. Use DI to move logic out.
 * You can attach **multiple handlers** to the same topic and event type.
+---
 
 ## 🔁 Retries
 
@@ -214,7 +209,7 @@ attempts.
 ## 🧩 `HandlerGroup`
 
 `HandlerGroup` allows you to organize and register handlers **modularly**, useful for grouping handlers by topic or
-event type. It's especially handy for large codebases or reusable handler sets.
+event type.
 
 ### ✅ Use Cases
 
