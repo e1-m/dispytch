@@ -41,3 +41,4 @@ nav:
       - Architecture Overview: concepts/architecture.md
       - Dependency Injection: concepts/di.md
       - Event Emitter: concepts/emitter.md
+      - Event Listener: concepts/listener.md
