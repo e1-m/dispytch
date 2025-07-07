@@ -9,6 +9,8 @@
       
       
       
+        <link rel="prev" href="../own_consumers_and_producers/">
+      
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -16,7 +18,7 @@
     
     
       
-        <title>RabbitMQ Backend - Dispytch</title>
+        <title>Backend Configuration - Dispytch</title>
       
     
     
@@ -68,7 +70,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#rabbitmq-backend" class="md-skip">
+        <a href="#backend-specific-event-settings" class="md-skip">
           Skip to content
         </a>
       
@@ -102,7 +104,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              RabbitMQ Backend
+              Backend Configuration
             
           </span>
         </div>
@@ -241,6 +243,28 @@
   
   
   Getting Started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../architecture/" class="md-tabs__link">
+          
+  
+  
+  Core Concepts
 
         </a>
       </li>
@@ -409,6 +433,443 @@
   
 
     
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Core Concepts
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Core Concepts
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview & Architecture
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../di/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Dependency Injection
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Events
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            Events
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../emitter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Emitting Events
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../listener/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Listening for Events
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../serialization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Serialization
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Advanced Usage
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Advanced Usage
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../own_consumers_and_producers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Custom Producers & Consumers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Backend Configuration
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Backend Configuration
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-__backend_config__" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧩 What Is __backend_config__?
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧩 What Is __backend_config__?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔎 Example
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kafkaeventconfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      🪵 KafkaEventConfig
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🪵 KafkaEventConfig">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#partition_by-dynamic-partitioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧠 partition_by: Dynamic Partitioning
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧠 partition_by: Dynamic Partitioning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Example
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rabbitmqeventconfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      🐇 RabbitMQEventConfig
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementing-custom-configs" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔨 Implementing Custom Configs
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -436,36 +897,81 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#installation" class="md-nav__link">
+  <a href="#what-is-__backend_config__" class="md-nav__link">
     <span class="md-ellipsis">
-      Installation
+      🧩 What Is __backend_config__?
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧩 What Is __backend_config__?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔎 Example
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kafkaeventconfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      🪵 KafkaEventConfig
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🪵 KafkaEventConfig">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#partition_by-dynamic-partitioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧠 partition_by: Dynamic Partitioning
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧠 partition_by: Dynamic Partitioning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Example
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rabbitmqeventconfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      🐇 RabbitMQEventConfig
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#consuming-events-rabbitmq-consumer" class="md-nav__link">
+  <a href="#implementing-custom-configs" class="md-nav__link">
     <span class="md-ellipsis">
-      Consuming Events (RabbitMQ Consumer)
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#notes-on-rabbitmq-integration" class="md-nav__link">
-    <span class="md-ellipsis">
-      Notes on RabbitMQ Integration
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#example-queue-declaration-optional" class="md-nav__link">
-    <span class="md-ellipsis">
-      Example Queue Declaration (Optional)
+      🔨 Implementing Custom Configs
     </span>
   </a>
   
@@ -490,89 +996,107 @@
   
 
 
-<h1 id="rabbitmq-backend">RabbitMQ Backend</h1>
-<p>Dispytch supports RabbitMQ as a backend for both emitting and consuming events.</p>
-<p>It integrates cleanly with <code>aio-pika</code>, using AMQP 0.9.1 under the hood.</p>
+<h1 id="backend-specific-event-settings">⚙️ Backend-Specific Event Settings</h1>
+<p>Events often need fine-grained control over how they’re published—things like partitioning, headers, priorities,
+timestamps, etc. Dispytch supports this via the optional <code>__backend_config__</code> class attribute on any <code>EventBase</code>
+subclass.</p>
+<p>This lets you define backend-specific settings <em>inside</em> your event class in a clean, declarative way.</p>
 <hr />
-<h2 id="installation">Installation</h2>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span></pre></div></td><td class="code"><div><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>dispytch<span class="o">[</span>rabbitmq<span class="o">]</span>
-<span class="sb">````</span>
-
-This<span class="w"> </span>installs<span class="w"> </span><span class="sb">`</span>aio-pika<span class="sb">`</span><span class="w"> </span>and<span class="w"> </span>necessary<span class="w"> </span>dependencies.
-
----
-
-<span class="c1">## Producing Events (RabbitMQ Producer)</span>
-
-To<span class="w"> </span>emit<span class="w"> </span>events<span class="w"> </span>via<span class="w"> </span>RabbitMQ:
-
-<span class="sb">```</span>python
-import<span class="w"> </span>aio_pika
-from<span class="w"> </span>dispytch_rabbitmq<span class="w"> </span>import<span class="w"> </span>RabbitMQProducer
-from<span class="w"> </span>dispytch<span class="w"> </span>import<span class="w"> </span>EventEmitter
-
-<span class="nv">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>await<span class="w"> </span>aio_pika.connect_robust<span class="o">(</span><span class="s2">&quot;amqp://guest:guest@localhost/&quot;</span><span class="o">)</span>
-<span class="nv">channel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>await<span class="w"> </span>connection.channel<span class="o">()</span>
-
-<span class="nv">producer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>RabbitMQProducer<span class="o">(</span>channel<span class="o">)</span>
-<span class="nv">emitter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>EventEmitter<span class="o">(</span>producer<span class="o">)</span>
-</code></pre></div></td></tr></table></div>
-<p>Now you can emit events like this:</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">await</span> <span class="n">emitter</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">UserRegistered</span><span class="p">(</span><span class="o">...</span><span class="p">))</span>
-</code></pre></div></td></tr></table></div>
-<hr />
-<h2 id="consuming-events-rabbitmq-consumer">Consuming Events (RabbitMQ Consumer)</h2>
-<p>To listen for events:</p>
+<h2 id="what-is-__backend_config__">🧩 What Is <code>__backend_config__</code>?</h2>
+<p><code>__backend_config__</code> is an optional <code>BaseModel</code> that lets you pass custom options to your producer. Each backend (Kafka,
+RabbitMQ, etc.) can define its own config schema.</p>
+<h3 id="example">🔎 Example</h3>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
 <span class="normal">4</span>
-<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">dispytch_rabbitmq</span><span class="w"> </span><span class="kn">import</span> <span class="n">RabbitMQConsumer</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">dispytch</span><span class="w"> </span><span class="kn">import</span> <span class="n">EventListener</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">UserCreated</span><span class="p">(</span><span class="n">EventBase</span><span class="p">):</span>
+    <span class="n">__topic__</span> <span class="o">=</span> <span class="s2">&quot;user_events&quot;</span>
+    <span class="n">__event_type__</span> <span class="o">=</span> <span class="s2">&quot;user_created&quot;</span>
+    <span class="n">__backend_config__</span> <span class="o">=</span> <span class="n">KafkaEventConfig</span><span class="p">(</span><span class="n">partition_by</span><span class="o">=</span><span class="s2">&quot;user.id&quot;</span><span class="p">)</span>
 
-<span class="n">consumer</span> <span class="o">=</span> <span class="n">RabbitMQConsumer</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="n">queue_name</span><span class="o">=</span><span class="s2">&quot;user_events&quot;</span><span class="p">)</span>
-<span class="n">listener</span> <span class="o">=</span> <span class="n">EventListener</span><span class="p">(</span><span class="n">consumer</span><span class="p">)</span>
+    <span class="n">user</span><span class="p">:</span> <span class="n">User</span>
+    <span class="n">timestamp</span><span class="p">:</span> <span class="nb">int</span>
 </code></pre></div></td></tr></table></div>
-<p>Add your handlers and start listening:</p>
+<hr />
+<h2 id="kafkaeventconfig">🪵 KafkaEventConfig</h2>
+<p>Use this config to control how events are sent to Kafka.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
-<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">listener</span><span class="o">.</span><span class="n">add_handler_group</span><span class="p">(</span><span class="n">user_events</span><span class="p">)</span>
-<span class="k">await</span> <span class="n">listener</span><span class="o">.</span><span class="n">listen</span><span class="p">()</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">KafkaEventConfig</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">partition_by</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">partition</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">timestamp_ms</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">headers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 </code></pre></div></td></tr></table></div>
-<hr />
-<h2 id="notes-on-rabbitmq-integration">Notes on RabbitMQ Integration</h2>
-<ul>
-<li>Each topic maps to a RabbitMQ queue.</li>
-<li>Messages are encoded as JSON.</li>
-<li>Acknowledgements are managed manually after successful handler execution.</li>
-<li>RabbitMQ does not support native partitions, so <code>__partition_by__</code> is ignored.</li>
-<li>Retry logic is handled by Dispytch — not RabbitMQ DLX or redelivery.</li>
-</ul>
-<hr />
-<h2 id="example-queue-declaration-optional">Example Queue Declaration (Optional)</h2>
-<p>You can declare queues manually if needed:</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">await</span> <span class="n">channel</span><span class="o">.</span><span class="n">declare_queue</span><span class="p">(</span><span class="s2">&quot;user_events&quot;</span><span class="p">,</span> <span class="n">durable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<h3 id="partition_by-dynamic-partitioning">🧠 <code>partition_by</code>: Dynamic Partitioning</h3>
+<p>Dispytch supports <strong>dot-notation</strong> to extract keys from deeply nested payloads and use them as Kafka partition keys.</p>
+<h4 id="example_1">✅ Example</h4>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">SomeEvent</span><span class="p">(</span><span class="n">EventBase</span><span class="p">):</span>
+    <span class="n">__topic__</span> <span class="o">=</span> <span class="s2">&quot;things&quot;</span>
+    <span class="n">__event_type__</span> <span class="o">=</span> <span class="s2">&quot;thing_happened&quot;</span>
+    <span class="n">__backend_config__</span> <span class="o">=</span> <span class="n">KafkaEventConfig</span><span class="p">(</span><span class="n">partition_by</span><span class="o">=</span><span class="s2">&quot;user.id&quot;</span><span class="p">)</span>
+
+    <span class="n">user</span><span class="p">:</span> <span class="n">User</span>
 </code></pre></div></td></tr></table></div>
-<p>Dispytch will not auto-create queues.</p>
+<p>If the event’s payload contains:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;user&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;user123&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Alice&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="err">...</span>
+<span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p>Then <code>user123</code> will be used as the partition key.</p>
+<hr />
+<h2 id="rabbitmqeventconfig">🐇 RabbitMQEventConfig</h2>
+<p>RabbitMQ gives you full control over message delivery via its rich AMQP options.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">RabbitMQEventConfig</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">delivery_mode</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">priority</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">expiration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="n">datetime</span> <span class="o">|</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">timedelta</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">headers</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">content_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="o">...</span>
+</code></pre></div></td></tr></table></div>
+<p>Using this config, you can set AMQP-specific things</p>
+<hr />
+<h2 id="implementing-custom-configs">🔨 Implementing Custom Configs</h2>
+<p>If you're writing a custom producer (see <a href="../own_consumers_and_producers/">Writing Custom Producers &amp; Consumers</a>), you can define
+your own config schema:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">MyCustomConfig</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">foo</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">retries</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span>
+</code></pre></div></td></tr></table></div>
+<p>Then inspect and apply it inside your <code>send()</code> method:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">MyCustomConfig</span><span class="p">):</span>
+    <span class="n">do_something_with</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">foo</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
 
 
 

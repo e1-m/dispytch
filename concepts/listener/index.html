@@ -9,6 +9,10 @@
       
       
       
+        <link rel="prev" href="../emitter/">
+      
+      
+        <link rel="next" href="../serialization/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -16,7 +20,7 @@
     
     
       
-        <title>EventListener - Dispytch</title>
+        <title>Listening for Events - Dispytch</title>
       
     
     
@@ -102,7 +106,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              EventListener
+              Listening for Events
             
           </span>
         </div>
@@ -241,6 +245,28 @@
   
   
   Getting Started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../architecture/" class="md-tabs__link">
+          
+  
+  
+  Core Concepts
 
         </a>
       </li>
@@ -409,6 +435,479 @@
   
 
     
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Core Concepts
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Core Concepts
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview & Architecture
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../di/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Dependency Injection
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Events
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            Events
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../emitter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Emitting Events
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Listening for Events
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Listening for Events
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-do-i-need-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Why do I need it?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#basic-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧱 Basic Structure
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example-setting-up-event-listener" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✍️ Example: Setting Up Event Listener
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="✍️ Example: Setting Up Event Listener">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#notes-gotchas" class="md-nav__link">
+    <span class="md-ellipsis">
+      ⚠️ Notes &amp; Gotchas
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#retries" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔁 Retries
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔁 Retries">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎯 Parameters:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Example:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#handlergroup" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧩 HandlerGroup
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧩 HandlerGroup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#use-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Use Cases
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔧 Setup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#group-config-behavior" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎯 Group Config Behavior
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../serialization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Serialization
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Advanced Usage
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Advanced Usage
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../own_consumers_and_producers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Custom Producers & Consumers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../backend_specific_event_configs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Backend Configuration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -436,47 +935,119 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#overview" class="md-nav__link">
+  <a href="#why-do-i-need-it" class="md-nav__link">
     <span class="md-ellipsis">
-      Overview
+      ✅ Why do I need it?
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#core-responsibilities" class="md-nav__link">
+  <a href="#basic-structure" class="md-nav__link">
     <span class="md-ellipsis">
-      Core Responsibilities
+      🧱 Basic Structure
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#example-usage" class="md-nav__link">
+  <a href="#example-setting-up-event-listener" class="md-nav__link">
     <span class="md-ellipsis">
-      Example Usage
+      ✍️ Example: Setting Up Event Listener
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="✍️ Example: Setting Up Event Listener">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#notes-gotchas" class="md-nav__link">
+    <span class="md-ellipsis">
+      ⚠️ Notes &amp; Gotchas
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#registering-handler-groups" class="md-nav__link">
-    <span class="md-ellipsis">
-      Registering Handler Groups
-    </span>
-  </a>
+        
+      </ul>
+    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#notes" class="md-nav__link">
+  <a href="#retries" class="md-nav__link">
     <span class="md-ellipsis">
-      Notes
+      🔁 Retries
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="🔁 Retries">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎯 Parameters:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Example:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#handlergroup" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧩 HandlerGroup
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧩 HandlerGroup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#use-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Use Cases
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔧 Setup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#group-config-behavior" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎯 Group Config Behavior
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -499,69 +1070,330 @@
   
 
 
-<h1 id="eventlistener">EventListener</h1>
-<p>The <strong>EventListener</strong> orchestrates consuming events from your backend and dispatching them to the right handlers.</p>
+<h1 id="eventlistener">📥 <code>EventListener</code></h1>
+<p><code>EventListener</code> is Dispytch’s high-level abstraction for consuming events from a message broker (like Kafka or RabbitMQ)
+and dispatching them to appropriate async handler functions. It’s where your event-driven logic lives — clean,
+decoupled, and dependency-injected.</p>
 <hr />
-<h2 id="overview">Overview</h2>
+<h2 id="why-do-i-need-it">✅ Why do I need it?</h2>
 <ul>
-<li>Consumes events asynchronously from a <code>Consumer</code> interface.</li>
-<li>Matches events by topic and event type to registered handlers.</li>
-<li>Supports concurrent handler execution with asyncio tasks.</li>
-<li>Provides retry logic and error logging on failures.</li>
-<li>Supports handler registration via decorators or by importing <code>HandlerGroup</code>s.</li>
+<li>
+<p><strong>Decoupled event handling:</strong> <code>EventListener</code> connects your logic to the outside world without mixing transport
+  concerns into your business code. It listens, routes, and invokes handlers—you just write the logic.</p>
+</li>
+<li>
+<p><strong>Strong typing, minimal guesswork:</strong> With <code>Event[...]</code> and Pydantic models, your handlers receive structured,
+  validated data. No manual parsing, no ambiguous payloads.</p>
+</li>
+<li>
+<p><strong>Built-in dependency injection:</strong> Handlers don’t need to do everything. With first-class support for DI, you can
+  split logic into small, testable, reusable functions that plug into the handler automatically.</p>
+</li>
+<li>
+<p><strong>Async-native execution:</strong> Handlers are fully async. Whether you're processing 10 events or 10,000, <code>EventListener</code>
+  doesn’t block or get in your way.</p>
+</li>
+<li>
+<p><strong>Flexible retry logic:</strong> Failures happen. With per-handler retry controls, you decide what’s worth retrying and how
+  persistent to be—without bloating your handler code.</p>
+</li>
+<li>
+<p><strong>Organized and scalable:</strong> With <code>HandlerGroup</code>, you can group related handlers by topic or concern, making
+  codebases more maintainable and modular.</p>
+</li>
+<li>
+<p><strong>Backend agnostic:</strong> Whether you're consuming from Kafka, RabbitMQ, or anything else behind a compatible consumer,
+  the interface stays the same—clean and stable.</p>
+</li>
 </ul>
+<p><strong>Bottom line:</strong> <code>EventListener</code> gives you a clean, scalable, and testable way to react to events across your system.
+Without it, you're hand-wiring consumers, parsing raw payloads, and stuffing all your logic into bloated callback
+functions.</p>
 <hr />
-<h2 id="core-responsibilities">Core Responsibilities</h2>
-<ol>
-<li>
-<p><strong>Listening</strong><br />
-   Uses <code>async for</code> to listen for incoming events from the backend.</p>
-</li>
-<li>
-<p><strong>Dispatching</strong><br />
-   Finds all handlers matching the event’s topic and type.</p>
-</li>
-<li>
-<p><strong>Dependency Injection</strong><br />
-   Injects dependencies into handlers, allowing clean, decoupled code.</p>
-</li>
-<li>
-<p><strong>Task Management</strong><br />
-   Creates asyncio tasks for each handler call and manages their lifecycle.</p>
-</li>
-<li>
-<p><strong>Acknowledgement</strong><br />
-   Calls the consumer’s ack method on successful handling.</p>
-</li>
-</ol>
-<hr />
-<h2 id="example-usage">Example Usage</h2>
+<h2 id="basic-structure">🧱 Basic Structure</h2>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
 <span class="normal">4</span>
 <span class="normal">5</span>
-<span class="normal">6</span>
-<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">listener</span> <span class="o">=</span> <span class="n">EventListener</span><span class="p">(</span><span class="n">consumer</span><span class="p">)</span>  <span class="c1"># consumer is your Kafka/RabbitMQ consumer instance</span>
+<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">event_listener</span> <span class="o">=</span> <span class="n">EventListener</span><span class="p">(</span><span class="n">consumer</span><span class="p">)</span>
 
-<span class="nd">@listener</span><span class="o">.</span><span class="n">handler</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="s2">&quot;user_events&quot;</span><span class="p">,</span> <span class="n">event</span><span class="o">=</span><span class="s2">&quot;user_registered&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">handle_user_registered</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received user_registered: </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">body</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<span class="k">await</span> <span class="n">listener</span><span class="o">.</span><span class="n">listen</span><span class="p">()</span>
+<span class="nd">@event_listener</span><span class="o">.</span><span class="n">handler</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="s2">&quot;...&quot;</span><span class="p">,</span> <span class="n">event</span><span class="o">=</span><span class="s2">&quot;...&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">handle_event</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+    <span class="o">...</span>
 </code></pre></div></td></tr></table></div>
-<hr />
-<h2 id="registering-handler-groups">Registering Handler Groups</h2>
-<p>You can register multiple handlers grouped logically:</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">listener</span><span class="o">.</span><span class="n">add_handler_group</span><span class="p">(</span><span class="n">user_events</span><span class="p">)</span>
-</code></pre></div></td></tr></table></div>
-<p>Where <code>user_events</code> is an instance of <code>HandlerGroup</code> containing handlers registered via decorators.</p>
-<hr />
-<h2 id="notes">Notes</h2>
+<p>Where:</p>
 <ul>
-<li>If no handler matches an event, an info log is emitted.</li>
-<li>Handler failures log exceptions but do not crash the listener.</li>
-<li>Retries and retry intervals can be configured per handler.</li>
+<li><code>consumer</code> is an instance of a compatible consumer (e.g. <code>KafkaConsumer</code>, <code>RabbitMQConsumer</code> or your own)</li>
+<li><code>T</code> is your <code>pydantic</code> model for the event body.</li>
+<li>Decorated handler is auto-wired to the event type via <code>topic</code> + <code>event</code>.</li>
+</ul>
+<hr />
+<h2 id="example-setting-up-event-listener">✍️ Example: Setting Up Event Listener</h2>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">RabbitMQ</label><label for="__tabbed_1_2">Kafka</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">aio_pika</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Annotated</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">dispytch</span><span class="w"> </span><span class="kn">import</span> <span class="n">EventListener</span><span class="p">,</span> <span class="n">Event</span><span class="p">,</span> <span class="n">Dependency</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dispytch.consumers</span><span class="w"> </span><span class="kn">import</span> <span class="n">RabbitMQConsumer</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MyEventBody</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span>
+
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_user</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">[</span><span class="n">MyEventBody</span><span class="p">]):</span>
+    <span class="k">yield</span> <span class="n">event</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">user_id</span>
+
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="n">connection</span> <span class="o">=</span> <span class="k">await</span> <span class="n">aio_pika</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;amqp://guest:guest@localhost:5672&quot;</span><span class="p">)</span>
+    <span class="n">channel</span> <span class="o">=</span> <span class="k">await</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
+    <span class="n">queue</span> <span class="o">=</span> <span class="k">await</span> <span class="n">channel</span><span class="o">.</span><span class="n">declare_queue</span><span class="p">(</span><span class="s2">&quot;notifications&quot;</span><span class="p">)</span>
+    <span class="n">exchange</span> <span class="o">=</span> <span class="k">await</span> <span class="n">channel</span><span class="o">.</span><span class="n">declare_exchange</span><span class="p">(</span><span class="s2">&quot;notifications&quot;</span><span class="p">,</span> <span class="n">aio_pika</span><span class="o">.</span><span class="n">ExchangeType</span><span class="o">.</span><span class="n">DIRECT</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">queue</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">exchange</span><span class="p">,</span> <span class="n">routing_key</span><span class="o">=</span><span class="s2">&quot;notifications&quot;</span><span class="p">)</span>
+
+    <span class="n">consumer</span> <span class="o">=</span> <span class="n">RabbitMQConsumer</span><span class="p">(</span><span class="n">queue</span><span class="p">)</span>
+    <span class="n">listener</span> <span class="o">=</span> <span class="n">EventListener</span><span class="p">(</span><span class="n">consumer</span><span class="p">)</span>
+
+    <span class="nd">@listener</span><span class="o">.</span><span class="n">handler</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="s2">&quot;notifications&quot;</span><span class="p">,</span> <span class="n">event</span><span class="o">=</span><span class="s2">&quot;user_registered&quot;</span><span class="p">)</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">handle_user_reg</span><span class="p">(</span>
+            <span class="n">user_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dependency</span><span class="p">(</span><span class="n">get_user</span><span class="p">)]</span>
+    <span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received registration for user </span><span class="si">{</span><span class="n">user_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">await</span> <span class="n">listener</span><span class="o">.</span><span class="n">listen</span><span class="p">()</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</code></pre></div></td></tr></table></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aiokafka</span><span class="w"> </span><span class="kn">import</span> <span class="n">AIOKafkaConsumer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Annotated</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">dispytch</span><span class="w"> </span><span class="kn">import</span> <span class="n">EventListener</span><span class="p">,</span> <span class="n">Event</span><span class="p">,</span> <span class="n">Dependency</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dispytch.consumers</span><span class="w"> </span><span class="kn">import</span> <span class="n">KafkaConsumer</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MyEventBody</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">action</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">int</span>
+
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">parse_value</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">[</span><span class="n">MyEventBody</span><span class="p">]):</span>
+    <span class="k">yield</span> <span class="n">event</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">value</span>
+
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="n">raw_consumer</span> <span class="o">=</span> <span class="n">AIOKafkaConsumer</span><span class="p">(</span>
+        <span class="s2">&quot;user_events&quot;</span><span class="p">,</span>
+        <span class="n">bootstrap_servers</span><span class="o">=</span><span class="s2">&quot;localhost:19092&quot;</span><span class="p">,</span>
+        <span class="n">enable_auto_commit</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">group_id</span><span class="o">=</span><span class="s2">&quot;listener_group&quot;</span>
+    <span class="p">)</span>
+    <span class="c1"># the next line is essential</span>
+    <span class="k">await</span> <span class="n">raw_consumer</span><span class="o">.</span><span class="n">start</span><span class="p">()</span> <span class="c1"># DO NOT FORGET</span>
+    <span class="n">consumer</span> <span class="o">=</span> <span class="n">KafkaConsumer</span><span class="p">(</span><span class="n">raw_consumer</span><span class="p">)</span>
+    <span class="n">listener</span> <span class="o">=</span> <span class="n">EventListener</span><span class="p">(</span><span class="n">consumer</span><span class="p">)</span>
+
+    <span class="nd">@listener</span><span class="o">.</span><span class="n">handler</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="s2">&quot;user_events&quot;</span><span class="p">,</span> <span class="n">event</span><span class="o">=</span><span class="s2">&quot;user_logged_in&quot;</span><span class="p">)</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">handle_login</span><span class="p">(</span>
+            <span class="n">value</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Dependency</span><span class="p">(</span><span class="n">parse_value</span><span class="p">)]</span>
+    <span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Login action with value: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">await</span> <span class="n">listener</span><span class="o">.</span><span class="n">listen</span><span class="p">()</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</code></pre></div></td></tr></table></div>
+<p>⚠️ <strong>Important</strong>:</p>
+<p>When using Kafka with EventListener, you must manually start the underlying AIOKafkaConsumer.
+Dispytch does not start it for you.</p>
+<p>If you forget to call:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">await</span> <span class="n">raw_consumer</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+<p>events will not be consumed, and you won’t get any errors—they’ll just silently vanish into the void.</p>
+<p>So don’t skip it. Don’t forget it. Your future self will thank you.</p>
+</div>
+</div>
+</div>
+<hr />
+<h3 id="notes-gotchas">⚠️ Notes &amp; Gotchas</h3>
+<ul>
+<li>Handlers receive the full <code>Event[T]</code> with your typed payload (Pydantic model) under <code>.body</code>:</li>
+<li>The event payload must match the Pydantic schema — or decoding will fail.</li>
+<li>The <code>event</code> string must match <code>__event_type__</code> of the published event.</li>
+<li>Event handling is <strong>fully async</strong>, and multiple handlers can run concurrently.</li>
+<li>You can attach <strong>multiple handlers</strong> to the same topic and event type.</li>
+</ul>
+<hr />
+<h2 id="retries">🔁 Retries</h2>
+<p>Handlers can be configured to <strong>automatically retry</strong> on failure using <code>retries</code>, <code>retry_on</code>, and <code>retry_interval</code>.</p>
+<h3 id="parameters">🎯 Parameters:</h3>
+<ul>
+<li><code>retries</code>: Number of retry attempts (default: <code>0</code>)</li>
+<li><code>retry_on</code>: list of exception types to trigger retry. If <code>None</code>, all exceptions will trigger retry.</li>
+<li><code>retry_interval</code>: Delay (in seconds) between retries (default: <code>1.25</code>)</li>
+</ul>
+<h3 id="example">✅ Example:</h3>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@listener</span><span class="o">.</span><span class="n">handler</span><span class="p">(</span>
+    <span class="n">topic</span><span class="o">=</span><span class="s2">&quot;critical_events&quot;</span><span class="p">,</span>
+    <span class="n">event</span><span class="o">=</span><span class="s2">&quot;do_or_die&quot;</span><span class="p">,</span>
+    <span class="n">retries</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">retry_on</span><span class="o">=</span><span class="p">[</span><span class="ne">RuntimeError</span><span class="p">],</span>
+    <span class="n">retry_interval</span><span class="o">=</span><span class="mf">2.0</span>
+<span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">handle_critical</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">[</span><span class="n">MyEventBody</span><span class="p">]):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Processing...&quot;</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Temporary failure&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+<p>In this example, the handler will retry up to 3 times <strong>only</strong> if a <code>RuntimeError</code> is raised, waiting 2 seconds between
+attempts.</p>
+<p>💡 <em>If you don't set <code>retry_on</code>, all exceptions will trigger a retry — use with caution.</em></p>
+<hr />
+<h2 id="handlergroup">🧩 <code>HandlerGroup</code></h2>
+<p><code>HandlerGroup</code> allows you to organize and register handlers <strong>modularly</strong>, useful for grouping handlers by topic or
+event type.</p>
+<h3 id="use-cases">✅ Use Cases</h3>
+<ul>
+<li>Defining a group of related handlers</li>
+<li>Splitting handlers into modules </li>
+<li>Avoiding repetition of <code>topic</code>/<code>event</code> in every decorator</li>
+</ul>
+<hr />
+<h3 id="setup">🔧 Setup</h3>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">dispytch</span><span class="w"> </span><span class="kn">import</span> <span class="n">HandlerGroup</span>
+
+<span class="n">group</span> <span class="o">=</span> <span class="n">HandlerGroup</span><span class="p">(</span><span class="n">default_topic</span><span class="o">=</span><span class="s2">&quot;my_topic&quot;</span><span class="p">,</span> <span class="n">default_event</span><span class="o">=</span><span class="s2">&quot;default_type&quot;</span><span class="p">)</span>
+
+
+<span class="nd">@group</span><span class="o">.</span><span class="n">handler</span><span class="p">(</span><span class="n">event</span><span class="o">=</span><span class="s2">&quot;user_created&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">handle_user_created</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">[</span><span class="o">...</span><span class="p">]):</span>
+    <span class="o">...</span>
+
+
+<span class="nd">@group</span><span class="o">.</span><span class="n">handler</span><span class="p">(</span><span class="n">event</span><span class="o">=</span><span class="s2">&quot;user_deleted&quot;</span><span class="p">,</span> <span class="n">retries</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">handle_user_deleted</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">[</span><span class="o">...</span><span class="p">]):</span>
+    <span class="o">...</span>
+</code></pre></div></td></tr></table></div>
+<p>You can register this <code>HandlerGroup</code> with an <code>EventListener</code>:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">listener</span><span class="o">.</span><span class="n">add_handler_group</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+<p>Behind the scenes, Dispytch will collect all handlers in the group and attach them to the listener.</p>
+<hr />
+<h3 id="group-config-behavior">🎯 Group Config Behavior</h3>
+<ul>
+<li><code>topic</code> and <code>event</code> in the decorator <strong>override</strong> group defaults.</li>
+<li>If <strong>neither</strong> is set (decorator or default), you get a <code>TypeError</code>.</li>
 </ul>
 
 

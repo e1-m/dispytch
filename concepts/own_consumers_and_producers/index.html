@@ -9,10 +9,10 @@
       
       
       
-        <link rel="prev" href="../di/">
+        <link rel="prev" href="../serialization/">
       
       
-        <link rel="next" href="../listener/">
+        <link rel="next" href="../backend_specific_event_configs/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -20,7 +20,7 @@
     
     
       
-        <title>Emitting Events - Dispytch</title>
+        <title>Custom Producers & Consumers - Dispytch</title>
       
     
     
@@ -72,7 +72,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#eventemitter" class="md-skip">
+        <a href="#writing-custom-producers-consumers" class="md-skip">
           Skip to content
         </a>
       
@@ -106,7 +106,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Emitting Events
+              Custom Producers & Consumers
             
           </span>
         </div>
@@ -531,8 +531,6 @@
                 
   
   
-    
-  
   
   
     
@@ -543,11 +541,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
         
           
           <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
@@ -563,7 +561,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3_3">
             <span class="md-nav__icon md-icon"></span>
             Events
@@ -574,32 +572,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Emitting Events
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../emitter/" class="md-nav__link">
         
   
   
@@ -610,80 +586,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#why-do-i-need-it" class="md-nav__link">
-    <span class="md-ellipsis">
-      ✅ Why do I need it?
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#basic-structure" class="md-nav__link">
-    <span class="md-ellipsis">
-      🧱 Basic Structure
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#event-definition" class="md-nav__link">
-    <span class="md-ellipsis">
-      🧾 Event Definition
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#example-setting-up-event-emitter" class="md-nav__link">
-    <span class="md-ellipsis">
-      ✍️ Example: Setting Up Event Emitter
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#handling-timeouts-with-on_timeout" class="md-nav__link">
-    <span class="md-ellipsis">
-      ⏱️ Handling Timeouts with on_timeout
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#notes" class="md-nav__link">
-    <span class="md-ellipsis">
-      📌 Notes
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -747,6 +649,8 @@
                 
   
   
+    
+  
   
   
     
@@ -757,11 +661,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" checked>
         
           
           <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
@@ -777,7 +681,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3_4">
             <span class="md-nav__icon md-icon"></span>
             Advanced Usage
@@ -788,10 +692,32 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../own_consumers_and_producers/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Custom Producers & Consumers
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -802,6 +728,119 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#custom-producer" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧪 Custom Producer
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧪 Custom Producer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✍️ Interface
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      💡 Notes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-pseudocode" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Example (Pseudocode)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-consumer" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧃 Custom Consumer
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧃 Custom Consumer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#interface_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✍️ Interface
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#notes_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      💡 Notes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-pseudocode_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Example (Pseudocode)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#use-your-custom-classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      🛠️ Use Your Custom Classes
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -872,54 +911,93 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#why-do-i-need-it" class="md-nav__link">
+  <a href="#custom-producer" class="md-nav__link">
     <span class="md-ellipsis">
-      ✅ Why do I need it?
+      🧪 Custom Producer
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧪 Custom Producer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✍️ Interface
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#basic-structure" class="md-nav__link">
-    <span class="md-ellipsis">
-      🧱 Basic Structure
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#event-definition" class="md-nav__link">
-    <span class="md-ellipsis">
-      🧾 Event Definition
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#example-setting-up-event-emitter" class="md-nav__link">
-    <span class="md-ellipsis">
-      ✍️ Example: Setting Up Event Emitter
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#handling-timeouts-with-on_timeout" class="md-nav__link">
-    <span class="md-ellipsis">
-      ⏱️ Handling Timeouts with on_timeout
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#notes" class="md-nav__link">
     <span class="md-ellipsis">
-      📌 Notes
+      💡 Notes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-pseudocode" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Example (Pseudocode)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-consumer" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧃 Custom Consumer
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧃 Custom Consumer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#interface_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✍️ Interface
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#notes_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      💡 Notes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-pseudocode_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Example (Pseudocode)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#use-your-custom-classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      🛠️ Use Your Custom Classes
     </span>
   </a>
   
@@ -944,84 +1022,47 @@
   
 
 
-<h1 id="eventemitter">📤 <code>EventEmitter</code></h1>
-<p>The <code>EventEmitter</code> is a core component of Dispytch used to emit (publish) events to an underlying message broker such as
-RabbitMQ or Kafka. It abstracts away the details of the producer backend and allows you to send events
-with minimal boilerplate.</p>
+<h1 id="writing-custom-producers-consumers">⚙️ Writing Custom Producers &amp; Consumers</h1>
+<p>Dispytch doesn’t lock you into any specific messaging backend. If you want to connect to something like Redis Streams, SQS, or whatever queue you want—you can do that by implementing your own <code>Producer</code> and <code>Consumer</code>.</p>
+<p>Here’s how.</p>
 <hr />
-<h2 id="why-do-i-need-it">✅ Why do I need it?</h2>
-<ul>
-<li>
-<p><strong>Separation of concerns:</strong> Your app’s business logic shouldn’t wrestle with raw message brokers. <code>EventEmitter</code>
-  abstracts away the gritty details of RabbitMQ, Kafka, or whatever is under the hood, so you can focus on events—not
-  infrastructure.</p>
-</li>
-<li>
-<p><strong>Consistency &amp; safety:</strong> Typed events with <code>EventBase</code> ensure your payloads are validated and predictable. No more
-  guessing the shape of your data or fumbling with manual serialization.</p>
-</li>
-<li>
-<p><strong>Async-first by design:</strong> Modern Python runs on async I/O—your event emission won’t block or slow down your app.</p>
-</li>
-<li>
-<p><strong>Plug &amp; play with multiple backends:</strong> Whether you’re team Kafka or RabbitMQ (or both), <code>EventEmitter</code> lets you
-  switch between or postpone backend decisions without the fuss.</p>
-</li>
-<li>
-<p><strong>Standardized routing:</strong> By tying events to topics and event types, you create a clear, manageable event flow that
-  scales cleanly.</p>
-</li>
-<li>
-<p><strong>Testability:</strong> Emitting an event is just calling a method on an object you can mock or swap out—making your code
-  easier to test and reason about.</p>
-</li>
-</ul>
-<p><strong>Bottom line:</strong> <code>EventEmitter</code> turns noisy, complex event publishing into a streamlined, reliable, and
-developer-friendly interface. Without it, you’re stuck juggling broker APIs, serialization, and error-prone glue code.</p>
-<hr />
-<h2 id="basic-structure">🧱 Basic Structure</h2>
+<h2 id="custom-producer">🧪 Custom Producer</h2>
+<p>To build your own event emitter backend, implement the <code>Producer</code> interface.</p>
+<h3 id="interface">✍️ Interface</h3>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
-<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">event_emitter</span> <span class="o">=</span> <span class="n">EventEmitter</span><span class="p">(</span><span class="n">producer</span><span class="p">)</span>
-<span class="k">await</span> <span class="n">event_emitter</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">MyEvent</span><span class="p">(</span><span class="o">...</span><span class="p">))</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Producer</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">BaseModel</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="o">...</span>
 </code></pre></div></td></tr></table></div>
-<p><code>EventEmitter</code> expects a <code>Producer</code> instance (such as <code>RabbitMQProducer</code> or <code>KafkaProducer</code>) that handles the actual
-transport layer.</p>
-<hr />
-<h2 id="event-definition">🧾 Event Definition</h2>
+<h3 id="notes">💡 Notes</h3>
 <ul>
-<li>
-<p><code>MyEvent</code> inherits from <code>EventBase</code> and defines:</p>
-<ul>
-<li><code>__topic__</code>: Target topic for the event.</li>
-<li><code>__event_type__</code>: Identifier for the type of event.</li>
-<li>Event payload fields using standard <code>pydantic</code> model syntax.</li>
+<li><code>topic</code>: where the event goes</li>
+<li><code>payload</code>: a dict containing <code>id</code>, <code>type</code>, and <code>body</code> of the event</li>
+<li><code>config</code>: optional backend-specific config, usually declared in the event model as <code>__backend_config__</code></li>
+<li>If your send logic times out raise <code>ProducerTimeout</code></li>
 </ul>
-</li>
-</ul>
-<p>Example:</p>
+<h3 id="example-pseudocode">✅ Example (Pseudocode)</h3>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
 <span class="normal">4</span>
 <span class="normal">5</span>
 <span class="normal">6</span>
-<span class="normal">7</span>
-<span class="normal">8</span>
-<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">dispytch</span><span class="w"> </span><span class="kn">import</span> <span class="n">EventBase</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">dispytch.emitter.producer</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProducerTimeout</span><span class="p">,</span> <span class="n">Producer</span>
 
-
-<span class="k">class</span><span class="w"> </span><span class="nc">MyEvent</span><span class="p">(</span><span class="n">EventBase</span><span class="p">):</span>
-    <span class="n">__topic__</span> <span class="o">=</span> <span class="s2">&quot;my_topic&quot;</span>
-    <span class="n">__event_type__</span> <span class="o">=</span> <span class="s2">&quot;something_happened&quot;</span>
-
-    <span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">value</span><span class="p">:</span> <span class="nb">int</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RedisProducer</span><span class="p">(</span><span class="n">Producer</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">BaseModel</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">redis_client</span><span class="o">.</span><span class="n">xadd</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">payload</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ProducerTimeout</span><span class="p">(</span><span class="s2">&quot;Redis XADD failed&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
 <hr />
-<h2 id="example-setting-up-event-emitter">✍️ Example: Setting Up Event Emitter</h2>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">RabbitMQ</label><label for="__tabbed_1_2">Kafka</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
+<h2 id="custom-consumer">🧃 Custom Consumer</h2>
+<p>To receive and handle events from your own backend, implement the <code>Consumer</code> interface.</p>
+<h3 id="interface_1">✍️ Interface</h3>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -1035,137 +1076,66 @@ transport layer.</p>
 <span class="normal">11</span>
 <span class="normal">12</span>
 <span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span>
-<span class="normal">25</span>
-<span class="normal">26</span>
-<span class="normal">27</span>
-<span class="normal">28</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">aio_pika</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">dispytch</span><span class="w"> </span><span class="kn">import</span> <span class="n">EventEmitter</span><span class="p">,</span> <span class="n">EventBase</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">dispytch.producers</span><span class="w"> </span><span class="kn">import</span> <span class="n">RabbitMQProducer</span>
+<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Event</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">topic</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">body</span><span class="p">:</span> <span class="nb">dict</span>
 
+<span class="k">class</span><span class="w"> </span><span class="nc">Consumer</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">listen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncIterator</span><span class="p">[</span><span class="n">Event</span><span class="p">]:</span>
+        <span class="o">...</span>
 
-<span class="k">class</span><span class="w"> </span><span class="nc">MyEvent</span><span class="p">(</span><span class="n">EventBase</span><span class="p">):</span>
-    <span class="n">__topic__</span> <span class="o">=</span> <span class="s1">&#39;notifications&#39;</span>
-    <span class="n">__event_type__</span> <span class="o">=</span> <span class="s1">&#39;user_registered&#39;</span>
-
-    <span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">email</span><span class="p">:</span> <span class="nb">str</span>
-
-
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
-    <span class="n">connection</span> <span class="o">=</span> <span class="k">await</span> <span class="n">aio_pika</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;amqp://guest:guest@localhost:5672&#39;</span><span class="p">)</span>
-    <span class="n">channel</span> <span class="o">=</span> <span class="k">await</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
-    <span class="n">exchange</span> <span class="o">=</span> <span class="k">await</span> <span class="n">channel</span><span class="o">.</span><span class="n">declare_exchange</span><span class="p">(</span><span class="s1">&#39;notifications&#39;</span><span class="p">,</span> <span class="n">aio_pika</span><span class="o">.</span><span class="n">ExchangeType</span><span class="o">.</span><span class="n">DIRECT</span><span class="p">)</span>
-
-    <span class="n">producer</span> <span class="o">=</span> <span class="n">RabbitMQProducer</span><span class="p">(</span><span class="n">exchange</span><span class="p">)</span>
-    <span class="n">emitter</span> <span class="o">=</span> <span class="n">EventEmitter</span><span class="p">(</span><span class="n">producer</span><span class="p">)</span>
-
-    <span class="k">await</span> <span class="n">emitter</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">MyEvent</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="s2">&quot;abc123&quot;</span><span class="p">,</span> <span class="n">email</span><span class="o">=</span><span class="s2">&quot;user@example.com&quot;</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Event sent!&quot;</span><span class="p">)</span>
-
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">):</span>
+        <span class="o">...</span>
 </code></pre></div></td></tr></table></div>
-<p>💡 <strong>Note</strong>: <code>__topic__</code> will be used as a routing key when published to exchange</p>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span>
-<span class="normal">25</span>
-<span class="normal">26</span>
-<span class="normal">27</span>
-<span class="normal">28</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">aiokafka</span><span class="w"> </span><span class="kn">import</span> <span class="n">AIOKafkaProducer</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">dispytch</span><span class="w"> </span><span class="kn">import</span> <span class="n">EventEmitter</span><span class="p">,</span> <span class="n">EventBase</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">dispytch.producers</span><span class="w"> </span><span class="kn">import</span> <span class="n">KafkaProducer</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">MyEvent</span><span class="p">(</span><span class="n">EventBase</span><span class="p">):</span>
-    <span class="n">__topic__</span> <span class="o">=</span> <span class="s1">&#39;user_events&#39;</span>
-    <span class="n">__event_type__</span> <span class="o">=</span> <span class="s1">&#39;user_logged_in&#39;</span>
-
-    <span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">timestamp</span><span class="p">:</span> <span class="nb">str</span>
-
-
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
-    <span class="n">kafka_raw_producer</span> <span class="o">=</span> <span class="n">AIOKafkaProducer</span><span class="p">(</span><span class="n">bootstrap_servers</span><span class="o">=</span><span class="s2">&quot;localhost:19092&quot;</span><span class="p">)</span>
-    <span class="c1"># The next line is essential. </span>
-    <span class="k">await</span> <span class="n">kafka_raw_producer</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>  <span class="c1"># DO NOT FORGET </span>
-
-    <span class="n">producer</span> <span class="o">=</span> <span class="n">KafkaProducer</span><span class="p">(</span><span class="n">kafka_raw_producer</span><span class="p">)</span>
-    <span class="n">emitter</span> <span class="o">=</span> <span class="n">EventEmitter</span><span class="p">(</span><span class="n">producer</span><span class="p">)</span>
-
-    <span class="k">await</span> <span class="n">emitter</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">MyEvent</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="s2">&quot;abc123&quot;</span><span class="p">,</span> <span class="n">timestamp</span><span class="o">=</span><span class="s2">&quot;2025-07-07T12:00:00Z&quot;</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Event emitted!&quot;</span><span class="p">)</span>
-
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
-</code></pre></div></td></tr></table></div>
-<p>⚠️ <strong>Important</strong>:</p>
-<p>When using Kafka with EventEmitter, you must manually start the underlying AIOKafkaProducer.
-Dispytch does not start it for you.</p>
-<p>If you forget to call:</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">await</span> <span class="n">kafka_raw_producer</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-</code></pre></div></td></tr></table></div>
-<p>events will not be published, and you won’t get any errors—they’ll just silently vanish into the void.</p>
-<p>So don’t skip it. Don’t forget it. Your future self will thank you.</p>
-</div>
-</div>
-</div>
-<hr />
-<h2 id="handling-timeouts-with-on_timeout">⏱️ Handling Timeouts with <code>on_timeout</code></h2>
-<p>By default, if an event fails to emit due to a timeout, Dispytch logs a warning. If you want custom behavior (e.g.,
-metrics, retries, alerts), you can register a callback using <code>on_timeout()</code>:</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
-<span class="normal">2</span>
-<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@emitter</span><span class="o">.</span><span class="n">on_timeout</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">handle_timeout</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Event </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> failed to emit!&quot;</span><span class="p">)</span>
-</code></pre></div></td></tr></table></div>
-<p>The callback can be sync or async, and receives the original <code>EventBase</code> instance that timed out.</p>
-<hr />
-<h2 id="notes">📌 Notes</h2>
+<h3 id="notes_1">💡 Notes</h3>
 <ul>
-<li>Dispytch automatically <strong>serializes the payload</strong> as JSON by default. To change the default serializer you can
-  pass included <code>MessagePackSerializer</code> to the Producer or write one on your own</li>
-<li>Event ordering and delivery guarantees — depend on the underlying producer (Kafka/RabbitMQ), not Dispytch.</li>
+<li>
+<p><code>listen()</code> must yield <code>Event</code> objects. This is an <strong>async generator</strong>.</p>
+</li>
+<li>
+<p><code>ack()</code> is called when Dispytch successfully processes an event. Use it to mark the event as handled (e.g., ack a Kafka offset or delete a message from a queue).</p>
+</li>
 </ul>
+<h3 id="example-pseudocode_1">✅ Example (Pseudocode)</h3>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">dispytch.listener.consumer</span><span class="w"> </span><span class="kn">import</span> <span class="n">Consumer</span><span class="p">,</span> <span class="n">Event</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RedisConsumer</span><span class="p">(</span><span class="n">Consumer</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">listen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncIterator</span><span class="p">[</span><span class="n">Event</span><span class="p">]:</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">raw</span> <span class="o">=</span> <span class="k">await</span> <span class="n">redis_client</span><span class="o">.</span><span class="n">xread</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">Event</span><span class="p">(</span>
+                <span class="nb">id</span><span class="o">=</span><span class="n">raw</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span>
+                <span class="n">topic</span><span class="o">=</span><span class="n">raw</span><span class="p">[</span><span class="s2">&quot;stream&quot;</span><span class="p">],</span>
+                <span class="nb">type</span><span class="o">=</span><span class="n">raw</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">],</span>
+                <span class="n">body</span><span class="o">=</span><span class="n">raw</span><span class="p">[</span><span class="s2">&quot;body&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">ack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">):</span>
+        <span class="c1"># Redis streams might not need manual ack, or you could XDEL here</span>
+        <span class="k">pass</span>
+</code></pre></div></td></tr></table></div>
+<hr />
+<h2 id="use-your-custom-classes">🛠️ Use Your Custom Classes</h2>
+<p>Once implemented, you can use your custom producer and consumer classes directly in <code>EventEmitter</code> and <code>EventListener</code></p>
 
 
 

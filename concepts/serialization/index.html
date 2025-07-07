@@ -9,6 +9,10 @@
       
       
       
+        <link rel="prev" href="../listener/">
+      
+      
+        <link rel="next" href="../own_consumers_and_producers/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -16,7 +20,7 @@
     
     
       
-        <title>Kafka Backend - Dispytch</title>
+        <title>Serialization - Dispytch</title>
       
     
     
@@ -68,7 +72,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#kafka-backend" class="md-skip">
+        <a href="#serialization-deserialization" class="md-skip">
           Skip to content
         </a>
       
@@ -102,7 +106,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Kafka Backend
+              Serialization
             
           </span>
         </div>
@@ -241,6 +245,28 @@
   
   
   Getting Started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../architecture/" class="md-tabs__link">
+          
+  
+  
+  Core Concepts
 
         </a>
       </li>
@@ -409,6 +435,389 @@
   
 
     
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Core Concepts
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Core Concepts
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview & Architecture
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../di/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Dependency Injection
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Events
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            Events
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../emitter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Emitting Events
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../listener/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Listening for Events
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Serialization
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Serialization
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#setting-a-serializer-producer-side" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✍️ Setting a Serializer (Producer Side)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setting-a-deserializer-consumer-side" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧩 Setting a Deserializer (Consumer Side)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#writing-your-own" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✨ Writing Your Own
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Advanced Usage
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Advanced Usage
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../own_consumers_and_producers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Custom Producers & Consumers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../backend_specific_event_configs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Backend Configuration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -436,36 +845,27 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#installation" class="md-nav__link">
+  <a href="#setting-a-serializer-producer-side" class="md-nav__link">
     <span class="md-ellipsis">
-      Installation
+      ✍️ Setting a Serializer (Producer Side)
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#consuming-events-kafkaconsumer" class="md-nav__link">
+  <a href="#setting-a-deserializer-consumer-side" class="md-nav__link">
     <span class="md-ellipsis">
-      Consuming Events (KafkaConsumer)
+      🧩 Setting a Deserializer (Consumer Side)
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#partitioning-events" class="md-nav__link">
+  <a href="#writing-your-own" class="md-nav__link">
     <span class="md-ellipsis">
-      Partitioning Events
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#notes" class="md-nav__link">
-    <span class="md-ellipsis">
-      Notes
+      ✨ Writing Your Own
     </span>
   </a>
   
@@ -490,113 +890,71 @@
   
 
 
-<h1 id="kafka-backend">Kafka Backend</h1>
-<p>Dispytch has first-class support for Kafka as a message broker.</p>
-<p>It supports:
-- Emitting events to Kafka topics via a producer
-- Consuming events from Kafka topics via a listener
-- Manual partitioning via <code>__partition_by__</code></p>
-<hr />
-<h2 id="installation">Installation</h2>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span></pre></div></td><td class="code"><div><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>dispytch<span class="o">[</span>kafka<span class="o">]</span>
-<span class="sb">````</span>
-
-This<span class="w"> </span>installs<span class="w"> </span>the<span class="w"> </span>required<span class="w"> </span>dependencies<span class="w"> </span>like<span class="w"> </span><span class="sb">`</span>aiokafka<span class="sb">`</span>.
-
----
-
-<span class="c1">## Producing Events (KafkaProducer)</span>
-
-Use<span class="w"> </span>the<span class="w"> </span>built-in<span class="w"> </span>Kafka<span class="w"> </span>producer<span class="w"> </span>to<span class="w"> </span>emit<span class="w"> </span>events:
-
-<span class="sb">```</span>python
-from<span class="w"> </span>aiokafka<span class="w"> </span>import<span class="w"> </span>AIOKafkaProducer
-from<span class="w"> </span>dispytch_kafka<span class="w"> </span>import<span class="w"> </span>KafkaProducer
-from<span class="w"> </span>dispytch<span class="w"> </span>import<span class="w"> </span>EventEmitter
-
-<span class="nv">aioproducer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>AIOKafkaProducer<span class="o">(</span><span class="nv">bootstrap_servers</span><span class="o">=</span><span class="s2">&quot;localhost:9092&quot;</span><span class="o">)</span>
-await<span class="w"> </span>aioproducer.start<span class="o">()</span>
-
-<span class="nv">producer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>KafkaProducer<span class="o">(</span>aioproducer<span class="o">)</span>
-<span class="nv">emitter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>EventEmitter<span class="o">(</span>producer<span class="o">)</span>
-</code></pre></div></td></tr></table></div>
-<p>Then emit as usual:</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">await</span> <span class="n">emitter</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">UserRegistered</span><span class="p">(</span><span class="o">...</span><span class="p">))</span>
-</code></pre></div></td></tr></table></div>
-<hr />
-<h2 id="consuming-events-kafkaconsumer">Consuming Events (KafkaConsumer)</h2>
-<p>Create a Kafka consumer and wire it into Dispytch:</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">aiokafka</span><span class="w"> </span><span class="kn">import</span> <span class="n">AIOKafkaConsumer</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">dispytch_kafka</span><span class="w"> </span><span class="kn">import</span> <span class="n">KafkaConsumer</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">dispytch</span><span class="w"> </span><span class="kn">import</span> <span class="n">EventListener</span>
-
-<span class="n">aioconsumer</span> <span class="o">=</span> <span class="n">AIOKafkaConsumer</span><span class="p">(</span>
-    <span class="s2">&quot;user_events&quot;</span><span class="p">,</span>
-    <span class="n">bootstrap_servers</span><span class="o">=</span><span class="s2">&quot;localhost:9092&quot;</span><span class="p">,</span>
-    <span class="n">group_id</span><span class="o">=</span><span class="s2">&quot;my-service&quot;</span>
-<span class="p">)</span>
-<span class="k">await</span> <span class="n">aioconsumer</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-
-<span class="n">consumer</span> <span class="o">=</span> <span class="n">KafkaConsumer</span><span class="p">(</span><span class="n">aioconsumer</span><span class="p">)</span>
-<span class="n">listener</span> <span class="o">=</span> <span class="n">EventListener</span><span class="p">(</span><span class="n">consumer</span><span class="p">)</span>
-</code></pre></div></td></tr></table></div>
-<hr />
-<h2 id="partitioning-events">Partitioning Events</h2>
-<p>Kafka supports partitioned topics for scaling and ordering guarantees. Dispytch allows you to specify a partition key:</p>
+<h1 id="serialization-deserialization">🧱 Serialization &amp; Deserialization</h1>
+<p>By default, Dispytch uses JSON for serializing and deserializing events. This keeps things simple and readable—but
+you're not stuck with it. If you're sending binary data, need better performance, or just enjoy making things more
+complicated than they need to be, you can plug in a custom serializer or deserializer.</p>
+<h2 id="setting-a-serializer-producer-side">✍️ Setting a Serializer (Producer Side)</h2>
+<p>To override the default JSON serializer, pass a serializer instance to your <code>Producer</code>:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
 <span class="normal">4</span>
 <span class="normal">5</span>
 <span class="normal">6</span>
-<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">UserRegistered</span><span class="p">(</span><span class="n">EventBase</span><span class="p">):</span>
-    <span class="n">__topic__</span> <span class="o">=</span> <span class="s2">&quot;user_events&quot;</span>
-    <span class="n">__event_type__</span> <span class="o">=</span> <span class="s2">&quot;user_registered&quot;</span>
-    <span class="n">__partition_by__</span> <span class="o">=</span> <span class="s2">&quot;user.id&quot;</span>  <span class="c1"># supports dotted paths</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">dispytch.serializers</span><span class="w"> </span><span class="kn">import</span> <span class="n">MessagePackSerializer</span><span class="p">,</span> <span class="n">JSONSerializer</span>
 
-    <span class="n">user</span><span class="p">:</span> <span class="nb">dict</span>
-    <span class="n">timestamp</span><span class="p">:</span> <span class="nb">int</span>
+<span class="c1"># Use JSON (default)</span>
+<span class="n">producer</span> <span class="o">=</span> <span class="n">KafkaProducer</span><span class="p">(</span><span class="n">kafka_producer</span><span class="p">,</span> <span class="n">JSONSerializer</span><span class="p">())</span>
+
+<span class="c1"># Use MessagePack</span>
+<span class="n">producer</span> <span class="o">=</span> <span class="n">KafkaProducer</span><span class="p">(</span><span class="n">kafka_producer</span><span class="p">,</span> <span class="n">MessagePackSerializer</span><span class="p">())</span>
 </code></pre></div></td></tr></table></div>
-<p>Dispytch extracts the key at runtime and routes messages accordingly.</p>
+<p>If you don’t explicitly pass one, <code>JSONSerializer()</code> is used under the hood.</p>
+<h2 id="setting-a-deserializer-consumer-side">🧩 Setting a Deserializer (Consumer Side)</h2>
+<p>Same deal for consumers. You can pick how incoming messages are decoded (should be consistent with sending side):</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">dispytch.deserializers</span><span class="w"> </span><span class="kn">import</span> <span class="n">MessagePackDeserializer</span><span class="p">,</span> <span class="n">JSONDeserializer</span>
+
+<span class="c1"># Use MessagePack</span>
+<span class="n">consumer</span> <span class="o">=</span> <span class="n">KafkaConsumer</span><span class="p">(</span><span class="n">kafka_consumer</span><span class="p">,</span> <span class="n">MessagePackDeserializer</span><span class="p">())</span>
+
+<span class="c1"># Use JSON (default)</span>
+<span class="n">consumer</span> <span class="o">=</span> <span class="n">KafkaConsumer</span><span class="p">(</span><span class="n">kafka_consumer</span><span class="p">,</span> <span class="n">JSONDeserializer</span><span class="p">())</span>
+</code></pre></div></td></tr></table></div>
+<p>Again, if you don’t set it, Dispytch will default to <code>JSONDeserializer()</code>.</p>
 <hr />
-<h2 id="notes">Notes</h2>
-<ul>
-<li>Dispytch does not manage topic creation or schema registration.</li>
-<li>Kafka retries and acks are handled at the Dispytch level, not via Kafka-specific settings.</li>
-<li>All messages are JSON-serialized using Pydantic under the hood.</li>
-</ul>
+<h2 id="writing-your-own">✨ Writing Your Own</h2>
+<p>Custom serialization is as simple as implementing a method.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">dispytch.producers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Serializer</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MyCoolSerializer</span><span class="p">(</span><span class="n">Serializer</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+        <span class="o">...</span>
+</code></pre></div></td></tr></table></div>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">dispytch.consumers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Deserializer</span><span class="p">,</span> <span class="n">Payload</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MyCoolDeserializer</span><span class="p">(</span><span class="n">Deserializer</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">deserialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Payload</span><span class="p">:</span>
+        <span class="o">...</span>
+</code></pre></div></td></tr></table></div>
 
 
 

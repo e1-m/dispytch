@@ -9,6 +9,10 @@
       
       
       
+        <link rel="prev" href="../architecture/">
+      
+      
+        <link rel="next" href="../emitter/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -16,7 +20,7 @@
     
     
       
-        <title>Dependency Injection (DI) - Dispytch</title>
+        <title>Dependency Injection - Dispytch</title>
       
     
     
@@ -102,7 +106,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Dependency Injection (DI)
+              Dependency Injection
             
           </span>
         </div>
@@ -241,6 +245,28 @@
   
   
   Getting Started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../architecture/" class="md-tabs__link">
+          
+  
+  
+  Core Concepts
 
         </a>
       </li>
@@ -409,6 +435,468 @@
   
 
     
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Core Concepts
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Core Concepts
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview & Architecture
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Dependency Injection
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Dependency Injection
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-use-di" class="md-nav__link">
+    <span class="md-ellipsis">
+      💡 Why Use DI?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      How It Works
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nested-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧩 Nested Dependencies
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧩 Nested Dependencies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✍️ Example
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#whats-happening" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔍 What's happening
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#context-aware-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      🌐 Context-Aware Dependencies
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🌐 Context-Aware Dependencies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✍️ Example
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-use-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧰 Common Use Cases
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alternative-syntax" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔁 Alternative Syntax
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔁 Alternative Syntax">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✍️ Example
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Events
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            Events
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../emitter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Emitting Events
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../listener/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Listening for Events
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../serialization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Serialization
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Advanced Usage
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Advanced Usage
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../own_consumers_and_producers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Custom Producers & Consumers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../backend_specific_event_configs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Backend Configuration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -436,9 +924,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#why-di" class="md-nav__link">
+  <a href="#why-use-di" class="md-nav__link">
     <span class="md-ellipsis">
-      Why DI?
+      💡 Why Use DI?
     </span>
   </a>
   
@@ -454,29 +942,92 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#features" class="md-nav__link">
+  <a href="#nested-dependencies" class="md-nav__link">
     <span class="md-ellipsis">
-      Features
+      🧩 Nested Dependencies
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧩 Nested Dependencies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✍️ Example
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#advanced-usage" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#whats-happening" class="md-nav__link">
     <span class="md-ellipsis">
-      Advanced Usage
+      🔍 What's happening
     </span>
   </a>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
-  <a href="#notes" class="md-nav__link">
+  <a href="#context-aware-dependencies" class="md-nav__link">
     <span class="md-ellipsis">
-      Notes
+      🌐 Context-Aware Dependencies
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="🌐 Context-Aware Dependencies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✍️ Example
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-use-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧰 Common Use Cases
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alternative-syntax" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔁 Alternative Syntax
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔁 Alternative Syntax">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✍️ Example
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -499,19 +1050,18 @@
   
 
 
-<h1 id="dependency-injection-di">Dependency Injection (DI)</h1>
-<p>Dispytch incorporates a <strong>FastAPI-inspired Dependency Injection system</strong> to simplify handler dependencies and improve testability.</p>
+<h1 id="dependency-injection-di">🧪 Dependency Injection (DI)</h1>
+<p>Dispytch supports a FastAPI-style Dependency Injection system to cleanly manage your handler dependencies—keeping your
+logic modular, testable, and DRY.</p>
 <hr />
-<h2 id="why-di">Why DI?</h2>
-<ul>
-<li>Decouples handler business logic from infrastructure concerns.</li>
-<li>Enables clean, declarative handler signatures.</li>
-<li>Automatically resolves and injects dependencies at runtime.</li>
-<li>Supports async and sync dependencies.</li>
-</ul>
+<h2 id="why-use-di">💡 Why Use DI?</h2>
+<p>♻️ Decoupling – Separate business logic from infrastructure concerns</p>
+<p>✅ Testability – Easily mock or override dependencies in tests</p>
+<p>🔄 Reusability – Centralize shared resources and logic</p>
 <hr />
 <h2 id="how-it-works">How It Works</h2>
-<p>Handlers declare dependencies using Python’s type annotations combined with Dispytch’s <code>Dependency</code> wrapper.</p>
+<p>Handlers declare dependencies using Python’s type annotations combined with Dispytch’s <code>Dependency</code> wrapper and <code>Event</code>
+generic class.</p>
 <p>Example:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
@@ -525,44 +1075,191 @@
 <span class="normal">10</span>
 <span class="normal">11</span>
 <span class="normal">12</span>
-<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Annotated</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">dispytch</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dependency</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">EventBody</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
 
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_user_service</span><span class="p">():</span>
-    <span class="c1"># Setup or retrieve a service instance</span>
-    <span class="k">return</span> <span class="n">UserService</span><span class="p">()</span>
 
-<span class="nd">@handler_group</span><span class="o">.</span><span class="n">handler</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="s2">&quot;user_events&quot;</span><span class="p">,</span> <span class="n">event</span><span class="o">=</span><span class="s2">&quot;user_registered&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">handle_user_registered</span><span class="p">(</span>
-    <span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">[</span><span class="n">UserRegisteredEvent</span><span class="p">],</span>
-    <span class="n">user_service</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">UserService</span><span class="p">,</span> <span class="n">Dependency</span><span class="p">(</span><span class="n">get_user_service</span><span class="p">)]</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_service</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Service</span><span class="p">:</span>
+    <span class="n">service</span> <span class="o">=</span> <span class="n">Service</span><span class="p">()</span>
+    <span class="k">yield</span> <span class="n">service</span>
+    <span class="k">await</span> <span class="n">service</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span>
+
+
+<span class="nd">@handler_group</span><span class="o">.</span><span class="n">handler</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="s2">&quot;test_events&quot;</span><span class="p">,</span> <span class="n">event</span><span class="o">=</span><span class="s2">&quot;event_type&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">handle_event</span><span class="p">(</span>
+        <span class="c1"># Validates the event payload using EventBody model</span>
+        <span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">[</span><span class="n">EventBody</span><span class="p">],</span>
+
+        <span class="c1"># Injects the result of get_service(); supports automatic cleanup when using context managers</span>
+        <span class="n">service</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">Service</span><span class="p">,</span> <span class="n">Dependency</span><span class="p">(</span><span class="n">get_service</span><span class="p">)]</span>
 <span class="p">):</span>
-    <span class="k">await</span> <span class="n">user_service</span><span class="o">.</span><span class="n">do_something</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Name = </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> | Value = </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">service</span><span class="o">.</span><span class="n">do_smth</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
 <p>At runtime, Dispytch:</p>
 <ol>
-<li>Inspects the handler’s parameters.</li>
-<li>Detects <code>Dependency</code> annotations.</li>
-<li>Resolves and injects the requested dependencies before invoking the handler.</li>
+<li>
+<p>Parses the handler signature.</p>
+</li>
+<li>
+<p>Resolves dependencies using the provided factory functions (sync or async).</p>
+</li>
+<li>
+<p>Injects results directly into the handler.</p>
+</li>
+<li>
+<p>Handles cleanup automatically for context-managed dependencies.</p>
+</li>
 </ol>
 <hr />
-<h2 id="features">Features</h2>
+<h2 id="nested-dependencies">🧩 Nested Dependencies</h2>
+<p>Dispytch supports dependency chains—where one dependency depends on another. Each layer is resolved automatically, with
+full lifecycle management.</p>
+<h3 id="example">✍️ Example</h3>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Config</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">threshold</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span>
+
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_config</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Config</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">Config</span><span class="p">()</span>
+
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_service</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">Config</span><span class="p">,</span> <span class="n">Dependency</span><span class="p">(</span><span class="n">get_config</span><span class="p">)]):</span>
+    <span class="n">service</span> <span class="o">=</span> <span class="n">Service</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">threshold</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="n">service</span>
+    <span class="k">await</span> <span class="n">service</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span>
+
+
+<span class="nd">@handler_group</span><span class="o">.</span><span class="n">handler</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="s2">&quot;nested&quot;</span><span class="p">,</span> <span class="n">event</span><span class="o">=</span><span class="s2">&quot;example&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">handle_nested</span><span class="p">(</span>
+        <span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span>
+        <span class="n">service</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">Service</span><span class="p">,</span> <span class="n">Dependency</span><span class="p">(</span><span class="n">get_service</span><span class="p">)]</span>
+<span class="p">):</span>
+    <span class="k">await</span> <span class="n">service</span><span class="o">.</span><span class="n">do_smth</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+<h3 id="whats-happening">🔍 What's happening</h3>
 <ul>
-<li>Supports async/sync factory functions for dependencies.</li>
-<li>Automatically manages dependency lifecycles.</li>
-<li>Allows passing context, such as the current event, to dependency resolvers.</li>
-<li>Easily testable by overriding dependencies in tests.</li>
+<li><code>get_service</code> declares a dependency on <code>get_config</code></li>
+<li>Dispytch resolves <code>get_config</code>, then passes the result to <code>get_service</code></li>
+<li>The final resolved <code>Service</code> is injected into the handler</li>
 </ul>
 <hr />
-<h2 id="advanced-usage">Advanced Usage</h2>
-<p>You can create reusable dependencies for common resources (DB sessions, caches, config objects), keeping your handlers clean and focused.</p>
+<h2 id="context-aware-dependencies">🌐 Context-Aware Dependencies</h2>
+<p>Dependency functions can receive contextual information about the current event—such as its topic, type, or payload—by
+accepting a typed <code>Event[T]</code> as an argument.</p>
+<p>This enables runtime-aware logic, such as per-event logging, dynamic configuration, or tenant resolution.</p>
 <hr />
-<h2 id="notes">Notes</h2>
+<h3 id="example_1">✍️ Example</h3>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Payload</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">action</span><span class="p">:</span> <span class="nb">str</span>
+
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_logger</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">[</span><span class="n">Payload</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Logger</span><span class="p">:</span>
+    <span class="c1"># Logger initialized with event metadata</span>
+    <span class="k">return</span> <span class="n">Logger</span><span class="p">(</span><span class="n">context</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;topic&quot;</span><span class="p">:</span> <span class="n">event</span><span class="o">.</span><span class="n">__topic__</span><span class="p">,</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">event</span><span class="o">.</span><span class="n">__event_type__</span><span class="p">,</span>
+        <span class="s2">&quot;user_id&quot;</span><span class="p">:</span> <span class="n">event</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">user_id</span>
+    <span class="p">})</span>
+
+
+<span class="nd">@handler_group</span><span class="o">.</span><span class="n">handler</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="s2">&quot;loggable&quot;</span><span class="p">,</span> <span class="n">event</span><span class="o">=</span><span class="s2">&quot;ctx_aware&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">handle_event_with_logger</span><span class="p">(</span>
+        <span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">[</span><span class="n">Payload</span><span class="p">],</span>
+        <span class="n">logger</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">Logger</span><span class="p">,</span> <span class="n">Dependency</span><span class="p">(</span><span class="n">get_logger</span><span class="p">)]</span>
+<span class="p">):</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">user_id</span><span class="si">}</span><span class="s2"> performed action: </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">action</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+<hr />
+<h3 id="common-use-cases">🧰 Common Use Cases</h3>
 <ul>
-<li>DI is optional but recommended for complex services.</li>
-<li>Keep dependency trees shallow to avoid performance issues.</li>
-<li>Currently designed to work seamlessly within Dispytch’s event handling lifecycle.</li>
+<li>
+<p>📋 Structured logging – Include event context in every log entry</p>
+</li>
+<li>
+<p>🏢 Per-tenant or per-topic logic – Apply tenant-specific rules or routing</p>
+</li>
+<li>
+<p>⚙️ Dynamic configuration – Adjust behavior based on event payload or headers</p>
+</li>
 </ul>
+<h2 id="alternative-syntax">🔁 Alternative Syntax</h2>
+<p>As an alternative for the <code>Annotated[T, Dependency(...)]</code> style, Dispytch lets you inject dependencies by assigning a
+<code>Dependency</code> instance directly as a default value for a handler parameter. Functionally the same—just a different
+flavor.</p>
+<blockquote>
+<p>📋 Note: This injection method <strong>does not work</strong> for the <code>Event</code> parameter. You must use explicit type hints for
+<code>Event</code> to enable proper injection.</p>
+</blockquote>
+<h3 id="example_2">✍️ Example</h3>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_service</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Service</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">Service</span><span class="p">()</span>
+
+
+<span class="nd">@handler_group</span><span class="o">.</span><span class="n">handler</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="s2">&quot;alt_usage&quot;</span><span class="p">,</span> <span class="n">event</span><span class="o">=</span><span class="s2">&quot;example&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">handler_two</span><span class="p">(</span>
+        <span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">,</span>
+        <span class="n">service</span><span class="o">=</span><span class="n">Dependency</span><span class="p">(</span><span class="n">get_service</span><span class="p">)</span>  <span class="c1"># Injected via default argument</span>
+<span class="p">):</span>
+    <span class="k">await</span> <span class="n">service</span><span class="o">.</span><span class="n">do_smth</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
 
 
 
