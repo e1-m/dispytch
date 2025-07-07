@@ -38,9 +38,12 @@ nav:
       - Installation: getting-started/installation.md
       - Quickstart: getting-started/quickstart.md
   - Core Concepts:
-      - Architecture Overview: concepts/architecture.md
+      - Overview & Architecture: concepts/architecture.md
       - Dependency Injection: concepts/di.md
-      - Event Emitter: concepts/emitter.md
-      - Event Listener: concepts/listener.md
-      - Serialization & Deserialization: concepts/serialization.md
-      - Custom Producers & Consumers: concepts/own_consumers_and_producers.md
+      - Events:
+          - Emitting Events: concepts/emitter.md
+          - Listening for Events: concepts/listener.md
+          - Serialization: concepts/serialization.md
+      - Advanced Usage:
+          - Custom Producers & Consumers: concepts/own_consumers_and_producers.md
+          - Backend Configuration: concepts/backend_specific_event_configs.md
