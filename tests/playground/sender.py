@@ -15,8 +15,8 @@ class MyEvent(EventBase):
 
 async def main():
     kafka_producer = AIOKafkaProducer(bootstrap_servers='localhost:19092')
+    await kafka_producer.start()
     producer = KafkaProducer(kafka_producer)
-    await producer.start()
 
     event_emitter = EventEmitter(producer)
     await asyncio.sleep(0.5)
@@ -25,8 +25,6 @@ async def main():
         await event_emitter.emit(MyEvent(test=i))
         print(f'Event {i} sent')
         await asyncio.sleep(0.3)
-
-    await producer.stop()
 
 
 if __name__ == '__main__':

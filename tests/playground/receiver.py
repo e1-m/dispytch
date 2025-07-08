@@ -27,7 +27,9 @@ async def outer_dep(test: Annotated[int, Dependency(inner_dep)],
 
 async def main():
     kafka_consumer = AIOKafkaConsumer('test_events',
-                                      bootstrap_servers='localhost:19092')
+                                      bootstrap_servers='localhost:19092',
+                                      enable_auto_commit=False,
+                                      group_id='test_group', )
     consumer = KafkaConsumer(kafka_consumer)
     event_listener = EventListener(consumer)
 
