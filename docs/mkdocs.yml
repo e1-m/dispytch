@@ -42,7 +42,7 @@ nav:
       - Dependency Injection: concepts/di.md
       - Events:
           - Emitting Events: concepts/emitter.md
-          - Listening for Events: concepts/listener.md
+          - Handling Events: concepts/listener.md
           - Serialization: concepts/serialization.md
       - Advanced Usage:
           - Custom Producers & Consumers: concepts/own_consumers_and_producers.md
