@@ -1,6 +1,6 @@
 [project]
 name = "dispytch"
-version = "0.9.0"
+version = "0.9.1"
 description = "Lightweight Python framework for writing clean and testable event-driven services"
 authors = [
     { name = "Ivan Mihun" }
