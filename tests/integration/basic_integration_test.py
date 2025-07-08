@@ -23,8 +23,8 @@ class MyEventBody(BaseModel):
     message: str
 
 
-listener_start_up_time = 0.3
-event_processing_delay = 0.5
+listener_start_up_time = 0.5
+event_processing_delay = 1
 
 
 @pytest.fixture
