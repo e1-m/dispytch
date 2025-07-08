@@ -52,7 +52,7 @@ class EventListener:
     async def _handle_event(self, event: ConsumerEvent):
         handlers = self._handlers[event.topic][event.type]
         if not handlers:
-            logging.info(f'There is not handler for topic `{event.topic}` and event type `{event.type}`')
+            logging.info(f'There is no handler for topic `{event.topic}` and event type `{event.type}`')
             return
 
         tasks = [asyncio.create_task(
