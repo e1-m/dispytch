@@ -9,8 +9,9 @@ It’s designed to streamline the development of clean and testable event-driven
 * 🔌 **FastAPI-style dependency injection** – clean, decoupled handlers
 * 📬 **Backend-flexible** – with Kafka and RabbitMQ out-of-the-box
 * 🧱 **Composable architecture** – extend, override, or inject anything
-* 🧾 **Pydantic-based validation** – event schemas are validated using pydantic 
+* 🧾 **Pydantic-based validation** – event schemas are validated using pydantic
 * 🔁 **Built-in retry logic** – configurable, resilient, no boilerplate
+
 ---
 
 ## 📦 Installation
@@ -28,6 +29,13 @@ For RabbitMQ support:
 ```bash
 uv add dispytch[rabbitmq]
 ```
+
+---
+
+## 📚 Documentation
+
+Full documentation is available:  
+👉 [here](https://e1-m.github.io/dispytch/)
 
 ---
 
