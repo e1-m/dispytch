@@ -1,4 +1,5 @@
 import logging
+import time
 from inspect import isawaitable
 from typing import Callable
 
@@ -30,7 +31,7 @@ class EventEmitter:
                 payload={
                     'id': event.id,
                     'type': event.__event_type__,
-                    'body': event.model_dump(exclude={'id'})
+                    'body': event.model_dump(mode="json", by_alias=True, exclude={'id'}),
                 },
                 config=event.__backend_config__
             )
