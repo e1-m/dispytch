@@ -22,10 +22,8 @@ class KafkaConsumer(Consumer):
         async for msg in self.consumer:
             deserialized_payload = self.deserializer.deserialize(msg.value)
 
-            event = Event(id=deserialized_payload.id,
-                          topic=msg.topic,
-                          type=deserialized_payload.type,
-                          body=deserialized_payload.body)
+            event = Event(topic=msg.topic,
+                          **deserialized_payload.model_dump())
 
             self._waiting_for_commit[event.id] = msg
 

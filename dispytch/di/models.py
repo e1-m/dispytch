@@ -22,6 +22,7 @@ class Event[Body]:
     topic: str
     type: str
     body: Body
+    timestamp: int
 
 
 @dataclass

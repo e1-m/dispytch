@@ -25,10 +25,8 @@ class RedisConsumer(Consumer):
 
             deserialized_payload = self.deserializer.deserialize(message['data'])
             yield Event(
-                id=deserialized_payload.id,
-                body=deserialized_payload.body,
-                type=deserialized_payload.type,
                 topic=message['channel'].decode('utf-8'),
+                **deserialized_payload.model_dump()
             )
 
     async def ack(self, event: Event):

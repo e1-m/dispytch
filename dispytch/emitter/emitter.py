@@ -32,6 +32,7 @@ class EventEmitter:
                     'id': event.id,
                     'type': event.__event_type__,
                     'body': event.model_dump(mode="json", by_alias=True, exclude={'id'}),
+                    'timestamp': int(time.time() * 1000),
                 },
                 config=event.__backend_config__
             )

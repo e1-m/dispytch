@@ -9,6 +9,7 @@ class MessagePayload(BaseModel):
     id: str
     type: str
     body: dict
+    timestamp: int
 
 
 class Event(BaseModel):
@@ -16,6 +17,7 @@ class Event(BaseModel):
     topic: str
     type: str
     body: dict
+    timestamp: int
 
 
 class Consumer(ABC):
