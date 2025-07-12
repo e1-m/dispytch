@@ -8,6 +8,7 @@ from dispytch import EventBase, Event, EventEmitter, EventListener, Dependency
 
 from tests.integration.kafka_setup import *
 from tests.integration.rabbitmq_setup import *
+from tests.integration.redis_setup import *
 
 
 class MyEvent(EventBase):
@@ -43,6 +44,7 @@ def listener(request):
     [
         ("emitter_kafka", "listener_kafka"),
         ("emitter_rabbitmq", "listener_rabbitmq"),
+        ("emitter_redis", "listener_redis"),
     ],
     indirect=True,
 )
@@ -80,6 +82,7 @@ async def test_emit_and_receive(emitter: EventEmitter, listener: EventListener):
     [
         ("emitter_kafka", "listener_kafka"),
         ("emitter_rabbitmq", "listener_rabbitmq"),
+        ("emitter_redis", "listener_redis"),
     ],
     indirect=True,
 )
@@ -121,6 +124,7 @@ async def test_multiple_events(emitter: EventEmitter, listener: EventListener):
     [
         ("emitter_kafka", "listener_kafka"),
         ("emitter_rabbitmq", "listener_rabbitmq"),
+        ("emitter_redis", "listener_redis"),
     ],
     indirect=True,
 )
@@ -159,6 +163,7 @@ async def test_handler_with_retries(emitter: EventEmitter, listener: EventListen
     [
         ("emitter_kafka", "listener_kafka"),
         ("emitter_rabbitmq", "listener_rabbitmq"),
+        ("emitter_redis", "listener_redis"),
     ],
     indirect=True,
 )
