@@ -5,7 +5,7 @@ from aiokafka import AIOKafkaConsumer
 from pydantic import BaseModel
 
 from dispytch import EventListener, Event, Dependency
-from dispytch.consumers import KafkaConsumer
+from dispytch.kafka import KafkaConsumer
 
 
 class MyEventBody(BaseModel):

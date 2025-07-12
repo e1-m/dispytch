@@ -2,8 +2,7 @@ import pytest_asyncio
 from aiokafka import AIOKafkaConsumer, AIOKafkaProducer
 
 from dispytch import EventEmitter, EventListener
-from dispytch.producers import KafkaProducer
-from dispytch.consumers import KafkaConsumer
+from dispytch.kafka import KafkaProducer, KafkaConsumer
 
 
 @pytest_asyncio.fixture()

@@ -1,6 +1,6 @@
 import json
 
-from dispytch.producers.serializer import Serializer
+from dispytch.serialization.serializer import Serializer
 
 
 class JSONSerializer(Serializer):

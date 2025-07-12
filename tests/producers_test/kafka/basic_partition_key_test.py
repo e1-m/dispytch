@@ -1,5 +1,5 @@
 import pytest
-from dispytch.producers.kafka import KafkaEventConfig
+from dispytch.kafka import KafkaEventConfig
 
 from mocks import *
 

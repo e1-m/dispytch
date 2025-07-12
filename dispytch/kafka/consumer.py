@@ -5,9 +5,9 @@ import logging
 from aiokafka import AIOKafkaConsumer, ConsumerRecord, TopicPartition
 from aiokafka.errors import KafkaError
 
-from dispytch.deserializers import JSONDeserializer
 from dispytch.listener.consumer import Consumer, Event
-from dispytch.consumers.deserializer import Deserializer
+from dispytch.serialization.deserializer import Deserializer
+from dispytch.serialization.json import JSONDeserializer
 
 logger = logging.getLogger(__name__)
 

@@ -2,7 +2,7 @@ import asyncio
 
 from aiokafka import AIOKafkaProducer
 
-from dispytch.producers import KafkaProducer
+from dispytch.kafka import KafkaProducer
 from dispytch import EventEmitter, EventBase
 
 

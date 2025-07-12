@@ -4,9 +4,9 @@ from typing import AsyncIterator
 
 from aio_pika.abc import AbstractIncomingMessage, AbstractQueue
 
-from dispytch.deserializers import JSONDeserializer
 from dispytch.listener.consumer import Consumer, Event
-from dispytch.consumers.deserializer import Deserializer
+from dispytch.serialization.deserializer import Deserializer
+from dispytch.serialization.json import JSONDeserializer
 
 logger = logging.getLogger(__name__)
 

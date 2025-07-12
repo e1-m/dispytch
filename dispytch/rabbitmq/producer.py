@@ -8,8 +8,8 @@ from aio_pika.abc import AbstractExchange, DeliveryMode
 from pydantic import BaseModel
 
 from dispytch.emitter.producer import Producer, ProducerTimeout
-from dispytch.producers.serializer import Serializer
-from dispytch.serializers import JSONSerializer
+from dispytch.serialization.serializer import Serializer
+from dispytch.serialization.json import JSONSerializer
 
 
 class RabbitMQEventConfig(BaseModel):

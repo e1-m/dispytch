@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import AsyncMock, Mock
 
-from dispytch.producers.kafka import KafkaProducer
+from dispytch.kafka import KafkaProducer
 
 
 @pytest.fixture
