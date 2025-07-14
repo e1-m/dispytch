@@ -27,7 +27,7 @@ class EventEmitter:
     async def emit(self, event: EventBase):
         try:
             await self.producer.send(
-                topic=event.__topic__,
+                topic=_get_formatted_topic(event),
                 payload={
                     'id': event.id,
                     'type': event.__event_type__,
@@ -43,3 +43,17 @@ class EventEmitter:
     def on_timeout(self, callback: Callable[[EventBase], None]):
         self._on_timeout = callback
         return callback
+
+
+def _get_formatted_topic(event: EventBase) -> str:
+    try:
+        return event.__topic__.format(**event.model_dump())
+    except KeyError as e:
+        raise RuntimeError(
+            f"Missing an event field `{e.args[0]}` "
+            f"used to form a topic name `{event.__topic__}`"
+            f" on event {event.__class__.__name__}") from e
+    except IndexError as e:
+        raise RuntimeError(
+            f"Malformed topic name `{event.__topic__}` pls use an event field name in {{}} "
+        )
