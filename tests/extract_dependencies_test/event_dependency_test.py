@@ -17,7 +17,8 @@ def event_dict():
         'body': {
             'name': 'test',
             'value': 42
-        }
+        },
+        'timestamp': 100
     }
 
 
@@ -27,7 +28,8 @@ def event_dict_with_empty_body():
         'id': str(uuid.uuid4()),
         'topic': 'test-topic',
         'type': 'test-type',
-        'body': {}
+        'body': {},
+        'timestamp': 100
     }
 
 
@@ -42,7 +44,8 @@ def event_dict_with_additional_data():
             'value': 42,
             'additional': 'extra data',
             'timestamp': '2023-01-01T00:00:00Z'
-        }
+        },
+        'timestamp': 100
     }
 
 

@@ -18,7 +18,8 @@ def event_dict():
         'body': {
             'name': 'test',
             'value': 42
-        }
+        },
+        'timestamp': 100
     }
 
 

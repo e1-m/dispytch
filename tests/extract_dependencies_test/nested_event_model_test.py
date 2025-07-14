@@ -41,7 +41,8 @@ def event_dict():
                 }
             },
             'additional': 'extra data',
-        }
+        },
+        'timestamp': 100
     }
 
 

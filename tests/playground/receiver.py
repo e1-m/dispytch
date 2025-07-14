@@ -30,6 +30,7 @@ async def main():
                                       bootstrap_servers='localhost:19092',
                                       enable_auto_commit=False,
                                       group_id='test_group', )
+    await kafka_consumer.start()
     consumer = KafkaConsumer(kafka_consumer)
     event_listener = EventListener(consumer)
 
