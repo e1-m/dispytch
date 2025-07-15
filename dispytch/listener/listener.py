@@ -1,12 +1,12 @@
 import asyncio
 import logging
-from collections import defaultdict
 
 from dispytch.di.models import EventHandlerContext
 from dispytch.di.solver import solve_dependencies
 from dispytch.listener.consumer import Consumer, Event as ConsumerEvent
 from dispytch.listener.handler import Handler
 from dispytch.listener.handler_group import HandlerGroup
+from dispytch.listener.handler_tree import HandlerNode
 
 
 async def _call_handler_with_injected_dependencies(handler: Handler, event: ConsumerEvent):
@@ -34,7 +34,7 @@ class EventListener:
     def __init__(self, consumer: Consumer):
         self.consumer = consumer
         self._tasks = set()
-        self._handlers: dict[str, dict[str, list[Handler]]] = defaultdict(lambda: defaultdict(list))
+        self._handlers: HandlerNode = HandlerNode()
 
     async def listen(self):
         """
@@ -50,7 +50,7 @@ class EventListener:
             await asyncio.wait(self._tasks)
 
     async def _handle_event(self, event: ConsumerEvent):
-        handlers = self._handlers[event.topic][event.type]
+        handlers = self._handlers.get((event.topic, event.type))
         if not handlers:
             logging.info(f'There is no handler for topic `{event.topic}` and event type `{event.type}`')
             return
@@ -83,7 +83,7 @@ class EventListener:
             """
 
         def decorator(callback):
-            self._handlers[topic][event].append(Handler(callback, retries, retry_interval, retry_on))
+            self._handlers.insert((topic, event), Handler(callback, retries, retry_interval, retry_on))
             return callback
 
         return decorator
@@ -97,4 +97,4 @@ class EventListener:
         """
         for topic in group.handlers:
             for event in group.handlers[topic]:
-                self._handlers[topic][event].extend(group.handlers[topic][event])
+                self._handlers.insert((topic, event), *group.handlers[topic][event])
