@@ -25,7 +25,7 @@ def event_dict():
 
 @pytest.fixture
 def handler_context(event_dict):
-    return EventHandlerContext(event=event_dict)
+    return EventHandlerContext(event=event_dict, topic_pattern="topic", topic_delimiter=':')
 
 
 class EventBody(BaseModel):

@@ -58,7 +58,7 @@ async def test_nested_event(event_dict):
     dep = result["event_param"]
     assert isinstance(dep, Dependency)
 
-    async with dep(ctx=EventHandlerContext(event=event_dict)) as event:
+    async with dep(ctx=EventHandlerContext(event=event_dict, topic_pattern="topic", topic_delimiter=':')) as event:
         assert isinstance(event, Event)
         assert isinstance(event.body, EventBody)
         assert event.body.name == event_dict['body']['name']
