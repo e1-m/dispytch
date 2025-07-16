@@ -3,7 +3,8 @@ import uuid
 import pytest
 from pydantic import BaseModel, ValidationError
 
-from dispytch.di.models import EventHandlerContext, Event
+from dispytch.di.models import EventHandlerContext
+from dispytch.di.event import Event
 from dispytch.di.extractor import extract_dependencies
 from dispytch.di.dependency import Dependency
 

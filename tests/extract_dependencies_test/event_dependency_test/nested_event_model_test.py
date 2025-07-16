@@ -4,7 +4,8 @@ import pytest
 from pydantic import BaseModel
 
 from dispytch.di.dependency import Dependency
-from dispytch.di.models import Event, EventHandlerContext
+from dispytch.di.models import EventHandlerContext
+from dispytch.di.event import Event
 from dispytch.di.extractor import extract_dependencies
 
 

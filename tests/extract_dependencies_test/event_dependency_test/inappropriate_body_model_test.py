@@ -1,6 +1,6 @@
 import pytest
 
-from dispytch.di.models import Event
+from dispytch.di.event import Event
 from dispytch.di.extractor import extract_dependencies
 
 

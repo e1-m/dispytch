@@ -2,7 +2,7 @@ from typing import Annotated
 
 from pydantic import BaseModel
 
-from dispytch.di.models import Event
+from dispytch.di.event import Event
 from dispytch.di.extractor import extract_dependencies
 from dispytch.di.dependency import Dependency
 
