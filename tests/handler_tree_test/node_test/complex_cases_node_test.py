@@ -25,3 +25,11 @@ def test_shared_prefixes():
 
     result = node.get(("a", "b", "c"))
     assert set(result) == {"abc", "a_wc", "w_b_w"}
+
+
+def test_direct_wildcard_access():
+    node = HandlerNode()
+    node.insert(("*", "bar"), "wildcard_1")
+
+    result = node.get(("*", "bar"))
+    assert set(result) == {"wildcard_1"}
