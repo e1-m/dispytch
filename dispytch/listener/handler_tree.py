@@ -26,7 +26,7 @@ class HandlerNode:
         if key[0] in self.children:
             handlers += self.children[key[0]].get(key[1:])
 
-        if "*" in self.children:
+        if key[0] != "*" and "*" in self.children:
             handlers += self.children["*"].get(key[1:])
 
         return handlers
