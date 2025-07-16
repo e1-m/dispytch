@@ -11,7 +11,7 @@ from dispytch.di.dependency import Dependency
 
 @pytest.fixture
 def event_dict():
-    return {
+    return Event(**{
         'id': str(uuid.uuid4()),
         'topic': 'test-topic',
         'type': 'test-type',
@@ -20,23 +20,23 @@ def event_dict():
             'value': 42
         },
         'timestamp': 100
-    }
+    })
 
 
 @pytest.fixture
 def event_dict_with_empty_body():
-    return {
+    return Event(**{
         'id': str(uuid.uuid4()),
         'topic': 'test-topic',
         'type': 'test-type',
         'body': {},
         'timestamp': 100
-    }
+    })
 
 
 @pytest.fixture
 def event_dict_with_additional_data():
-    return {
+    return Event(**{
         'id': str(uuid.uuid4()),
         'topic': 'test-topic',
         'type': 'test-type',
@@ -47,7 +47,7 @@ def event_dict_with_additional_data():
             'timestamp': '2023-01-01T00:00:00Z'
         },
         'timestamp': 100
-    }
+    })
 
 
 class EventBody(BaseModel):
@@ -69,11 +69,11 @@ class OnlyValueNeededModel(BaseModel):
     value: int
 
 
-def assert_dict_was_interpreted(event: Event, event_dict: dict):
-    assert event.topic == event_dict['topic']
-    assert event.type == event_dict['type']
-    assert event.body.name == event_dict['body']['name']
-    assert event.body.value == event_dict['body']['value']
+def assert_dict_was_interpreted(received_event: Event, initial_event: Event):
+    assert received_event.topic == initial_event.topic
+    assert received_event.type == initial_event.type
+    assert received_event.body.name == initial_event.body['name']
+    assert received_event.body.value == initial_event.body['value']
 
 
 @pytest.mark.asyncio
@@ -143,7 +143,7 @@ async def test_multiple_event_dependencies_with_different_fields_of_event_needed
                                                     topic_delimiter=':')) as event1:
         assert isinstance(event1, Event)
         assert isinstance(event1.body, OnlyNameNeededModel)
-        assert event1.body.name == event_dict['body']['name']
+        assert event1.body.name == event_dict.body['name']
 
         with pytest.raises(AttributeError):
             assert event1.body.value
@@ -153,7 +153,7 @@ async def test_multiple_event_dependencies_with_different_fields_of_event_needed
                                                     topic_delimiter=':')) as event2:
         assert isinstance(event2, Event)
         assert isinstance(event2.body, OnlyValueNeededModel)
-        assert event2.body.value == event_dict['body']['value']
+        assert event2.body.value == event_dict.body['value']
 
         with pytest.raises(AttributeError):
             assert event2.body.name
@@ -210,4 +210,4 @@ async def test_getting_all_event_data_as_dict(event_dict_with_additional_data):
         assert isinstance(event, Event)
         assert isinstance(event.body, dict)
 
-        assert event.body == event_dict_with_additional_data['body']
+        assert event.body == event_dict_with_additional_data.body

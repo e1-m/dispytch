@@ -1,5 +1,6 @@
 import inspect
 from typing import Callable, Any, get_origin, Annotated, get_args, get_type_hints
+from dataclasses import asdict
 
 from pydantic import BaseModel
 
@@ -56,10 +57,10 @@ def _extract_event_dependencies(func: Callable[..., Any]) -> dict[str, Dependenc
             continue
 
         def context_to_event(ctx: EventHandlerContext, model=event_body_model) -> Event:
-            metadata = ctx.event.copy()
-            body = metadata.pop('body')
+            event_data = asdict(ctx.event)
+            body = event_data.pop('body')
 
-            return Event(body=model(**body), **metadata)
+            return Event(body=model(**body), **event_data)
 
         deps[name] = Dependency(context_to_event)
 

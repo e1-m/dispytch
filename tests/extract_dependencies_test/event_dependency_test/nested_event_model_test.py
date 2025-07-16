@@ -27,7 +27,7 @@ class EventBody(BaseModel):
 
 @pytest.fixture
 def event_dict():
-    return {
+    return Event(**{
         'id': str(uuid.uuid4()),
         'topic': 'test-topic',
         'type': 'test-type',
@@ -44,7 +44,7 @@ def event_dict():
             'additional': 'extra data',
         },
         'timestamp': 100
-    }
+    })
 
 
 @pytest.mark.asyncio
@@ -62,13 +62,13 @@ async def test_nested_event(event_dict):
     async with dep(ctx=EventHandlerContext(event=event_dict, topic_pattern="topic", topic_delimiter=':')) as event:
         assert isinstance(event, Event)
         assert isinstance(event.body, EventBody)
-        assert event.body.name == event_dict['body']['name']
-        assert event.body.value == event_dict['body']['value']
+        assert event.body.name == event_dict.body['name']
+        assert event.body.value == event_dict.body['value']
         assert isinstance(event.body.metadata, Metadata)
-        assert event.body.metadata.timestamp == event_dict['body']['metadata']['timestamp']
+        assert event.body.metadata.timestamp == event_dict.body['metadata']['timestamp']
         assert isinstance(event.body.metadata.sender, Sender)
-        assert event.body.metadata.sender.name == event_dict['body']['metadata']['sender']['name']
-        assert event.body.metadata.sender.age == event_dict['body']['metadata']['sender']['age']
+        assert event.body.metadata.sender.name == event_dict.body['metadata']['sender']['name']
+        assert event.body.metadata.sender.age == event_dict.body['metadata']['sender']['age']
 
         with pytest.raises(AttributeError):
             assert event.body.additional == 'extra data'

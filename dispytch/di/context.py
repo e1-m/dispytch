@@ -1,8 +1,10 @@
 from dataclasses import dataclass
 
+from dispytch.di.event import Event
+
 
 @dataclass
 class EventHandlerContext:
-    event: dict
+    event: Event[dict]
     topic_pattern: str
     topic_delimiter: str

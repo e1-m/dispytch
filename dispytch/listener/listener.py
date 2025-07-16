@@ -1,6 +1,7 @@
 import asyncio
 import logging
 
+from dispytch.di.event import Event
 from dispytch.di.context import EventHandlerContext
 from dispytch.di.solver import solve_dependencies
 from dispytch.listener.consumer import Consumer, Event as ConsumerEvent
@@ -56,7 +57,7 @@ class EventListener:
     async def _call_handler_with_injected_dependencies(self, handler: Handler, event: ConsumerEvent):
         async with solve_dependencies(handler.func,
                                       EventHandlerContext(
-                                          event=event.model_dump(),
+                                          event=Event(**event.model_dump()),
                                           topic_pattern=handler.topic,
                                           topic_delimiter=self.topic_delimiter
 
