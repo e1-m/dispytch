@@ -9,17 +9,6 @@ from dispytch.listener.handler_group import HandlerGroup
 from dispytch.listener.handler_tree import HandlerTree
 
 
-async def _call_handler_with_injected_dependencies(handler: Handler, event: ConsumerEvent):
-    async with solve_dependencies(handler.func,
-                                  EventHandlerContext(
-                                      event=event.model_dump()
-                                  )) as deps:
-        try:
-            await handler.handle(**deps)
-        except Exception as e:
-            logging.exception(f"Handler {handler.func.__name__} failed for event {event.type}: {e}")
-
-
 class EventListener:
     """
     Coordinates the dispatch of consumed events to their corresponding handlers.
@@ -34,6 +23,7 @@ class EventListener:
 
     def __init__(self, consumer: Consumer, topic_delimiter: str = ':'):
         self.consumer = consumer
+        self.topic_delimiter: str = topic_delimiter
         self._tasks = set()
         self._handlers: HandlerTree = HandlerTree(topic_delimiter)
 
@@ -57,11 +47,24 @@ class EventListener:
             return
 
         tasks = [asyncio.create_task(
-            _call_handler_with_injected_dependencies(handler, event)
+            self._call_handler_with_injected_dependencies(handler, event)
         ) for handler in handlers]
         await asyncio.gather(*tasks)
 
         await self.consumer.ack(event)
+
+    async def _call_handler_with_injected_dependencies(self, handler: Handler, event: ConsumerEvent):
+        async with solve_dependencies(handler.func,
+                                      EventHandlerContext(
+                                          event=event.model_dump(),
+                                          topic_pattern=handler.topic,
+                                          topic_delimiter=self.topic_delimiter
+
+                                      )) as deps:
+            try:
+                await handler.handle(**deps)
+            except Exception as e:
+                logging.exception(f"Handler {handler.func.__name__} failed for event {event.type}: {e}")
 
     def handler(self, *,
                 topic: str,
@@ -84,7 +87,7 @@ class EventListener:
             """
 
         def decorator(callback):
-            self._handlers.insert(topic, event, Handler(callback, retries, retry_interval, retry_on))
+            self._handlers.insert(topic, event, Handler(callback, topic, retries, retry_interval, retry_on))
             return callback
 
         return decorator

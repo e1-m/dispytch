@@ -59,7 +59,7 @@ class HandlerGroup:
         def decorator(callback):
             handlers = self.handlers[topic or self.default_topic][event or self.default_event]
 
-            handlers.append(Handler(callback, retries, retry_interval, retry_on))
+            handlers.append(Handler(callback, topic, retries, retry_interval, retry_on))
             return callback
 
         return decorator
