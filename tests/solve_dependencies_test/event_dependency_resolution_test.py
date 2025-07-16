@@ -5,7 +5,7 @@ import pytest
 from pydantic import BaseModel
 
 from dispytch.di.dependency import Dependency
-from dispytch.di.models import EventHandlerContext
+from dispytch.di.context import EventHandlerContext
 from dispytch.di.event import Event
 from dispytch.di.solver import solve_dependencies
 

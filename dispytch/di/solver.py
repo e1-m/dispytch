@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 from typing import Callable, Any
 
 from dispytch.di.builder import get_dependency_tree
-from dispytch.di.models import EventHandlerContext
+from dispytch.di.context import EventHandlerContext
 
 
 @asynccontextmanager

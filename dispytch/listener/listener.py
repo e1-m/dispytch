@@ -1,7 +1,7 @@
 import asyncio
 import logging
 
-from dispytch.di.models import EventHandlerContext
+from dispytch.di.context import EventHandlerContext
 from dispytch.di.solver import solve_dependencies
 from dispytch.listener.consumer import Consumer, Event as ConsumerEvent
 from dispytch.listener.handler import Handler
