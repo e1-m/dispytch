@@ -3,6 +3,24 @@ from collections import defaultdict
 from dispytch.listener.handler import Handler
 
 
+class HandlerTree:
+    def __init__(self, delimiter: str = ':'):
+        self.delimiter: str = delimiter
+        self.root: HandlerNode = HandlerNode()
+
+    def insert(self, topic: str, event: str, *handlers: Handler):
+        segments = ['*'
+                    if (segment.startswith('{') and segment.endswith('}'))
+                    else segment
+                    for segment in topic.split(self.delimiter)]
+
+        self.root.insert((*segments, event), *handlers)
+
+    def get(self, topic: str, event: str) -> list[Handler]:
+        segments = topic.split(self.delimiter)
+        return self.root.get((*segments, event))
+
+
 class HandlerNode:
     def __init__(self):
         self.handlers: list[Handler] = []

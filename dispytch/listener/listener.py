@@ -6,7 +6,7 @@ from dispytch.di.solver import solve_dependencies
 from dispytch.listener.consumer import Consumer, Event as ConsumerEvent
 from dispytch.listener.handler import Handler
 from dispytch.listener.handler_group import HandlerGroup
-from dispytch.listener.handler_tree import HandlerNode
+from dispytch.listener.handler_tree import HandlerTree
 
 
 async def _call_handler_with_injected_dependencies(handler: Handler, event: ConsumerEvent):
@@ -29,12 +29,13 @@ class EventListener:
 
     Args:
         consumer (Consumer): The event source responsible for yielding incoming events.
+        topic_delimiter (str): The symbol used to split topic names into segments for dynamic routing (default: ':').
     """
 
-    def __init__(self, consumer: Consumer):
+    def __init__(self, consumer: Consumer, topic_delimiter: str = ':'):
         self.consumer = consumer
         self._tasks = set()
-        self._handlers: HandlerNode = HandlerNode()
+        self._handlers: HandlerTree = HandlerTree(topic_delimiter)
 
     async def listen(self):
         """
@@ -50,7 +51,7 @@ class EventListener:
             await asyncio.wait(self._tasks)
 
     async def _handle_event(self, event: ConsumerEvent):
-        handlers = self._handlers.get((event.topic, event.type))
+        handlers = self._handlers.get(event.topic, event.type)
         if not handlers:
             logging.info(f'There is no handler for topic `{event.topic}` and event type `{event.type}`')
             return
@@ -83,7 +84,7 @@ class EventListener:
             """
 
         def decorator(callback):
-            self._handlers.insert((topic, event), Handler(callback, retries, retry_interval, retry_on))
+            self._handlers.insert(topic, event, Handler(callback, retries, retry_interval, retry_on))
             return callback
 
         return decorator
@@ -97,4 +98,4 @@ class EventListener:
         """
         for topic in group.handlers:
             for event in group.handlers[topic]:
-                self._handlers.insert((topic, event), *group.handlers[topic][event])
+                self._handlers.insert(topic, event, *group.handlers[topic][event])
