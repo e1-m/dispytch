@@ -146,17 +146,21 @@ name = "dispytch"
 version = "0.9.1"
 source = { editable = "." }
 dependencies = [
-    { name = "msgpack" },
     { name = "pydantic" },
-    { name = "redis" },
 ]
 
 [package.optional-dependencies]
 kafka = [
     { name = "aiokafka" },
 ]
+msgpack = [
+    { name = "msgpack" },
+]
 rabbitmq = [
     { name = "aio-pika" },
+]
+redis = [
+    { name = "redis" },
 ]
 
 [package.dev-dependencies]
@@ -169,11 +173,11 @@ dev = [
 requires-dist = [
     { name = "aio-pika", marker = "extra == 'rabbitmq'", specifier = ">=9.5.5" },
     { name = "aiokafka", marker = "extra == 'kafka'", specifier = ">=0.12.0" },
-    { name = "msgpack", specifier = ">=1.1.1" },
+    { name = "msgpack", marker = "extra == 'msgpack'", specifier = ">=1.1.1" },
     { name = "pydantic", specifier = ">=2.11.7" },
-    { name = "redis", specifier = ">=6.2.0" },
+    { name = "redis", marker = "extra == 'redis'", specifier = ">=6.2.0" },
 ]
-provides-extras = ["kafka", "rabbitmq"]
+provides-extras = ["kafka", "rabbitmq", "redis", "msgpack"]
 
 [package.metadata.requires-dev]
 dev = [
