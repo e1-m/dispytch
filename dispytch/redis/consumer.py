@@ -20,7 +20,7 @@ class RedisConsumer(Consumer):
 
     async def listen(self) -> AsyncIterator[Event]:
         async for message in self.redis.listen():
-            if message['type'] != 'message':
+            if message['type'] != 'message' and message['type'] != 'pmessage':
                 continue
 
             deserialized_payload = self.deserializer.deserialize(message['data'])
