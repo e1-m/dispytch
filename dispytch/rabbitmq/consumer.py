@@ -25,8 +25,7 @@ class RabbitMQConsumer(Consumer):
         async with queue.iterator() as queue_iter:
             async for message in queue_iter:
                 deserialized_payload = self.deserializer.deserialize(message.body)
-
-                event = Event(topic=queue.name,
+                event = Event(topic=message.routing_key,
                               **deserialized_payload.model_dump())
 
                 self._waiting_for_ack[event.id] = message
