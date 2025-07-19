@@ -5,35 +5,30 @@ import logging
 from aiokafka import AIOKafkaConsumer, ConsumerRecord, TopicPartition
 from aiokafka.errors import KafkaError
 
-from dispytch.listener.consumer import Consumer, Event
-from dispytch.serialization.deserializer import Deserializer
-from dispytch.serialization.json import JSONDeserializer
+from dispytch.listener.consumer import Consumer, Message
 
 logger = logging.getLogger(__name__)
 
 
 class KafkaConsumer(Consumer):
-    def __init__(self, consumer: AIOKafkaConsumer, deserializer: Deserializer = None):
+    def __init__(self, consumer: AIOKafkaConsumer):
         self.consumer = consumer
-        self.deserializer = deserializer or JSONDeserializer()
-        self._waiting_for_commit: dict[str, ConsumerRecord] = {}
+        self._waiting_for_commit: dict[bytes, ConsumerRecord] = {}
 
-    async def listen(self) -> AsyncIterator[Event]:
-        async for msg in self.consumer:
-            deserialized_payload = self.deserializer.deserialize(msg.value)
+    async def listen(self) -> AsyncIterator[Message]:
+        async for message in self.consumer:
+            msg = Message(topic=message.topic,
+                          payload=message.value)
 
-            event = Event(topic=msg.topic,
-                          **deserialized_payload.model_dump())
+            self._waiting_for_commit[msg.payload] = message
 
-            self._waiting_for_commit[event.id] = msg
+            yield msg
 
-            yield event
-
-    async def ack(self, event: Event):
+    async def ack(self, message: Message):
         try:
-            msg = self._waiting_for_commit.pop(event.id)
+            msg = self._waiting_for_commit.pop(message.payload)
         except KeyError as e:
-            logger.warning(f"Tried to ack a non-existent or already acked event {event.id}")
+            logger.warning(f"Tried to ack a non-existent or already acked message")
             raise e
 
         tp = TopicPartition(msg.topic, msg.partition)
@@ -49,7 +44,7 @@ class KafkaConsumer(Consumer):
                     raise e
 
                 if attempt == max_retries:
-                    logger.critical(f"Commit failed after {max_retries} attempts for event {event.id}")
+                    logger.critical(f"Commit failed after {max_retries} attempts for a message")
                     raise e
 
                 await asyncio.sleep(backoff * attempt)

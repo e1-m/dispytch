@@ -4,25 +4,15 @@ from typing import AsyncIterator
 from pydantic import BaseModel
 
 
-class MessagePayload(BaseModel):
-    """Represents the deserialized content of a raw message received from a message broker."""
-    id: str
-    type: str
-    body: dict
-    timestamp: int
-
-
-class Event(BaseModel):
-    id: str
+class Message(BaseModel):
+    """Represents a raw message received from a message broker."""
     topic: str
-    type: str
-    body: dict
-    timestamp: int
+    payload: bytes
 
 
 class Consumer(ABC):
     @abstractmethod
-    def listen(self) -> AsyncIterator[Event]: ...
+    def listen(self) -> AsyncIterator[Message]: ...
 
     @abstractmethod
-    def ack(self, event: Event): ...
+    def ack(self, message: Message): ...

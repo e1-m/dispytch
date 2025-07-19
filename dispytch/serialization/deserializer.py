@@ -1,6 +1,14 @@
 from abc import ABC, abstractmethod
 
-from dispytch.listener.consumer import MessagePayload
+from pydantic import BaseModel
+
+
+class MessagePayload(BaseModel):
+    """Represents the deserialized content of a raw message received from a message broker."""
+    id: str
+    type: str
+    body: dict
+    timestamp: int
 
 
 class Deserializer(ABC):

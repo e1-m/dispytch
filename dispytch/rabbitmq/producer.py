@@ -8,8 +8,6 @@ from aio_pika.abc import AbstractExchange, DeliveryMode
 from pydantic import BaseModel
 
 from dispytch.emitter.producer import Producer, ProducerTimeout
-from dispytch.serialization.serializer import Serializer
-from dispytch.serialization.json import JSONSerializer
 
 
 class RabbitMQEventConfig(BaseModel):
@@ -32,13 +30,11 @@ class RabbitMQEventConfig(BaseModel):
 class RabbitMQProducer(Producer):
     def __init__(self,
                  exchange: AbstractExchange,
-                 serializer: Serializer = None,
                  timeout: int | float | None = None) -> None:
         self.exchange = exchange
-        self.serializer = serializer or JSONSerializer()
         self.timeout = timeout
 
-    async def send(self, topic: str, payload: dict, config: BaseModel | None = None):
+    async def send(self, topic: str, payload: bytes, config: BaseModel | None = None):
         if config is not None and not isinstance(config, RabbitMQEventConfig):
             raise ValueError(
                 f"Expected a RabbitMQEventConfig when using RabbitMQProducer got {type(config).__name__}"
@@ -48,7 +44,7 @@ class RabbitMQProducer(Producer):
         try:
             await self.exchange.publish(
                 Message(
-                    body=self.serializer.serialize(payload),
+                    body=payload,
                     delivery_mode=config.delivery_mode,
                     priority=config.priority,
                     expiration=config.expiration,
