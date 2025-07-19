@@ -23,7 +23,8 @@ class RabbitMQConfig(BaseSettings):
     USER_EVENTS_EXCHANGE_NAME: str = "user_events_exchange"
     POST_EVENTS_EXCHANGE_NAME: str = "post_events_exchange"
 
-    # the queue name should be used as `topic` in a handler decorator
+    # the queue name should be used as `topic` in a handler decorator in version 0.9.1
+    # from version 0.10.0 onwards, the emitting side's `__topic__` is used instead
     USER_EVENTS_QUEUE_NAME: str = event_handling_config.USER_EVENTS_TOPIC
     # the routing key should be the same as emitting side's `__topic__`
     USER_EVENTS_ROUTING_KEY: str = event_handling_config.USER_EVENTS_TOPIC
