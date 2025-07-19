@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from dispytch.di.event import Event
 from dispytch.di.extractor import extract_dependencies
 from dispytch.di.dependency import Dependency
+from dispytch.di.topic_segment import TopicSegment
 
 
 class EventBody(BaseModel):
@@ -57,17 +58,19 @@ def test_complex_signature():
 def test_mixed_event_and_regular_params():
     def func_with_mixed_params(
             event_param: Event[EventBody],
+            topic_param: Annotated[str, TopicSegment()],
             regular_param: int,
             another_param: str = "default",
-            dep_param=Dependency(lambda: "fake_dependency"),
+            dep_param=Dependency(lambda: "fake_dependency")
     ):
         pass
 
     result = extract_dependencies(func_with_mixed_params)
 
-    assert len(result) == 2
+    assert len(result) == 3
     assert "event_param" in result
     assert "dep_param" in result
+    assert "topic_param" in result
 
     assert "regular_param" not in result
     assert "another_param" not in result
