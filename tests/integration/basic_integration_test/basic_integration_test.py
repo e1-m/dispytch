@@ -6,9 +6,9 @@ from typing import Annotated
 
 from dispytch import EventBase, Event, EventEmitter, EventListener, Dependency
 
-from tests.integration.kafka_setup import *
-from tests.integration.rabbitmq_setup import *
-from tests.integration.redis_setup import *
+from tests.integration.basic_integration_test.kafka_setup import *
+from tests.integration.basic_integration_test.rabbitmq_setup import *
+from tests.integration.basic_integration_test.redis_setup import *
 
 
 class MyEvent(EventBase):

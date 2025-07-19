@@ -18,7 +18,7 @@ async def pubsub(topics):
 
 
 @pytest_asyncio.fixture()
-async def redis(bootstrap_servers):
+async def redis():
     yield Redis()
 
 
