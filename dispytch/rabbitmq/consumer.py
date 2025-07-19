@@ -1,6 +1,7 @@
 import asyncio
 import logging
 from typing import AsyncIterator
+from uuid import UUID
 
 from aio_pika.abc import AbstractIncomingMessage, AbstractQueue
 
@@ -13,7 +14,7 @@ class RabbitMQConsumer(Consumer):
     def __init__(self,
                  *queues: AbstractQueue):
         self.queues = queues
-        self._waiting_for_ack: dict[bytes, AbstractIncomingMessage] = {}
+        self._waiting_for_ack: dict[UUID, AbstractIncomingMessage] = {}
         self._consumed_messages_queue = asyncio.Queue()
         self._consumer_tasks = []
 
@@ -23,7 +24,7 @@ class RabbitMQConsumer(Consumer):
                 msg = Message(topic=message.routing_key,
                               payload=message.body)
 
-                self._waiting_for_ack[msg.payload] = message
+                self._waiting_for_ack[msg.id] = message
                 await self._consumed_messages_queue.put(msg)
 
     async def listen(self) -> AsyncIterator[Message]:
@@ -42,7 +43,7 @@ class RabbitMQConsumer(Consumer):
 
     async def ack(self, message: Message):
         try:
-            message = self._waiting_for_ack.pop(message.payload)
+            message = self._waiting_for_ack.pop(message.id)
         except KeyError as e:
             logger.warning(f"Tried to ack a non-existent or already acked message")
             raise e

@@ -1,6 +1,7 @@
 import asyncio
 from typing import AsyncIterator
 import logging
+from uuid import UUID
 
 from aiokafka import AIOKafkaConsumer, ConsumerRecord, TopicPartition
 from aiokafka.errors import KafkaError
@@ -13,20 +14,20 @@ logger = logging.getLogger(__name__)
 class KafkaConsumer(Consumer):
     def __init__(self, consumer: AIOKafkaConsumer):
         self.consumer = consumer
-        self._waiting_for_commit: dict[bytes, ConsumerRecord] = {}
+        self._waiting_for_commit: dict[UUID, ConsumerRecord] = {}
 
     async def listen(self) -> AsyncIterator[Message]:
         async for message in self.consumer:
             msg = Message(topic=message.topic,
                           payload=message.value)
 
-            self._waiting_for_commit[msg.payload] = message
+            self._waiting_for_commit[msg.id] = message
 
             yield msg
 
     async def ack(self, message: Message):
         try:
-            msg = self._waiting_for_commit.pop(message.payload)
+            msg = self._waiting_for_commit.pop(message.id)
         except KeyError as e:
             logger.warning(f"Tried to ack a non-existent or already acked message")
             raise e
