@@ -3,6 +3,7 @@ import aio_pika
 
 from dispytch import EventEmitter, EventListener
 from dispytch.rabbitmq import RabbitMQProducer, RabbitMQConsumer
+from dispytch.serialization.msgpack import MessagePackSerializer, MessagePackDeserializer
 
 
 @pytest_asyncio.fixture()
@@ -66,7 +67,8 @@ async def dispytch_rabbitmq_consumer(rabbitmq_queue):
 @pytest_asyncio.fixture()
 async def emitter_rabbitmq(dispytch_rabbitmq_producer):
     return EventEmitter(
-        producer=dispytch_rabbitmq_producer
+        producer=dispytch_rabbitmq_producer,
+        serializer=MessagePackSerializer()
     )
 
 
@@ -74,5 +76,6 @@ async def emitter_rabbitmq(dispytch_rabbitmq_producer):
 async def listener_rabbitmq(dispytch_rabbitmq_consumer):
     return EventListener(
         consumer=dispytch_rabbitmq_consumer,
+        deserializer=MessagePackDeserializer(),
         topic_delimiter='.'
     )

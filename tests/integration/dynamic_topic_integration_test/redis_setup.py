@@ -3,6 +3,7 @@ from redis.asyncio import Redis
 
 from dispytch import EventEmitter, EventListener
 from dispytch.redis import RedisConsumer, RedisProducer
+from dispytch.serialization.msgpack import MessagePackDeserializer, MessagePackSerializer
 
 
 @pytest_asyncio.fixture()
@@ -35,7 +36,8 @@ async def dispytch_redis_consumer(pubsub):
 @pytest_asyncio.fixture()
 async def emitter_redis(dispytch_redis_producer):
     return EventEmitter(
-        producer=dispytch_redis_producer
+        producer=dispytch_redis_producer,
+        serializer=MessagePackSerializer()
     )
 
 
@@ -43,5 +45,6 @@ async def emitter_redis(dispytch_redis_producer):
 async def listener_redis(dispytch_redis_consumer):
     return EventListener(
         consumer=dispytch_redis_consumer,
+        deserializer=MessagePackDeserializer(),
         topic_delimiter='.'
     )

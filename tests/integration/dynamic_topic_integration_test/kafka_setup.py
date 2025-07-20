@@ -1,12 +1,10 @@
-import re
-
 import pytest_asyncio
 from aiokafka import AIOKafkaConsumer, AIOKafkaProducer
 
 from dispytch import EventEmitter, EventListener
 from dispytch.kafka import KafkaProducer, KafkaConsumer
 
-from aiokafka.admin import AIOKafkaAdminClient, NewTopic
+from dispytch.serialization.msgpack import MessagePackSerializer, MessagePackDeserializer
 
 
 @pytest_asyncio.fixture()
@@ -54,7 +52,8 @@ async def dispytch_kafka_consumer(kafka_consumer: AIOKafkaConsumer):
 @pytest_asyncio.fixture()
 async def emitter_kafka(dispytch_kafka_producer):
     return EventEmitter(
-        producer=dispytch_kafka_producer
+        producer=dispytch_kafka_producer,
+        serializer=MessagePackSerializer(),
     )
 
 
@@ -62,5 +61,6 @@ async def emitter_kafka(dispytch_kafka_producer):
 async def listener_kafka(dispytch_kafka_consumer):
     return EventListener(
         consumer=dispytch_kafka_consumer,
+        deserializer=MessagePackDeserializer(),
         topic_delimiter='.'
     )
