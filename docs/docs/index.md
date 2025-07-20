@@ -1,4 +1,8 @@
-# ⚡ Dispytch
+#
+
+<img src="assets/images/logo.png" alt="Dispytch" style="padding: 10%;" />
+
+---
 
 **Dispytch** is a lightweight, async-first Python framework for event-handling.
 It’s designed to streamline the development of clean and testable event-driven services.
