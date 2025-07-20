@@ -6,3 +6,4 @@ from .emitter import EventBase as EventBase
 
 from .di import Dependency as Dependency
 from .di import Event as Event
+from .di import TopicSegment as TopicSegment
