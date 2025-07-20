@@ -1,13 +1,13 @@
 # ⚡ Dispytch
 
-**Dispytch** is a lightweight, async-first Python framework for event-handling.
+**Dispytch** is a lightweight, async Python framework for event-handling.
 It’s designed to streamline the development of clean and testable event-driven services.
 
 ## 🚀 Features
 
 * 🧠 **Async-first core** – built for modern Python I/O
 * 🔌 **FastAPI-style dependency injection** – clean, decoupled handlers
-* 📬 **Backend-flexible** – with Kafka and RabbitMQ out-of-the-box
+* 📬 **Backend-flexible** – with Kafka, RabbitMQ and Redis PubSub out-of-the-box
 * 🧱 **Composable architecture** – extend, override, or inject anything
 * 🧾 **Pydantic-based validation** – event schemas are validated using pydantic
 * 🔁 **Built-in retry logic** – configurable, resilient, no boilerplate
@@ -28,6 +28,12 @@ For RabbitMQ support:
 
 ```bash
 uv add dispytch[rabbitmq]
+```
+
+For Redis support:
+
+```bash
+uv add dispytch[redis]
 ```
 
 ---
@@ -133,11 +139,6 @@ Dispytch uses a schema-on-read model. Formats like Avro, Protobuf, or Thrift are
 
 🕵️ No dead-letter queue (DLQ)
 Failed messages are retried using built-in logic, but there’s no DLQ or fallback mechanism after final retries yet.
-
-🧩 No topic pattern matching
-Wildcard or templated subscriptions (e.g. user.*, order:{id}:events) aren’t supported in handler declarations yet.
-Though the backend of you choice may route events to the appropriate queues/topics/channels there is no way for a
-dispytch handler to know it yet
 
 ---
 💡 See something missing?
