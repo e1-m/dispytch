@@ -56,7 +56,7 @@ def _get_formatted_topic(event: EventBase) -> str:
             f"Missing an event field `{e.args[0]}` "
             f"used to form a topic name `{event.__topic__}`"
             f" on event {event.__class__.__name__}") from e
-    except IndexError as e:
+    except IndexError:
         raise RuntimeError(
-            f"Malformed topic name `{event.__topic__}` pls use an event field name in {{}} "
+            f"Malformed topic name `{event.__topic__}`. Use an event field name in {{}} "
         )
