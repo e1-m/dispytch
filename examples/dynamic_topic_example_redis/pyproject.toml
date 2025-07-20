@@ -1,0 +1,8 @@
+[project]
+name = "dynamic-topic-example-redis"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.13"
+dependencies = [
+    "dispytch[redis]>=0.10.0",
+]
