@@ -2,7 +2,7 @@ import asyncio
 
 from aiokafka import AIOKafkaConsumer
 from dispytch import EventListener
-from dispytch.consumers import KafkaConsumer
+from dispytch.kafka import KafkaConsumer
 
 from handlers import user_events
 

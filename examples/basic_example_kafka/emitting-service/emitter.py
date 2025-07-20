@@ -6,7 +6,7 @@ from aiokafka import AIOKafkaProducer
 from pydantic import BaseModel
 
 from dispytch import EventEmitter, EventBase
-from dispytch.producers import KafkaProducer
+from dispytch.kafka import KafkaProducer
 
 
 class User(BaseModel):

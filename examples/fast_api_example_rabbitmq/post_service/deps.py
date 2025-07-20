@@ -2,7 +2,7 @@ from functools import lru_cache
 from typing import Annotated
 
 from dispytch import EventEmitter
-from dispytch.producers import RabbitMQProducer
+from dispytch.rabbitmq import RabbitMQProducer
 from fastapi import Depends as FastAPIDependency, Request
 
 
@@ -10,7 +10,7 @@ from fastapi import Depends as FastAPIDependency, Request
 def emitter(request: Request):
     return EventEmitter(
         RabbitMQProducer(
-            exchange=request.app.state.rabbitmq.user_exchange,  # this service will send events to user events exchange
+            exchange=request.app.state.rabbitmq.post_exchange,  # this service will send events to post events exchange
         )
     )
 
