@@ -99,6 +99,28 @@ async def test_emit_handles_runtime_topic_formating_with_nested_curly_braces(moc
 
 
 @pytest.mark.asyncio
+async def test_emit_differentiate_dynamic_and_static_segments(mock_producer):
+    emitter = EventEmitter(mock_producer)
+
+    class DummyEvent(EventBase):
+        __topic__ = "test:name:{name}"
+        __event_type__ = "dummy_event"
+
+        name: str
+
+    name = "qwerty"
+
+    event = DummyEvent(
+        name=name,
+    )
+    await emitter.emit(event)
+
+    args, kwargs = mock_producer.send.call_args
+
+    assert kwargs["topic"] == f"test:name:{name}"
+
+
+@pytest.mark.asyncio
 async def test_emit_throws_with_malformed_topic(mock_producer):
     emitter = EventEmitter(mock_producer)
 
