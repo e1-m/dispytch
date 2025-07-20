@@ -10,11 +10,11 @@ logger = logging.getLogger(__name__)
 
 class RedisConsumer(Consumer):
     def __init__(self,
-                 redis: PubSub):
-        self.redis = redis
+                 pubsub: PubSub):
+        self.pubsub = pubsub
 
     async def listen(self) -> AsyncIterator[Message]:
-        async for message in self.redis.listen():
+        async for message in self.pubsub.listen():
             if message['type'] != 'message' and message['type'] != 'pmessage':
                 continue
 
