@@ -1078,23 +1078,30 @@ carefully.</p>
 <h2 id="defining-dynamic-segments-with-topicsegment">🧩 Defining Dynamic Segments with <code>TopicSegment()</code><a class="headerlink" href="#defining-dynamic-segments-with-topicsegment" title="Permanent link">&para;</a></h2>
 <p>You can bind dynamic parts of the topic to function parameters using <code>TopicSegment</code>.</p>
 <p>Here are three ways to use it:</p>
-<h3 id="1-annotated-parameter-recommended">1. <strong>Annotated Parameter (Recommended)</strong><a class="headerlink" href="#1-annotated-parameter-recommended" title="Permanent link">&para;</a></h3>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1"><strong>Annotated Parameter (Recommended)</strong></label><label for="__tabbed_1_2"><strong>Class-style Annotation</strong></label><label for="__tabbed_1_3"><strong>Default Value Style</strong></label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">handler</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">TopicSegment</span><span class="p">()]):</span>
     <span class="o">...</span>
 </code></pre></div></td></tr></table></div>
-<h3 id="2-class-style-annotation">2. <strong>Class-style Annotation</strong><a class="headerlink" href="#2-class-style-annotation" title="Permanent link">&para;</a></h3>
+</div>
+<div class="tabbed-block">
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">handler</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">TopicSegment</span><span class="p">]):</span>
     <span class="o">...</span>
 </code></pre></div></td></tr></table></div>
 <p>Equivalent to the first form, but useful if you forget the parentheses.</p>
-<h3 id="3-default-value-style">3. <strong>Default Value Style</strong><a class="headerlink" href="#3-default-value-style" title="Permanent link">&para;</a></h3>
+</div>
+<div class="tabbed-block">
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">handler</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">TopicSegment</span><span class="p">()):</span>
     <span class="o">...</span>
 </code></pre></div></td></tr></table></div>
 <p>You're not allowed to forget the parentheses using this one xD</p>
+</div>
+</div>
+</div>
 <hr />
 <h2 id="aliases-in-dynamic-segments">🪞 Aliases in Dynamic Segments<a class="headerlink" href="#aliases-in-dynamic-segments" title="Permanent link">&para;</a></h2>
 <p>By default, Dispytch binds the segment name in the topic (e.g., <code>user_id</code>) to the <strong>parameter name</strong> in your function.
