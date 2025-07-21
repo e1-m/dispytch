@@ -41,7 +41,6 @@ nav:
       - Installation: getting-started/installation.md
       - Quickstart: getting-started/quickstart.md
   - Core Concepts:
-      - Overview & Architecture: concepts/architecture.md
       - Dependency Injection: concepts/di.md
       - Events:
           - Emitting Events: concepts/emitter.md
