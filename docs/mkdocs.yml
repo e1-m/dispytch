@@ -26,6 +26,9 @@ extra:
   version:
     provider: mike
 markdown_extensions:
+  - toc:
+      permalink: true
+      toc_depth: 2
   - pymdownx.blocks.tab:
       alternate_style: true
   - pymdownx.superfences:
@@ -45,6 +48,7 @@ nav:
       - Events:
           - Emitting Events: concepts/emitter.md
           - Handling Events: concepts/listener.md
+          - Dynamic Topics: concepts/dynamic_topics.md
           - Serialization: concepts/serialization.md
       - Advanced Usage:
           - Custom Producers & Consumers: concepts/own_consumers_and_producers.md
