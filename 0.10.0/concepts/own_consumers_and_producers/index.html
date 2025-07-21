@@ -1120,7 +1120,7 @@ SQS, or whatever queue you want—you can do that by implementing your own <code
             <span class="n">raw</span> <span class="o">=</span> <span class="k">await</span> <span class="n">redis_client</span><span class="o">.</span><span class="n">xread</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
             <span class="k">yield</span> <span class="n">Message</span><span class="p">(</span>
                 <span class="n">topic</span><span class="o">=</span><span class="n">raw</span><span class="p">[</span><span class="s2">&quot;stream&quot;</span><span class="p">],</span>
-                <span class="n">payload</span><span class="o">=</span><span class="n">raw</span><span class="p">[</span><span class="s2">&quot;body&quot;</span><span class="p">]</span>
+                <span class="n">payload</span><span class="o">=</span><span class="n">raw</span><span class="p">[</span><span class="s2">&quot;payload&quot;</span><span class="p">]</span>
             <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">ack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">Message</span><span class="p">):</span>
