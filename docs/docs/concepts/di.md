@@ -132,14 +132,6 @@ async def handle_event_with_logger(
 
 ---
 
-### 🧰 Common Use Cases
-
-* 📋 Structured logging – Include event context in every log entry
-
-* 🏢 Per-tenant or per-topic logic – Apply tenant-specific rules or routing
-
-* ⚙️ Dynamic configuration – Adjust behavior based on event payload or headers
-
 ## 🔁 Alternative Syntax
 
 As an alternative for the `Annotated[T, Dependency(...)]` style, Dispytch lets you inject dependencies by assigning a

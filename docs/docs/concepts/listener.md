@@ -59,13 +59,12 @@ Where:
 //// tab | RabbitMQ
 
 ```python
-import asyncio
 import aio_pika
 from typing import Annotated
 from pydantic import BaseModel
 
 from dispytch import EventListener, Event, Dependency
-from dispytch.consumers import RabbitMQConsumer
+from dispytch.rabbitmq import RabbitMQConsumer
 
 
 class MyEventBody(BaseModel):
@@ -93,23 +92,18 @@ async def main():
         print(f"Received registration for user {user_id}")
 
     await listener.listen()
-
-
-if __name__ == "__main__":
-    asyncio.run(main())
 ```
 
 ////
 //// tab | Kafka
 
 ```python
-import asyncio
 from aiokafka import AIOKafkaConsumer
 from typing import Annotated
 from pydantic import BaseModel
 
 from dispytch import EventListener, Event, Dependency
-from dispytch.consumers import KafkaConsumer
+from dispytch.kafka import KafkaConsumer
 
 
 class MyEventBody(BaseModel):
@@ -129,7 +123,7 @@ async def main():
         group_id="listener_group"
     )
     # the next line is essential
-    await raw_consumer.start() # DO NOT FORGET
+    await raw_consumer.start()  # DO NOT FORGET
     consumer = KafkaConsumer(raw_consumer)
     listener = EventListener(consumer)
 
@@ -140,10 +134,6 @@ async def main():
         print(f"Login action with value: {value}")
 
     await listener.listen()
-
-
-if __name__ == "__main__":
-    asyncio.run(main())
 ```
 
 ⚠️ **Important**:
@@ -163,6 +153,47 @@ So don’t skip it. Don’t forget it. Your future self will thank you.
 
 ////
 
+//// tab | Redis Pub/Sub
+
+```python
+# !!! Important: Use the asyncio-compatible Redis client from redis.asyncio
+from redis.asyncio import Redis
+from pydantic import BaseModel
+
+from dispytch import EventListener, Event
+from dispytch.redis import RedisConsumer
+
+
+class SystemAlert(BaseModel):
+    level: str
+    message: str
+
+
+async def main():
+    redis = Redis()
+    pubsub = redis.pubsub()
+
+    await pubsub.subscribe("system.alerts")
+
+    consumer = RedisConsumer(pubsub)
+    listener = EventListener(consumer)
+
+    @listener.handler(topic="system.alerts", event="system_alert")
+    async def handle_alert(event: Event[SystemAlert]):
+        print(f"🚨 [{event.body.level.upper()}] {event.body.message}")
+
+    print("🛡️ Listening for system alerts...")
+    await listener.listen()
+
+```
+
+⚠️ **Important**:
+
+When using RedisConsumer with EventListener,
+you should pass the asyncio-compatible Redis client (from redis.asyncio) to the consumer.
+
+////
+
 ---
 
 ### ⚠️ Notes & Gotchas
@@ -172,6 +203,7 @@ So don’t skip it. Don’t forget it. Your future self will thank you.
 * The `event` string must match `__event_type__` of the published event.
 * Event handling is **fully async**, and multiple handlers can run concurrently.
 * You can attach **multiple handlers** to the same topic and event type.
+
 ---
 
 ## 🔁 Retries
@@ -214,7 +246,7 @@ event type.
 ### ✅ Use Cases
 
 * Defining a group of related handlers
-* Splitting handlers into modules 
+* Splitting handlers into modules
 * Avoiding repetition of `topic`/`event` in every decorator
 
 ---

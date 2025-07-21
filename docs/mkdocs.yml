@@ -22,6 +22,9 @@ theme:
     - search.suggest
     - search.highlight
     - content.tabs.link
+extra:
+  version:
+    provider: mike
 markdown_extensions:
   - pymdownx.blocks.tab:
       alternate_style: true

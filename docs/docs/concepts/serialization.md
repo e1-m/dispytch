@@ -6,32 +6,24 @@ complicated than they need to be, you can plug in a custom serializer or deseria
 
 ## ✍️ Setting a Serializer (Producer Side)
 
-To override the default JSON serializer, pass a serializer instance to your `Producer`:
+To override the default JSON serializer, pass a serializer instance to your `EventEmitter`:
 
 ```python
-from dispytch.serializers import MessagePackSerializer, JSONSerializer
+from dispytch.serialization.msgpack import MessagePackSerializer
 
-# Use JSON (default)
-producer = KafkaProducer(kafka_producer, JSONSerializer())
-
-# Use MessagePack
-producer = KafkaProducer(kafka_producer, MessagePackSerializer())
+emitter = EventEmitter(producer, MessagePackSerializer())
 ```
 
-If you don’t explicitly pass one, `JSONSerializer()` is used under the hood.
+If you don’t explicitly pass serializer, `JSONSerializer()` is used under the hood.
 
 ## 🧩 Setting a Deserializer (Consumer Side)
 
-Same deal for consumers. You can pick how incoming messages are decoded (should be consistent with sending side):
+Same deal for consumers. You can pick how incoming messages are decoded (should be consistent with sending side, though):
 
 ```python
-from dispytch.deserializers import MessagePackDeserializer, JSONDeserializer
+from dispytch.serialization.msgpack import MessagePackDeserializer
 
-# Use MessagePack
-consumer = KafkaConsumer(kafka_consumer, MessagePackDeserializer())
-
-# Use JSON (default)
-consumer = KafkaConsumer(kafka_consumer, JSONDeserializer())
+listener = EventListener(consumer, MessagePackDeserializer())
 ```
 
 Again, if you don’t set it, Dispytch will default to `JSONDeserializer()`.
@@ -43,7 +35,7 @@ Again, if you don’t set it, Dispytch will default to `JSONDeserializer()`.
 Custom serialization is as simple as implementing a method.
 
 ```python
-from dispytch.producers import Serializer
+from dispytch.serialization.serializer import Serializer
 
 
 class MyCoolSerializer(Serializer):
@@ -53,10 +45,10 @@ class MyCoolSerializer(Serializer):
 ```
 
 ```python
-from dispytch.consumers import Deserializer, Payload
+from dispytch.serialization.deserializer import Deserializer, MessagePayload
 
 
 class MyCoolDeserializer(Deserializer):
-    def deserialize(self, data: bytes) -> Payload:
+    def deserialize(self, data: bytes) -> MessagePayload:
         ...
 ```

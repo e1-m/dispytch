@@ -4,14 +4,14 @@ Events often need fine-grained control over how they’re published—things lik
 timestamps, etc. Dispytch supports this via the optional `__backend_config__` class attribute on any `EventBase`
 subclass.
 
-This lets you define backend-specific settings *inside* your event class in a clean, declarative way.
+This lets you define backend-specific settings *inside* your event instance in a clean, declarative way.
 
 ---
 
 ## 🧩 What Is `__backend_config__`?
 
 `__backend_config__` is an optional `BaseModel` that lets you pass custom options to your producer. Each backend (Kafka,
-RabbitMQ, etc.) can define its own config schema.
+RabbitMQ, Redis, etc.) can define its own config schema.
 
 ### 🔎 Example
 
@@ -19,10 +19,22 @@ RabbitMQ, etc.) can define its own config schema.
 class UserCreated(EventBase):
     __topic__ = "user_events"
     __event_type__ = "user_created"
-    __backend_config__ = KafkaEventConfig(partition_by="user.id")
 
     user: User
     timestamp: int
+
+
+async def example_emit(emitter: EventEmitter, user: User):
+    await emitter.emit(
+        UserCreated(
+            user=user,
+            timestamp=int(datetime.now().timestamp()),
+            __backend_config__=KafkaEventConfig(
+                partition_key=user.id,
+            )
+        )
+
+    )
 ```
 
 ---
@@ -33,40 +45,11 @@ Use this config to control how events are sent to Kafka.
 
 ```python
 class KafkaEventConfig(BaseModel):
-    partition_by: Optional[str] = None
+    partition_key: Optional[Any] = None
     partition: Optional[int] = None
     timestamp_ms: Optional[int] = None
     headers: Optional[dict] = None
 ```
-
-### 🧠 `partition_by`: Dynamic Partitioning
-
-Dispytch supports **dot-notation** to extract keys from deeply nested payloads and use them as Kafka partition keys.
-
-#### ✅ Example
-
-```python
-class SomeEvent(EventBase):
-    __topic__ = "things"
-    __event_type__ = "thing_happened"
-    __backend_config__ = KafkaEventConfig(partition_by="user.id")
-
-    user: User
-```
-
-If the event’s payload contains:
-
-```json
-{
-    "user": {
-        "id": "user123",
-        "name": "Alice"
-    },
-    ...
-}
-```
-
-Then `user123` will be used as the partition key.
 
 ---
 

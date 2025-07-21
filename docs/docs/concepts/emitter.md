@@ -72,10 +72,9 @@ class MyEvent(EventBase):
 //// tab | RabbitMQ
 
 ```python
-import asyncio
 import aio_pika
 from dispytch import EventEmitter, EventBase
-from dispytch.producers import RabbitMQProducer
+from dispytch.rabbitmq import RabbitMQProducer
 
 
 class MyEvent(EventBase):
@@ -94,12 +93,11 @@ async def main():
     producer = RabbitMQProducer(exchange)
     emitter = EventEmitter(producer)
 
-    await emitter.emit(MyEvent(user_id="abc123", email="user@example.com"))
+    await emitter.emit(
+        MyEvent(user_id="abc123",
+                email="user@example.com")
+    )
     print("Event sent!")
-
-
-if __name__ == "__main__":
-    asyncio.run(main())
 ```
 
 💡 **Note**: `__topic__` will be used as a routing key when published to exchange
@@ -108,10 +106,9 @@ if __name__ == "__main__":
 //// tab | Kafka
 
 ```python
-import asyncio
 from aiokafka import AIOKafkaProducer
 from dispytch import EventEmitter, EventBase
-from dispytch.producers import KafkaProducer
+from dispytch.kafka import KafkaProducer
 
 
 class MyEvent(EventBase):
@@ -130,12 +127,12 @@ async def main():
     producer = KafkaProducer(kafka_raw_producer)
     emitter = EventEmitter(producer)
 
-    await emitter.emit(MyEvent(user_id="abc123", timestamp="2025-07-07T12:00:00Z"))
+    await emitter.emit(
+        MyEvent(user_id="abc123",
+                timestamp="2025-07-07T12:00:00Z")
+    )
     print("Event emitted!")
 
-
-if __name__ == "__main__":
-    asyncio.run(main())
 ```
 
 ⚠️ **Important**:
@@ -152,6 +149,43 @@ await kafka_raw_producer.start()
 events will not be published, and you won’t get any errors—they’ll just silently vanish into the void.
 
 So don’t skip it. Don’t forget it. Your future self will thank you.
+
+////
+//// tab | Redis Pub/Sub
+
+```python
+# !!! Important: Use the asyncio-compatible Redis client from redis.asyncio
+from redis.asyncio import Redis
+from dispytch import EventEmitter, EventBase
+from dispytch.redis import RedisProducer
+
+
+class SystemAlert(EventBase):
+    __topic__ = "system.alerts"
+    __event_type__ = "system_alert"
+
+    level: str
+    message: str
+
+
+async def main():
+    redis = Redis()
+    
+    producer = RedisProducer(redis)
+    emitter = EventEmitter(producer)
+
+    await emitter.emit(
+        SystemAlert(level="critical",
+                    message="CPU temperature high")
+    )
+    print("Alert sent!")
+
+```
+
+⚠️ **Important**:
+
+When using RedisProducer with EventEmitter,
+you should pass the asyncio-compatible Redis client (from redis.asyncio) to the producer.
 
 ////
 
@@ -175,5 +209,5 @@ The callback can be sync or async, and receives the original `EventBase` instanc
 ## 📌 Notes
 
 * Dispytch automatically **serializes the payload** as JSON by default. To change the default serializer you can
-  pass included `MessagePackSerializer` to the Producer or write one on your own
-* Event ordering and delivery guarantees — depend on the underlying producer (Kafka/RabbitMQ), not Dispytch.
+  pass included `MessagePackSerializer` to the EventEmitter or write one on your own
+* Event ordering and delivery guarantees — depend on the underlying broker (Kafka/RabbitMQ/Redis), not Dispytch.
