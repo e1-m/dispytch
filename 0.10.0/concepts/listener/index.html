@@ -1135,7 +1135,7 @@ functions.</p>
 </ul>
 <hr />
 <h2 id="example-setting-up-event-listener">✍️ Example: Setting Up Event Listener</h2>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">RabbitMQ</label><label for="__tabbed_1_2">Kafka</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">RabbitMQ</label><label for="__tabbed_1_2">Kafka</label><label for="__tabbed_1_3">Redis Pub/Sub</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
@@ -1181,7 +1181,7 @@ functions.</p>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">dispytch</span><span class="w"> </span><span class="kn">import</span> <span class="n">EventListener</span><span class="p">,</span> <span class="n">Event</span><span class="p">,</span> <span class="n">Dependency</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">dispytch.consumers</span><span class="w"> </span><span class="kn">import</span> <span class="n">RabbitMQConsumer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dispytch.rabbitmq</span><span class="w"> </span><span class="kn">import</span> <span class="n">RabbitMQConsumer</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">MyEventBody</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
@@ -1262,7 +1262,7 @@ functions.</p>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">dispytch</span><span class="w"> </span><span class="kn">import</span> <span class="n">EventListener</span><span class="p">,</span> <span class="n">Event</span><span class="p">,</span> <span class="n">Dependency</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">dispytch.consumers</span><span class="w"> </span><span class="kn">import</span> <span class="n">KafkaConsumer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dispytch.kafka</span><span class="w"> </span><span class="kn">import</span> <span class="n">KafkaConsumer</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">MyEventBody</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
@@ -1282,7 +1282,7 @@ functions.</p>
         <span class="n">group_id</span><span class="o">=</span><span class="s2">&quot;listener_group&quot;</span>
     <span class="p">)</span>
     <span class="c1"># the next line is essential</span>
-    <span class="k">await</span> <span class="n">raw_consumer</span><span class="o">.</span><span class="n">start</span><span class="p">()</span> <span class="c1"># DO NOT FORGET</span>
+    <span class="k">await</span> <span class="n">raw_consumer</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>  <span class="c1"># DO NOT FORGET</span>
     <span class="n">consumer</span> <span class="o">=</span> <span class="n">KafkaConsumer</span><span class="p">(</span><span class="n">raw_consumer</span><span class="p">)</span>
     <span class="n">listener</span> <span class="o">=</span> <span class="n">EventListener</span><span class="p">(</span><span class="n">consumer</span><span class="p">)</span>
 
@@ -1306,6 +1306,62 @@ Dispytch does not start it for you.</p>
 </code></pre></div></td></tr></table></div>
 <p>events will not be consumed, and you won’t get any errors—they’ll just silently vanish into the void.</p>
 <p>So don’t skip it. Don’t forget it. Your future self will thank you.</p>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">redis.asyncio</span><span class="w"> </span><span class="kn">import</span> <span class="n">Redis</span>  <span class="c1"># !!! Important: Use the asyncio-compatible Redis client from redis.asyncio</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">dispytch</span><span class="w"> </span><span class="kn">import</span> <span class="n">EventListener</span><span class="p">,</span> <span class="n">Event</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dispytch.redis</span><span class="w"> </span><span class="kn">import</span> <span class="n">RedisConsumer</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">SystemAlert</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">level</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">message</span><span class="p">:</span> <span class="nb">str</span>
+
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="n">redis</span> <span class="o">=</span> <span class="n">Redis</span><span class="p">()</span>
+    <span class="n">pubsub</span> <span class="o">=</span> <span class="n">redis</span><span class="o">.</span><span class="n">pubsub</span><span class="p">()</span>
+
+    <span class="k">await</span> <span class="n">pubsub</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="s2">&quot;system.alerts&quot;</span><span class="p">)</span>
+
+    <span class="n">consumer</span> <span class="o">=</span> <span class="n">RedisConsumer</span><span class="p">(</span><span class="n">pubsub</span><span class="p">)</span>
+    <span class="n">listener</span> <span class="o">=</span> <span class="n">EventListener</span><span class="p">(</span><span class="n">consumer</span><span class="p">)</span>
+
+    <span class="nd">@listener</span><span class="o">.</span><span class="n">handler</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="s2">&quot;system.alerts&quot;</span><span class="p">,</span> <span class="n">event</span><span class="o">=</span><span class="s2">&quot;system_alert&quot;</span><span class="p">)</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">handle_alert</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">[</span><span class="n">SystemAlert</span><span class="p">]):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;🚨 [</span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">level</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;🛡️ Listening for system alerts...&quot;</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">listener</span><span class="o">.</span><span class="n">listen</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
 </div>
 </div>
 </div>
@@ -1358,7 +1414,7 @@ event type.</p>
 <h3 id="use-cases">✅ Use Cases</h3>
 <ul>
 <li>Defining a group of related handlers</li>
-<li>Splitting handlers into modules </li>
+<li>Splitting handlers into modules</li>
 <li>Avoiding repetition of <code>topic</code>/<code>event</code> in every decorator</li>
 </ul>
 <hr />
