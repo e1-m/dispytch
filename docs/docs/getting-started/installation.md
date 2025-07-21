@@ -3,7 +3,7 @@
 Dispytch is backend-agnostic by default. This means it won't install Kafka or RabbitMQ dependencies unless explicitly
 requested.
 
-Install with [`uv`](https://github.com/astral-sh/uv) or `pip`, including extras for your preferred message broker:
+Install with [`uv`](https://github.com/astral-sh/uv), [`poetry`](https://github.com/python-poetry/poetry) or `pip`, including extras for your preferred message broker:
 
 ## With Kafka support
 
@@ -29,6 +29,18 @@ Includes: `aio-pika`
 
 ---
 
+## With Redis support
+
+```bash
+uv add dispytch[redis]
+# or
+pip install dispytch[redis]
+```
+
+Includes: `redis`
+
+---
+
 ## ⚠️ No Backend by Default
 
 If you install Dispytch without any extras:
@@ -39,8 +51,8 @@ uv add dispytch
 pip install dispytch
 ```
 
-then no producer or consumer backends will be available. You'll need to install at least one extra (`[kafka]` or
-`[rabbitmq]`) or install the dependencies separately to use built-in event producers and consumers.
+then no producer or consumer backends will be available. You'll need to install at least one extra
+or install the dependencies separately to use built-in event producers and consumers.
 
 ---
 
