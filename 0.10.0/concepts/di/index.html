@@ -634,15 +634,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#common-use-cases" class="md-nav__link">
-    <span class="md-ellipsis">
-      🧰 Common Use Cases
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -997,15 +988,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#common-use-cases" class="md-nav__link">
-    <span class="md-ellipsis">
-      🧰 Common Use Cases
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -1223,18 +1205,6 @@ accepting a typed <code>Event[T]</code> as an argument.</p>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">user_id</span><span class="si">}</span><span class="s2"> performed action: </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">action</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
 <hr />
-<h3 id="common-use-cases">🧰 Common Use Cases</h3>
-<ul>
-<li>
-<p>📋 Structured logging – Include event context in every log entry</p>
-</li>
-<li>
-<p>🏢 Per-tenant or per-topic logic – Apply tenant-specific rules or routing</p>
-</li>
-<li>
-<p>⚙️ Dynamic configuration – Adjust behavior based on event payload or headers</p>
-</li>
-</ul>
 <h2 id="alternative-syntax">🔁 Alternative Syntax</h2>
 <p>As an alternative for the <code>Annotated[T, Dependency(...)]</code> style, Dispytch lets you inject dependencies by assigning a
 <code>Dependency</code> instance directly as a default value for a handler parameter. Functionally the same—just a different
