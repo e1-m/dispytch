@@ -779,7 +779,7 @@
           <li class="md-nav__item">
   <a href="#example-pseudocode" class="md-nav__link">
     <span class="md-ellipsis">
-      ✅ Example (Pseudocode)
+      ✅ Example (Pseudocode!!!)
     </span>
   </a>
   
@@ -821,7 +821,7 @@
           <li class="md-nav__item">
   <a href="#example-pseudocode_1" class="md-nav__link">
     <span class="md-ellipsis">
-      ✅ Example (Pseudocode)
+      ✅ Example (Pseudocode!!!)
     </span>
   </a>
   
@@ -945,7 +945,7 @@
           <li class="md-nav__item">
   <a href="#example-pseudocode" class="md-nav__link">
     <span class="md-ellipsis">
-      ✅ Example (Pseudocode)
+      ✅ Example (Pseudocode!!!)
     </span>
   </a>
   
@@ -987,7 +987,7 @@
           <li class="md-nav__item">
   <a href="#example-pseudocode_1" class="md-nav__link">
     <span class="md-ellipsis">
-      ✅ Example (Pseudocode)
+      ✅ Example (Pseudocode!!!)
     </span>
   </a>
   
@@ -1027,7 +1027,8 @@
 
 
 <h1 id="writing-custom-producers-consumers">⚙️ Writing Custom Producers &amp; Consumers</h1>
-<p>Dispytch doesn’t lock you into any specific messaging backend. If you want to connect to something like Redis Streams, SQS, or whatever queue you want—you can do that by implementing your own <code>Producer</code> and <code>Consumer</code>.</p>
+<p>Dispytch doesn’t lock you into any specific messaging backend. If you want to connect to something like Redis Streams,
+SQS, or whatever queue you want—you can do that by implementing your own <code>Producer</code> and <code>Consumer</code>.</p>
 <p>Here’s how.</p>
 <hr />
 <h2 id="custom-producer">🧪 Custom Producer</h2>
@@ -1038,27 +1039,29 @@
 <span class="normal">3</span>
 <span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Producer</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
     <span class="nd">@abstractmethod</span>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">BaseModel</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">BaseModel</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="o">...</span>
 </code></pre></div></td></tr></table></div>
 <h3 id="notes">💡 Notes</h3>
 <ul>
 <li><code>topic</code>: where the event goes</li>
-<li><code>payload</code>: a dict containing <code>id</code>, <code>type</code>, and <code>body</code> of the event</li>
-<li><code>config</code>: optional backend-specific config, usually declared in the event model as <code>__backend_config__</code></li>
+<li><code>payload</code>: bytes containing the event payload</li>
+<li><code>config</code>: optional backend-specific config, usually declared in the event as <code>__backend_config__</code></li>
 <li>If your send logic times out raise <code>ProducerTimeout</code></li>
 </ul>
-<h3 id="example-pseudocode">✅ Example (Pseudocode)</h3>
+<h3 id="example-pseudocode">✅ Example (Pseudocode!!!)</h3>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
 <span class="normal">4</span>
 <span class="normal">5</span>
 <span class="normal">6</span>
-<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">dispytch.emitter.producer</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProducerTimeout</span><span class="p">,</span> <span class="n">Producer</span>
+<span class="normal">7</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">dispytch.emitter.producer</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProducerTimeout</span><span class="p">,</span> <span class="n">Producer</span>
+
 
 <span class="k">class</span><span class="w"> </span><span class="nc">RedisProducer</span><span class="p">(</span><span class="n">Producer</span><span class="p">):</span>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">BaseModel</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">BaseModel</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">redis_client</span><span class="o">.</span><span class="n">xadd</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">payload</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">ProducerTimeout</span><span class="p">(</span><span class="s2">&quot;Redis XADD failed&quot;</span><span class="p">)</span>
@@ -1067,44 +1070,33 @@
 <h2 id="custom-consumer">🧃 Custom Consumer</h2>
 <p>To receive and handle events from your own backend, implement the <code>Consumer</code> interface.</p>
 <h3 id="interface_1">✍️ Interface</h3>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Event</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">topic</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">body</span><span class="p">:</span> <span class="nb">dict</span>
-
-<span class="k">class</span><span class="w"> </span><span class="nc">Consumer</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Consumer</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">listen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncIterator</span><span class="p">[</span><span class="n">Event</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">listen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncIterator</span><span class="p">[</span><span class="n">Message</span><span class="p">]:</span>
         <span class="o">...</span>
 
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">ack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">Message</span><span class="p">):</span>
         <span class="o">...</span>
 </code></pre></div></td></tr></table></div>
 <h3 id="notes_1">💡 Notes</h3>
 <ul>
 <li>
-<p><code>listen()</code> must yield <code>Event</code> objects. This is an <strong>async generator</strong>.</p>
+<p><code>listen()</code> must yield <code>Message</code> objects. This is an <strong>async generator</strong>.</p>
 </li>
 <li>
-<p><code>ack()</code> is called when Dispytch successfully processes an event. Use it to mark the event as handled (e.g., ack a Kafka offset or delete a message from a queue).</p>
+<p><code>ack()</code> is called when Dispytch successfully processes an event. Use it to mark the event as handled (e.g., ack a
+  Kafka offset or delete a message from a queue).</p>
 </li>
 </ul>
-<h3 id="example-pseudocode_1">✅ Example (Pseudocode)</h3>
+<h3 id="example-pseudocode_1">✅ Example (Pseudocode!!!)</h3>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -1119,21 +1111,19 @@
 <span class="normal">12</span>
 <span class="normal">13</span>
 <span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">dispytch.listener.consumer</span><span class="w"> </span><span class="kn">import</span> <span class="n">Consumer</span><span class="p">,</span> <span class="n">Event</span>
+<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">dispytch.listener.consumer</span><span class="w"> </span><span class="kn">import</span> <span class="n">Consumer</span><span class="p">,</span> <span class="n">Message</span>
+
 
 <span class="k">class</span><span class="w"> </span><span class="nc">RedisConsumer</span><span class="p">(</span><span class="n">Consumer</span><span class="p">):</span>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">listen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncIterator</span><span class="p">[</span><span class="n">Event</span><span class="p">]:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">listen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncIterator</span><span class="p">[</span><span class="n">Message</span><span class="p">]:</span>
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">raw</span> <span class="o">=</span> <span class="k">await</span> <span class="n">redis_client</span><span class="o">.</span><span class="n">xread</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
-            <span class="k">yield</span> <span class="n">Event</span><span class="p">(</span>
-                <span class="nb">id</span><span class="o">=</span><span class="n">raw</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span>
+            <span class="k">yield</span> <span class="n">Message</span><span class="p">(</span>
                 <span class="n">topic</span><span class="o">=</span><span class="n">raw</span><span class="p">[</span><span class="s2">&quot;stream&quot;</span><span class="p">],</span>
-                <span class="nb">type</span><span class="o">=</span><span class="n">raw</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">],</span>
-                <span class="n">body</span><span class="o">=</span><span class="n">raw</span><span class="p">[</span><span class="s2">&quot;body&quot;</span><span class="p">]</span>
+                <span class="n">payload</span><span class="o">=</span><span class="n">raw</span><span class="p">[</span><span class="s2">&quot;body&quot;</span><span class="p">]</span>
             <span class="p">)</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">ack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">Message</span><span class="p">):</span>
         <span class="c1"># Redis streams might not need manual ack, or you could XDEL here</span>
         <span class="k">pass</span>
 </code></pre></div></td></tr></table></div>
