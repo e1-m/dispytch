@@ -466,6 +466,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#with-redis-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      With Redis support
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#no-backend-by-default" class="md-nav__link">
     <span class="md-ellipsis">
       ⚠️ No Backend by Default
@@ -874,6 +883,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#with-redis-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      With Redis support
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#no-backend-by-default" class="md-nav__link">
     <span class="md-ellipsis">
       ⚠️ No Backend by Default
@@ -913,7 +931,7 @@
 <h1 id="installation">📦 Installation</h1>
 <p>Dispytch is backend-agnostic by default. This means it won't install Kafka or RabbitMQ dependencies unless explicitly
 requested.</p>
-<p>Install with <a href="https://github.com/astral-sh/uv"><code>uv</code></a> or <code>pip</code>, including extras for your preferred message broker:</p>
+<p>Install with <a href="https://github.com/astral-sh/uv"><code>uv</code></a>, <a href="https://github.com/python-poetry/poetry"><code>poetry</code></a> or <code>pip</code>, including extras for your preferred message broker:</p>
 <h2 id="with-kafka-support">With Kafka support</h2>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
@@ -931,6 +949,15 @@ pip<span class="w"> </span>install<span class="w"> </span>dispytch<span class="o
 pip<span class="w"> </span>install<span class="w"> </span>dispytch<span class="o">[</span>rabbitmq<span class="o">]</span>
 </code></pre></div></td></tr></table></div>
 <p>Includes: <code>aio-pika</code></p>
+<hr />
+<h2 id="with-redis-support">With Redis support</h2>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code>uv<span class="w"> </span>add<span class="w"> </span>dispytch<span class="o">[</span>redis<span class="o">]</span>
+<span class="c1"># or</span>
+pip<span class="w"> </span>install<span class="w"> </span>dispytch<span class="o">[</span>redis<span class="o">]</span>
+</code></pre></div></td></tr></table></div>
+<p>Includes: <code>redis</code></p>
 <hr />
 <h2 id="no-backend-by-default">⚠️ No Backend by Default</h2>
 <p>If you install Dispytch without any extras:</p>
