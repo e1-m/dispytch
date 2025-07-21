@@ -1,4 +1,4 @@
-<img src="docs/docs/assets/images/logo.png" alt="Dispytch" style="padding: 10%;" />
+![Dispytch](docs/docs/assets/images/logo.png)
 
 ---
 
