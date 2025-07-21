@@ -1334,7 +1334,9 @@ Dispytch does not start it for you.</p>
 <span class="normal">24</span>
 <span class="normal">25</span>
 <span class="normal">26</span>
-<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">redis.asyncio</span><span class="w"> </span><span class="kn">import</span> <span class="n">Redis</span>  <span class="c1"># !!! Important: Use the asyncio-compatible Redis client from redis.asyncio</span>
+<span class="normal">27</span>
+<span class="normal">28</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># !!! Important: Use the asyncio-compatible Redis client from redis.asyncio</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">redis.asyncio</span><span class="w"> </span><span class="kn">import</span> <span class="n">Redis</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">dispytch</span><span class="w"> </span><span class="kn">import</span> <span class="n">EventListener</span><span class="p">,</span> <span class="n">Event</span>
@@ -1362,6 +1364,9 @@ Dispytch does not start it for you.</p>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;🛡️ Listening for system alerts...&quot;</span><span class="p">)</span>
     <span class="k">await</span> <span class="n">listener</span><span class="o">.</span><span class="n">listen</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>
+<p>⚠️ <strong>Important</strong>:</p>
+<p>When using RedisConsumer with EventListener,
+you should pass the asyncio-compatible Redis client (from redis.asyncio) to the consumer.</p>
 </div>
 </div>
 </div>
