@@ -1078,7 +1078,7 @@ carefully.</p>
 <h2 id="defining-dynamic-segments-with-topicsegment">🧩 Defining Dynamic Segments with <code>TopicSegment()</code><a class="headerlink" href="#defining-dynamic-segments-with-topicsegment" title="Permanent link">&para;</a></h2>
 <p>You can bind dynamic parts of the topic to function parameters using <code>TopicSegment</code>.</p>
 <p>Here are three ways to use it:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1"><strong>Annotated Parameter (Recommended)</strong></label><label for="__tabbed_1_2"><strong>Class-style Annotation</strong></label><label for="__tabbed_1_3"><strong>Default Value Style</strong></label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1"><strong>Annotated Parameter (Recommended)</strong></label><label for="__tabbed_1_2"><strong>Class-style Annotation</strong></label><label for="__tabbed_1_3"><strong>Default Value</strong></label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
@@ -1221,7 +1221,7 @@ topic.</p>
 </code></pre></div></td></tr></table></div>
 <p>If the incoming topic contains anything else — like <code>weirdvalue</code> — <strong>validation fails</strong>.</p>
 <hr />
-<h3 id="example-range-constraints">📏 Example: Range Constraints<a class="headerlink" href="#example-range-constraints" title="Permanent link">&para;</a></h3>
+<h3 id="example-range-constraints">✍️ Example: Range Constraints<a class="headerlink" href="#example-range-constraints" title="Permanent link">&para;</a></h3>
 <p>You can also enforce constraints like <code>le</code> (less than or equal):</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">handler</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">TopicSegment</span><span class="p">(</span><span class="n">le</span><span class="o">=</span><span class="mi">125</span><span class="p">)]):</span>
