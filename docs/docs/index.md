@@ -1,10 +1,10 @@
 #
 
-<img src="assets/images/logo.png" alt="Dispytch" style="padding: 10%;" />
+![Dispytch](assets/images/logo.png)
 
 ---
 
-**Dispytch** is a lightweight, async-first Python framework for event-handling.
+**Dispytch** is a lightweight, async Python framework for event-handling.
 It’s designed to streamline the development of clean and testable event-driven services.
 
 ## 🚀 Features
@@ -86,22 +86,3 @@ async def handle_user_registered(
     print(f"[User Registered] {user.id} - {user.email} at {timestamp}")
     await user_service.do_smth_with_the_user(user)
 ```
-
-## ⚠️ Limitations
-
-### 🧾 No schema-on-write support
-
-Dispytch uses a schema-on-read model. Formats like Avro, Protobuf, or Thrift aren’t supported yet.
-
-### 🕵️ No dead-letter queue (DLQ)
-
-Failed messages are retried using built-in logic, but there’s no DLQ or fallback mechanism after final retries yet.
-
-### 🧩 No topic pattern matching
-
-Wildcard or templated subscriptions (e.g. `user.*`, `order:{id}:events`) aren’t supported in handler declarations yet.
-
----
-
-💡 *See something missing?*
-Some features aren’t here yet—but with your help, they could be. Contributions welcome via PRs or discussions.
