@@ -1,6 +1,6 @@
 import asyncio
 from typing import Annotated
-from redis.asyncio import Redis
+from redis.asyncio import Redis  # !!! Important: Use the asyncio-compatible Redis client from redis.asyncio
 from dispytch import EventListener, TopicSegment, Event
 from dispytch.redis import RedisConsumer
 
