@@ -404,48 +404,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#limitations" class="md-nav__link">
-    <span class="md-ellipsis">
-      ⚠️ Limitations
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="⚠️ Limitations">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#no-schema-on-write-support" class="md-nav__link">
-    <span class="md-ellipsis">
-      🧾 No schema-on-write support
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#no-dead-letter-queue-dlq" class="md-nav__link">
-    <span class="md-ellipsis">
-      🕵️ No dead-letter queue (DLQ)
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#no-topic-pattern-matching" class="md-nav__link">
-    <span class="md-ellipsis">
-      🧩 No topic pattern matching
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -908,48 +866,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#limitations" class="md-nav__link">
-    <span class="md-ellipsis">
-      ⚠️ Limitations
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="⚠️ Limitations">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#no-schema-on-write-support" class="md-nav__link">
-    <span class="md-ellipsis">
-      🧾 No schema-on-write support
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#no-dead-letter-queue-dlq" class="md-nav__link">
-    <span class="md-ellipsis">
-      🕵️ No dead-letter queue (DLQ)
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#no-topic-pattern-matching" class="md-nav__link">
-    <span class="md-ellipsis">
-      🧩 No topic pattern matching
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -970,7 +886,7 @@
 
 
 <h1 id="_1"></h1>
-<p><img src="assets/images/logo.png" alt="Dispytch" style="padding: 10%;" /></p>
+<p><img alt="Dispytch" src="assets/images/logo.png" /></p>
 <hr />
 <p><strong>Dispytch</strong> is a lightweight, async Python framework for event-handling.
 It’s designed to streamline the development of clean and testable event-driven services.</p>
@@ -1107,16 +1023,6 @@ It’s designed to streamline the development of clean and testable event-driven
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[User Registered] </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2"> at </span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="k">await</span> <span class="n">user_service</span><span class="o">.</span><span class="n">do_smth_with_the_user</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-<h2 id="limitations">⚠️ Limitations</h2>
-<h3 id="no-schema-on-write-support">🧾 No schema-on-write support</h3>
-<p>Dispytch uses a schema-on-read model. Formats like Avro, Protobuf, or Thrift aren’t supported yet.</p>
-<h3 id="no-dead-letter-queue-dlq">🕵️ No dead-letter queue (DLQ)</h3>
-<p>Failed messages are retried using built-in logic, but there’s no DLQ or fallback mechanism after final retries yet.</p>
-<h3 id="no-topic-pattern-matching">🧩 No topic pattern matching</h3>
-<p>Wildcard or templated subscriptions (e.g. <code>user.*</code>, <code>order:{id}:events</code>) aren’t supported in handler declarations yet.</p>
-<hr />
-<p>💡 <em>See something missing?</em>
-Some features aren’t here yet—but with your help, they could be. Contributions welcome via PRs or discussions.</p>
 
 
 
