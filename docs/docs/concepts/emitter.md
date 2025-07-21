@@ -15,13 +15,8 @@ with minimal boilerplate.
 * **Consistency & safety:** Typed events with `EventBase` ensure your payloads are validated and predictable. No more
   guessing the shape of your data or fumbling with manual serialization.
 
-* **Async-first by design:** Modern Python runs on async I/O—your event emission won’t block or slow down your app.
-
 * **Plug & play with multiple backends:** Whether you’re team Kafka or RabbitMQ (or both), `EventEmitter` lets you
-  switch between or postpone backend decisions without the fuss.
-
-* **Standardized routing:** By tying events to topics and event types, you create a clear, manageable event flow that
-  scales cleanly.
+  switch between or postpone backend decisions with less overhead.
 
 * **Testability:** Emitting an event is just calling a method on an object you can mock or swap out—making your code
   easier to test and reason about.
