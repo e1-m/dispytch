@@ -776,21 +776,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🧩 What Is __backend_config__?">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#example" class="md-nav__link">
-    <span class="md-ellipsis">
-      🔎 Example
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -877,21 +862,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🧩 What Is __backend_config__?">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#example" class="md-nav__link">
-    <span class="md-ellipsis">
-      🔎 Example
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -940,16 +910,16 @@
   
 
 
-<h1 id="backend-specific-event-settings">⚙️ Backend-Specific Event Settings</h1>
+<h1 id="backend-specific-event-settings">⚙️ Backend-Specific Event Settings<a class="headerlink" href="#backend-specific-event-settings" title="Permanent link">&para;</a></h1>
 <p>Events often need fine-grained control over how they’re published—things like partitioning, headers, priorities,
 timestamps, etc. Dispytch supports this via the optional <code>__backend_config__</code> class attribute on any <code>EventBase</code>
 subclass.</p>
 <p>This lets you define backend-specific settings <em>inside</em> your event instance in a clean, declarative way.</p>
 <hr />
-<h2 id="what-is-__backend_config__">🧩 What Is <code>__backend_config__</code>?</h2>
+<h2 id="what-is-__backend_config__">🧩 What Is <code>__backend_config__</code>?<a class="headerlink" href="#what-is-__backend_config__" title="Permanent link">&para;</a></h2>
 <p><code>__backend_config__</code> is an optional <code>BaseModel</code> that lets you pass custom options to your producer. Each backend (Kafka,
 RabbitMQ, Redis, etc.) can define its own config schema.</p>
-<h3 id="example">🔎 Example</h3>
+<h3 id="example">🔎 Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h3>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -989,7 +959,7 @@ RabbitMQ, Redis, etc.) can define its own config schema.</p>
     <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
 <hr />
-<h2 id="kafkaeventconfig">🪵 KafkaEventConfig</h2>
+<h2 id="kafkaeventconfig">🪵 KafkaEventConfig<a class="headerlink" href="#kafkaeventconfig" title="Permanent link">&para;</a></h2>
 <p>Use this config to control how events are sent to Kafka.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
@@ -1002,7 +972,7 @@ RabbitMQ, Redis, etc.) can define its own config schema.</p>
     <span class="n">headers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 </code></pre></div></td></tr></table></div>
 <hr />
-<h2 id="rabbitmqeventconfig">🐇 RabbitMQEventConfig</h2>
+<h2 id="rabbitmqeventconfig">🐇 RabbitMQEventConfig<a class="headerlink" href="#rabbitmqeventconfig" title="Permanent link">&para;</a></h2>
 <p>RabbitMQ gives you full control over message delivery via its rich AMQP options.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
@@ -1020,7 +990,7 @@ RabbitMQ, Redis, etc.) can define its own config schema.</p>
 </code></pre></div></td></tr></table></div>
 <p>Using this config, you can set AMQP-specific things</p>
 <hr />
-<h2 id="implementing-custom-configs">🔨 Implementing Custom Configs</h2>
+<h2 id="implementing-custom-configs">🔨 Implementing Custom Configs<a class="headerlink" href="#implementing-custom-configs" title="Permanent link">&para;</a></h2>
 <p>If you're writing a custom producer (see <a href="../own_consumers_and_producers/">Writing Custom Producers &amp; Consumers</a>), you can define
 your own config schema:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>

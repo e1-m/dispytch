@@ -655,21 +655,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="✍️ Example: Setting Up Event Listener">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#notes-gotchas" class="md-nav__link">
-    <span class="md-ellipsis">
-      ⚠️ Notes &amp; Gotchas
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -679,30 +664,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🔁 Retries">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#parameters" class="md-nav__link">
-    <span class="md-ellipsis">
-      🎯 Parameters:
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#example" class="md-nav__link">
-    <span class="md-ellipsis">
-      ✅ Example:
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -711,39 +672,6 @@
       🧩 HandlerGroup
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="🧩 HandlerGroup">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#use-cases" class="md-nav__link">
-    <span class="md-ellipsis">
-      ✅ Use Cases
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#setup" class="md-nav__link">
-    <span class="md-ellipsis">
-      🔧 Setup
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#group-config-behavior" class="md-nav__link">
-    <span class="md-ellipsis">
-      🎯 Group Config Behavior
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -963,21 +891,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="✍️ Example: Setting Up Event Listener">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#notes-gotchas" class="md-nav__link">
-    <span class="md-ellipsis">
-      ⚠️ Notes &amp; Gotchas
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -987,30 +900,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🔁 Retries">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#parameters" class="md-nav__link">
-    <span class="md-ellipsis">
-      🎯 Parameters:
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#example" class="md-nav__link">
-    <span class="md-ellipsis">
-      ✅ Example:
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -1019,39 +908,6 @@
       🧩 HandlerGroup
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="🧩 HandlerGroup">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#use-cases" class="md-nav__link">
-    <span class="md-ellipsis">
-      ✅ Use Cases
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#setup" class="md-nav__link">
-    <span class="md-ellipsis">
-      🔧 Setup
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#group-config-behavior" class="md-nav__link">
-    <span class="md-ellipsis">
-      🎯 Group Config Behavior
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1074,12 +930,12 @@
   
 
 
-<h1 id="eventlistener">📥 <code>EventListener</code></h1>
+<h1 id="eventlistener">📥 <code>EventListener</code><a class="headerlink" href="#eventlistener" title="Permanent link">&para;</a></h1>
 <p><code>EventListener</code> is Dispytch’s high-level abstraction for consuming events from a message broker (like Kafka or RabbitMQ)
 and dispatching them to appropriate async handler functions. It’s where your event-driven logic lives — clean,
 decoupled, and dependency-injected.</p>
 <hr />
-<h2 id="why-do-i-need-it">✅ Why do I need it?</h2>
+<h2 id="why-do-i-need-it">✅ Why do I need it?<a class="headerlink" href="#why-do-i-need-it" title="Permanent link">&para;</a></h2>
 <ul>
 <li>
 <p><strong>Decoupled event handling:</strong> <code>EventListener</code> connects your logic to the outside world without mixing transport
@@ -1114,7 +970,7 @@ decoupled, and dependency-injected.</p>
 Without it, you're hand-wiring consumers, parsing raw payloads, and stuffing all your logic into bloated callback
 functions.</p>
 <hr />
-<h2 id="basic-structure">🧱 Basic Structure</h2>
+<h2 id="basic-structure">🧱 Basic Structure<a class="headerlink" href="#basic-structure" title="Permanent link">&para;</a></h2>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -1134,7 +990,7 @@ functions.</p>
 <li>Decorated handler is auto-wired to the event type via <code>topic</code> + <code>event</code>.</li>
 </ul>
 <hr />
-<h2 id="example-setting-up-event-listener">✍️ Example: Setting Up Event Listener</h2>
+<h2 id="example-setting-up-event-listener">✍️ Example: Setting Up Event Listener<a class="headerlink" href="#example-setting-up-event-listener" title="Permanent link">&para;</a></h2>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">RabbitMQ</label><label for="__tabbed_1_2">Kafka</label><label for="__tabbed_1_3">Redis Pub/Sub</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -1351,7 +1207,7 @@ you should pass the asyncio-compatible Redis client (from redis.asyncio) to the 
 </div>
 </div>
 <hr />
-<h3 id="notes-gotchas">⚠️ Notes &amp; Gotchas</h3>
+<h3 id="notes-gotchas">⚠️ Notes &amp; Gotchas<a class="headerlink" href="#notes-gotchas" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Handlers receive the full <code>Event[T]</code> with your typed payload (Pydantic model) under <code>.body</code>:</li>
 <li>The event payload must match the Pydantic schema — or decoding will fail.</li>
@@ -1360,15 +1216,15 @@ you should pass the asyncio-compatible Redis client (from redis.asyncio) to the 
 <li>You can attach <strong>multiple handlers</strong> to the same topic and event type.</li>
 </ul>
 <hr />
-<h2 id="retries">🔁 Retries</h2>
+<h2 id="retries">🔁 Retries<a class="headerlink" href="#retries" title="Permanent link">&para;</a></h2>
 <p>Handlers can be configured to <strong>automatically retry</strong> on failure using <code>retries</code>, <code>retry_on</code>, and <code>retry_interval</code>.</p>
-<h3 id="parameters">🎯 Parameters:</h3>
+<h3 id="parameters">🎯 Parameters:<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h3>
 <ul>
 <li><code>retries</code>: Number of retry attempts (default: <code>0</code>)</li>
 <li><code>retry_on</code>: list of exception types to trigger retry. If <code>None</code>, all exceptions will trigger retry.</li>
 <li><code>retry_interval</code>: Delay (in seconds) between retries (default: <code>1.25</code>)</li>
 </ul>
-<h3 id="example">✅ Example:</h3>
+<h3 id="example">✅ Example:<a class="headerlink" href="#example" title="Permanent link">&para;</a></h3>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -1393,17 +1249,17 @@ you should pass the asyncio-compatible Redis client (from redis.asyncio) to the 
 attempts.</p>
 <p>💡 <em>If you don't set <code>retry_on</code>, all exceptions will trigger a retry — use with caution.</em></p>
 <hr />
-<h2 id="handlergroup">🧩 <code>HandlerGroup</code></h2>
+<h2 id="handlergroup">🧩 <code>HandlerGroup</code><a class="headerlink" href="#handlergroup" title="Permanent link">&para;</a></h2>
 <p><code>HandlerGroup</code> allows you to organize and register handlers <strong>modularly</strong>, useful for grouping handlers by topic or
 event type.</p>
-<h3 id="use-cases">✅ Use Cases</h3>
+<h3 id="use-cases">✅ Use Cases<a class="headerlink" href="#use-cases" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Defining a group of related handlers</li>
 <li>Splitting handlers into modules</li>
 <li>Avoiding repetition of <code>topic</code>/<code>event</code> in every decorator</li>
 </ul>
 <hr />
-<h3 id="setup">🔧 Setup</h3>
+<h3 id="setup">🔧 Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h3>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -1435,7 +1291,7 @@ event type.</p>
 </code></pre></div></td></tr></table></div>
 <p>Behind the scenes, Dispytch will collect all handlers in the group and attach them to the listener.</p>
 <hr />
-<h3 id="group-config-behavior">🎯 Group Config Behavior</h3>
+<h3 id="group-config-behavior">🎯 Group Config Behavior<a class="headerlink" href="#group-config-behavior" title="Permanent link">&para;</a></h3>
 <ul>
 <li><code>topic</code> and <code>event</code> in the decorator <strong>override</strong> group defaults.</li>
 <li>If <strong>neither</strong> is set (decorator or default), you get a <code>TypeError</code>.</li>

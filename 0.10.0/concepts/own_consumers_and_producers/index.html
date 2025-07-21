@@ -755,39 +755,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🧪 Custom Producer">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#interface" class="md-nav__link">
-    <span class="md-ellipsis">
-      ✍️ Interface
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#notes" class="md-nav__link">
-    <span class="md-ellipsis">
-      💡 Notes
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#example-pseudocode" class="md-nav__link">
-    <span class="md-ellipsis">
-      ✅ Example (Pseudocode!!!)
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -796,39 +763,6 @@
       🧃 Custom Consumer
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="🧃 Custom Consumer">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#interface_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      ✍️ Interface
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#notes_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      💡 Notes
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#example-pseudocode_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      ✅ Example (Pseudocode!!!)
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -921,39 +855,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🧪 Custom Producer">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#interface" class="md-nav__link">
-    <span class="md-ellipsis">
-      ✍️ Interface
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#notes" class="md-nav__link">
-    <span class="md-ellipsis">
-      💡 Notes
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#example-pseudocode" class="md-nav__link">
-    <span class="md-ellipsis">
-      ✅ Example (Pseudocode!!!)
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -962,39 +863,6 @@
       🧃 Custom Consumer
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="🧃 Custom Consumer">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#interface_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      ✍️ Interface
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#notes_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      💡 Notes
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#example-pseudocode_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      ✅ Example (Pseudocode!!!)
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1026,14 +894,14 @@
   
 
 
-<h1 id="writing-custom-producers-consumers">⚙️ Writing Custom Producers &amp; Consumers</h1>
+<h1 id="writing-custom-producers-consumers">⚙️ Writing Custom Producers &amp; Consumers<a class="headerlink" href="#writing-custom-producers-consumers" title="Permanent link">&para;</a></h1>
 <p>Dispytch doesn’t lock you into any specific messaging backend. If you want to connect to something like Redis Streams,
 SQS, or whatever queue you want—you can do that by implementing your own <code>Producer</code> and <code>Consumer</code>.</p>
 <p>Here’s how.</p>
 <hr />
-<h2 id="custom-producer">🧪 Custom Producer</h2>
+<h2 id="custom-producer">🧪 Custom Producer<a class="headerlink" href="#custom-producer" title="Permanent link">&para;</a></h2>
 <p>To build your own event emitter backend, implement the <code>Producer</code> interface.</p>
-<h3 id="interface">✍️ Interface</h3>
+<h3 id="interface">✍️ Interface<a class="headerlink" href="#interface" title="Permanent link">&para;</a></h3>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -1042,14 +910,14 @@ SQS, or whatever queue you want—you can do that by implementing your own <code
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">BaseModel</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="o">...</span>
 </code></pre></div></td></tr></table></div>
-<h3 id="notes">💡 Notes</h3>
+<h3 id="notes">💡 Notes<a class="headerlink" href="#notes" title="Permanent link">&para;</a></h3>
 <ul>
 <li><code>topic</code>: where the event goes</li>
 <li><code>payload</code>: bytes containing the event payload</li>
 <li><code>config</code>: optional backend-specific config, usually declared in the event as <code>__backend_config__</code></li>
 <li>If your send logic times out raise <code>ProducerTimeout</code></li>
 </ul>
-<h3 id="example-pseudocode">✅ Example (Pseudocode!!!)</h3>
+<h3 id="example-pseudocode">✅ Example (Pseudocode!!!)<a class="headerlink" href="#example-pseudocode" title="Permanent link">&para;</a></h3>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -1067,9 +935,9 @@ SQS, or whatever queue you want—you can do that by implementing your own <code
             <span class="k">raise</span> <span class="n">ProducerTimeout</span><span class="p">(</span><span class="s2">&quot;Redis XADD failed&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
 <hr />
-<h2 id="custom-consumer">🧃 Custom Consumer</h2>
+<h2 id="custom-consumer">🧃 Custom Consumer<a class="headerlink" href="#custom-consumer" title="Permanent link">&para;</a></h2>
 <p>To receive and handle events from your own backend, implement the <code>Consumer</code> interface.</p>
-<h3 id="interface_1">✍️ Interface</h3>
+<h3 id="interface_1">✍️ Interface<a class="headerlink" href="#interface_1" title="Permanent link">&para;</a></h3>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -1086,7 +954,7 @@ SQS, or whatever queue you want—you can do that by implementing your own <code
     <span class="k">def</span><span class="w"> </span><span class="nf">ack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">Message</span><span class="p">):</span>
         <span class="o">...</span>
 </code></pre></div></td></tr></table></div>
-<h3 id="notes_1">💡 Notes</h3>
+<h3 id="notes_1">💡 Notes<a class="headerlink" href="#notes_1" title="Permanent link">&para;</a></h3>
 <ul>
 <li>
 <p><code>listen()</code> must yield <code>Message</code> objects. This is an <strong>async generator</strong>.</p>
@@ -1096,7 +964,7 @@ SQS, or whatever queue you want—you can do that by implementing your own <code
   Kafka offset or delete a message from a queue).</p>
 </li>
 </ul>
-<h3 id="example-pseudocode_1">✅ Example (Pseudocode!!!)</h3>
+<h3 id="example-pseudocode_1">✅ Example (Pseudocode!!!)<a class="headerlink" href="#example-pseudocode_1" title="Permanent link">&para;</a></h3>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -1128,7 +996,7 @@ SQS, or whatever queue you want—you can do that by implementing your own <code
         <span class="k">pass</span>
 </code></pre></div></td></tr></table></div>
 <hr />
-<h2 id="use-your-custom-classes">🛠️ Use Your Custom Classes</h2>
+<h2 id="use-your-custom-classes">🛠️ Use Your Custom Classes<a class="headerlink" href="#use-your-custom-classes" title="Permanent link">&para;</a></h2>
 <p>Once implemented, you can use your custom producer and consumer classes directly in <code>EventEmitter</code> and <code>EventListener</code></p>
 
 

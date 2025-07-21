@@ -566,30 +566,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🧩 Nested Dependencies">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#example" class="md-nav__link">
-    <span class="md-ellipsis">
-      ✍️ Example
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#whats-happening" class="md-nav__link">
-    <span class="md-ellipsis">
-      🔍 What's happening
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -599,21 +575,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🌐 Context-Aware Dependencies">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#example_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      ✍️ Example
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -622,21 +583,6 @@
       🔁 Alternative Syntax
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="🔁 Alternative Syntax">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#example_2" class="md-nav__link">
-    <span class="md-ellipsis">
-      ✍️ Example
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -943,30 +889,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🧩 Nested Dependencies">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#example" class="md-nav__link">
-    <span class="md-ellipsis">
-      ✍️ Example
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#whats-happening" class="md-nav__link">
-    <span class="md-ellipsis">
-      🔍 What's happening
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -976,21 +898,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🌐 Context-Aware Dependencies">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#example_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      ✍️ Example
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -999,21 +906,6 @@
       🔁 Alternative Syntax
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="🔁 Alternative Syntax">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#example_2" class="md-nav__link">
-    <span class="md-ellipsis">
-      ✍️ Example
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1036,16 +928,16 @@
   
 
 
-<h1 id="dependency-injection-di">🧪 Dependency Injection (DI)</h1>
+<h1 id="dependency-injection-di">🧪 Dependency Injection (DI)<a class="headerlink" href="#dependency-injection-di" title="Permanent link">&para;</a></h1>
 <p>Dispytch supports a FastAPI-style Dependency Injection system to cleanly manage your handler dependencies—keeping your
 logic modular, testable, and DRY.</p>
 <hr />
-<h2 id="why-use-di">💡 Why Use DI?</h2>
+<h2 id="why-use-di">💡 Why Use DI?<a class="headerlink" href="#why-use-di" title="Permanent link">&para;</a></h2>
 <p>♻️ Decoupling – Separate business logic from infrastructure concerns</p>
 <p>✅ Testability – Easily mock or override dependencies in tests</p>
 <p>🔄 Reusability – Centralize shared resources and logic</p>
 <hr />
-<h2 id="how-it-works">How It Works</h2>
+<h2 id="how-it-works">How It Works<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h2>
 <p>Handlers declare dependencies using Python’s type annotations combined with Dispytch’s <code>Dependency</code> wrapper and <code>Event</code>
 generic class.</p>
 <p>Example:</p>
@@ -1107,10 +999,10 @@ generic class.</p>
 </li>
 </ol>
 <hr />
-<h2 id="nested-dependencies">🧩 Nested Dependencies</h2>
+<h2 id="nested-dependencies">🧩 Nested Dependencies<a class="headerlink" href="#nested-dependencies" title="Permanent link">&para;</a></h2>
 <p>Dispytch supports dependency chains—where one dependency depends on another. Each layer is resolved automatically, with
 full lifecycle management.</p>
-<h3 id="example">✍️ Example</h3>
+<h3 id="example">✍️ Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h3>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -1151,19 +1043,19 @@ full lifecycle management.</p>
 <span class="p">):</span>
     <span class="k">await</span> <span class="n">service</span><span class="o">.</span><span class="n">do_smth</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>
-<h3 id="whats-happening">🔍 What's happening</h3>
+<h3 id="whats-happening">🔍 What's happening<a class="headerlink" href="#whats-happening" title="Permanent link">&para;</a></h3>
 <ul>
 <li><code>get_service</code> declares a dependency on <code>get_config</code></li>
 <li>Dispytch resolves <code>get_config</code>, then passes the result to <code>get_service</code></li>
 <li>The final resolved <code>Service</code> is injected into the handler</li>
 </ul>
 <hr />
-<h2 id="context-aware-dependencies">🌐 Context-Aware Dependencies</h2>
+<h2 id="context-aware-dependencies">🌐 Context-Aware Dependencies<a class="headerlink" href="#context-aware-dependencies" title="Permanent link">&para;</a></h2>
 <p>Dependency functions can receive contextual information about the current event—such as its topic, type, or payload—by
 accepting a typed <code>Event[T]</code> as an argument.</p>
 <p>This enables runtime-aware logic, such as per-event logging, dynamic configuration, or tenant resolution.</p>
 <hr />
-<h3 id="example_1">✍️ Example</h3>
+<h3 id="example_1">✍️ Example<a class="headerlink" href="#example_1" title="Permanent link">&para;</a></h3>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -1205,7 +1097,7 @@ accepting a typed <code>Event[T]</code> as an argument.</p>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">user_id</span><span class="si">}</span><span class="s2"> performed action: </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">action</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
 <hr />
-<h2 id="alternative-syntax">🔁 Alternative Syntax</h2>
+<h2 id="alternative-syntax">🔁 Alternative Syntax<a class="headerlink" href="#alternative-syntax" title="Permanent link">&para;</a></h2>
 <p>As an alternative for the <code>Annotated[T, Dependency(...)]</code> style, Dispytch lets you inject dependencies by assigning a
 <code>Dependency</code> instance directly as a default value for a handler parameter. Functionally the same—just a different
 flavor.</p>
@@ -1213,7 +1105,7 @@ flavor.</p>
 <p>📋 Note: This injection method <strong>does not work</strong> for the <code>Event</code> parameter. You must use explicit type hints for
 <code>Event</code> to enable proper injection.</p>
 </blockquote>
-<h3 id="example_2">✍️ Example</h3>
+<h3 id="example_2">✍️ Example<a class="headerlink" href="#example_2" title="Permanent link">&para;</a></h3>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>

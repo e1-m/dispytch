@@ -894,11 +894,11 @@
   
 
 
-<h1 id="serialization-deserialization">🧱 Serialization &amp; Deserialization</h1>
+<h1 id="serialization-deserialization">🧱 Serialization &amp; Deserialization<a class="headerlink" href="#serialization-deserialization" title="Permanent link">&para;</a></h1>
 <p>By default, Dispytch uses JSON for serializing and deserializing events. This keeps things simple and readable—but
 you're not stuck with it. If you're sending binary data, need better performance, or just enjoy making things more
 complicated than they need to be, you can plug in a custom serializer or deserializer.</p>
-<h2 id="setting-a-serializer-producer-side">✍️ Setting a Serializer (Producer Side)</h2>
+<h2 id="setting-a-serializer-producer-side">✍️ Setting a Serializer (Producer Side)<a class="headerlink" href="#setting-a-serializer-producer-side" title="Permanent link">&para;</a></h2>
 <p>To override the default JSON serializer, pass a serializer instance to your <code>EventEmitter</code>:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
@@ -907,7 +907,7 @@ complicated than they need to be, you can plug in a custom serializer or deseria
 <span class="n">emitter</span> <span class="o">=</span> <span class="n">EventEmitter</span><span class="p">(</span><span class="n">producer</span><span class="p">,</span> <span class="n">MessagePackSerializer</span><span class="p">())</span>
 </code></pre></div></td></tr></table></div>
 <p>If you don’t explicitly pass serializer, <code>JSONSerializer()</code> is used under the hood.</p>
-<h2 id="setting-a-deserializer-consumer-side">🧩 Setting a Deserializer (Consumer Side)</h2>
+<h2 id="setting-a-deserializer-consumer-side">🧩 Setting a Deserializer (Consumer Side)<a class="headerlink" href="#setting-a-deserializer-consumer-side" title="Permanent link">&para;</a></h2>
 <p>Same deal for consumers. You can pick how incoming messages are decoded (should be consistent with sending side, though):</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
@@ -917,7 +917,7 @@ complicated than they need to be, you can plug in a custom serializer or deseria
 </code></pre></div></td></tr></table></div>
 <p>Again, if you don’t set it, Dispytch will default to <code>JSONDeserializer()</code>.</p>
 <hr />
-<h2 id="writing-your-own">✨ Writing Your Own</h2>
+<h2 id="writing-your-own">✨ Writing Your Own<a class="headerlink" href="#writing-your-own" title="Permanent link">&para;</a></h2>
 <p>Custom serialization is as simple as implementing a method.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>

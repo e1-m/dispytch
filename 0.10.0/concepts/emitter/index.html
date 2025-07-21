@@ -948,12 +948,12 @@
   
 
 
-<h1 id="eventemitter">📤 <code>EventEmitter</code></h1>
+<h1 id="eventemitter">📤 <code>EventEmitter</code><a class="headerlink" href="#eventemitter" title="Permanent link">&para;</a></h1>
 <p>The <code>EventEmitter</code> is a core component of Dispytch used to emit (publish) events to an underlying message broker such as
 RabbitMQ or Kafka. It abstracts away the details of the producer backend and allows you to send events
 with minimal boilerplate.</p>
 <hr />
-<h2 id="why-do-i-need-it">✅ Why do I need it?</h2>
+<h2 id="why-do-i-need-it">✅ Why do I need it?<a class="headerlink" href="#why-do-i-need-it" title="Permanent link">&para;</a></h2>
 <ul>
 <li>
 <p><strong>Separation of concerns:</strong> Your app’s business logic shouldn’t wrestle with raw message brokers. <code>EventEmitter</code>
@@ -976,7 +976,7 @@ with minimal boilerplate.</p>
 <p><strong>Bottom line:</strong> <code>EventEmitter</code> turns noisy, complex event publishing into a streamlined, reliable, and
 developer-friendly interface. Without it, you’re stuck juggling broker APIs, serialization, and error-prone glue code.</p>
 <hr />
-<h2 id="basic-structure">🧱 Basic Structure</h2>
+<h2 id="basic-structure">🧱 Basic Structure<a class="headerlink" href="#basic-structure" title="Permanent link">&para;</a></h2>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">event_emitter</span> <span class="o">=</span> <span class="n">EventEmitter</span><span class="p">(</span><span class="n">producer</span><span class="p">)</span>
 <span class="k">await</span> <span class="n">event_emitter</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">MyEvent</span><span class="p">(</span><span class="o">...</span><span class="p">))</span>
@@ -984,7 +984,7 @@ developer-friendly interface. Without it, you’re stuck juggling broker APIs, s
 <p><code>EventEmitter</code> expects a <code>Producer</code> instance (such as <code>RabbitMQProducer</code> or <code>KafkaProducer</code>) that handles the actual
 transport layer.</p>
 <hr />
-<h2 id="event-definition">🧾 Event Definition</h2>
+<h2 id="event-definition">🧾 Event Definition<a class="headerlink" href="#event-definition" title="Permanent link">&para;</a></h2>
 <ul>
 <li>
 <p><code>MyEvent</code> inherits from <code>EventBase</code> and defines:</p>
@@ -1015,7 +1015,7 @@ transport layer.</p>
     <span class="n">value</span><span class="p">:</span> <span class="nb">int</span>
 </code></pre></div></td></tr></table></div>
 <hr />
-<h2 id="example-setting-up-event-emitter">✍️ Example: Setting Up Event Emitter</h2>
+<h2 id="example-setting-up-event-emitter">✍️ Example: Setting Up Event Emitter<a class="headerlink" href="#example-setting-up-event-emitter" title="Permanent link">&para;</a></h2>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">RabbitMQ</label><label for="__tabbed_1_2">Kafka</label><label for="__tabbed_1_3">Redis Pub/Sub</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -1193,7 +1193,7 @@ you should pass the asyncio-compatible Redis client (from redis.asyncio) to the 
 </div>
 </div>
 <hr />
-<h2 id="handling-timeouts-with-on_timeout">⏱️ Handling Timeouts with <code>on_timeout</code></h2>
+<h2 id="handling-timeouts-with-on_timeout">⏱️ Handling Timeouts with <code>on_timeout</code><a class="headerlink" href="#handling-timeouts-with-on_timeout" title="Permanent link">&para;</a></h2>
 <p>By default, if an event fails to emit due to a timeout, Dispytch logs a warning. If you want custom behavior (e.g.,
 metrics, retries, alerts), you can register a callback using <code>on_timeout()</code>:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
@@ -1204,7 +1204,7 @@ metrics, retries, alerts), you can register a callback using <code>on_timeout()<
 </code></pre></div></td></tr></table></div>
 <p>The callback can be sync or async, and receives the original <code>EventBase</code> instance that timed out.</p>
 <hr />
-<h2 id="notes">📌 Notes</h2>
+<h2 id="notes">📌 Notes<a class="headerlink" href="#notes" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Dispytch automatically <strong>serializes the payload</strong> as JSON by default. To change the default serializer you can
   pass included <code>MessagePackSerializer</code> to the EventEmitter or write one on your own</li>

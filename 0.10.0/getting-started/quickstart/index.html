@@ -928,10 +928,10 @@
   
 
 
-<h1 id="quickstart">🚀 Quickstart</h1>
+<h1 id="quickstart">🚀 Quickstart<a class="headerlink" href="#quickstart" title="Permanent link">&para;</a></h1>
 <p>Get your event-driven flow running with Dispytch in four simple steps.</p>
 <hr />
-<h2 id="1-define-your-event">1. Define Your Event</h2>
+<h2 id="1-define-your-event">1. Define Your Event<a class="headerlink" href="#1-define-your-event" title="Permanent link">&para;</a></h2>
 <p>Subclass <code>EventBase</code> to declare your event’s topic and type metadata, along with its payload:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
@@ -952,7 +952,7 @@
     <span class="n">email</span><span class="p">:</span> <span class="nb">str</span>
 </code></pre></div></td></tr></table></div>
 <hr />
-<h2 id="2-emit-events">2. Emit Events</h2>
+<h2 id="2-emit-events">2. Emit Events<a class="headerlink" href="#2-emit-events" title="Permanent link">&para;</a></h2>
 <p>Create an <code>EventEmitter</code> with your configured backend producer, then emit events asynchronously:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
@@ -973,7 +973,7 @@
     <span class="k">await</span> <span class="n">emitter</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">UserRegistered</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="s2">&quot;123&quot;</span><span class="p">,</span> <span class="n">email</span><span class="o">=</span><span class="s2">&quot;user@example.com&quot;</span><span class="p">))</span>
 </code></pre></div></td></tr></table></div>
 <hr />
-<h2 id="3-register-event-handlers">3. Register Event Handlers</h2>
+<h2 id="3-register-event-handlers">3. Register Event Handlers<a class="headerlink" href="#3-register-event-handlers" title="Permanent link">&para;</a></h2>
 <p>Organize handlers with <code>HandlerGroup</code>. Define the event schema (usually a Pydantic model), then decorate your async
 handler:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
@@ -1007,7 +1007,7 @@ handler:</p>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">user_id</span><span class="si">}</span><span class="s2"> registered with email </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
 <hr />
-<h2 id="4-start-the-listener">4. Start the Listener</h2>
+<h2 id="4-start-the-listener">4. Start the Listener<a class="headerlink" href="#4-start-the-listener" title="Permanent link">&para;</a></h2>
 <p>Connect your backend consumer to an <code>EventListener</code>, register your handler group(s), then listen for incoming events:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
@@ -1030,7 +1030,7 @@ handler:</p>
     <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">listener</span><span class="o">.</span><span class="n">listen</span><span class="p">())</span>
 </code></pre></div></td></tr></table></div>
 <hr />
-<h2 id="thats-it">That’s It!</h2>
+<h2 id="thats-it">That’s It!<a class="headerlink" href="#thats-it" title="Permanent link">&para;</a></h2>
 <p>Define events, emit them, handle them asynchronously — all wired up and ready to roll.</p>
 
 
