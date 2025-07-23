@@ -10,6 +10,8 @@ Install with [`uv`](https://github.com/astral-sh/uv), [`poetry`](https://github.
 ```bash
 uv add dispytch[kafka]
 # or
+poetry add dispytch[kafka]
+# or
 pip install dispytch[kafka]
 ```
 
@@ -22,6 +24,8 @@ Includes: `aiokafka`
 ```bash
 uv add dispytch[rabbitmq]
 # or
+poetry add dispytch[rabbitmq]
+# or
 pip install dispytch[rabbitmq]
 ```
 
@@ -33,6 +37,8 @@ Includes: `aio-pika`
 
 ```bash
 uv add dispytch[redis]
+# or
+poetry add dispytch[redis]
 # or
 pip install dispytch[redis]
 ```
@@ -47,6 +53,8 @@ If you install Dispytch without any extras:
 
 ```bash
 uv add dispytch
+# or
+poetry add dispytch
 # or
 pip install dispytch
 ```
