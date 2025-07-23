@@ -33,8 +33,10 @@ from events import UserRegistered
 producer = ...  # your backend producer setup
 emitter = EventEmitter(producer)
 
+```
 
-async def emit_user_registered():
+```python
+async def emit_user_registered(emitter):
     await emitter.emit(UserRegistered(user_id="123", email="user@example.com"))
 ```
 
@@ -50,7 +52,7 @@ from pydantic import BaseModel
 from dispytch import HandlerGroup, Event
 
 
-class UserRegisteredBody(BaseModel):
+class UserRegistered(BaseModel):
     user_id: str
     email: str
 
@@ -59,7 +61,7 @@ user_events = HandlerGroup(default_topic="user_events")
 
 
 @user_events.handler(event="user_registered")
-async def handle_user_registered(event: Event[UserRegisteredBody]):
+async def handle_user_registered(event: Event[UserRegistered]):
     print(f"User {event.body.user_id} registered with email {event.body.email}")
 ```
 
