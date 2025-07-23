@@ -9,12 +9,12 @@ It’s designed to streamline the development of clean and testable event-driven
 
 ## 🚀 Features
 
-* 🧠 **Async-first core** – built for modern Python I/O
+* 🧠 **Async core** – built for modern Python I/O
 * 🔌 **FastAPI-style dependency injection** – clean, decoupled handlers
-* 📬 **Backend-flexible** – with Kafka and RabbitMQ out-of-the-box
-* 🧱 **Composable architecture** – extend, override, or inject anything
+* 📬 **Backend-flexible** – with Kafka, RabbitMQ and Redis PubSub out-of-the-box
 * 🧾 **Pydantic-based validation** – event schemas are validated using pydantic
 * 🔁 **Built-in retry logic** – configurable, resilient, no boilerplate
+* ✅ **Automatic acknowledgement** – events are acknowledged automatically after successful processing
 
 ## ✨ Example: Emitting Events
 
