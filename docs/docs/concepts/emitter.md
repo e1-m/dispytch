@@ -1,7 +1,7 @@
 # 📤 `EventEmitter`
 
 The `EventEmitter` is a core component of Dispytch used to emit (publish) events to an underlying message broker such as
-RabbitMQ or Kafka. It abstracts away the details of the producer backend and allows you to send events
+RabbitMQ, Kafka, or Redis. It abstracts away the details of the producer backend and allows you to send events
 with minimal boilerplate.
 
 ---
@@ -9,14 +9,13 @@ with minimal boilerplate.
 ## ✅ Why do I need it?
 
 * **Separation of concerns:** Your app’s business logic shouldn’t wrestle with raw message brokers. `EventEmitter`
-  abstracts away the gritty details of RabbitMQ, Kafka, or whatever is under the hood, so you can focus on events—not
+  abstracts away the gritty details of RabbitMQ, Kafka, or whatever it is under the hood, so you can focus on events—not
   infrastructure.
 
-* **Consistency & safety:** Typed events with `EventBase` ensure your payloads are validated and predictable. No more
-  guessing the shape of your data or fumbling with manual serialization.
+* **Consistency & safety:** Typed events with `EventBase` ensure your payloads are validated and predictable.
 
-* **Plug & play with multiple backends:** Whether you’re team Kafka or RabbitMQ (or both), `EventEmitter` lets you
-  switch between or postpone backend decisions with less overhead.
+* **Plug & play with multiple backends:** Whether you want to use Kafka or RabbitMQ, `EventEmitter` lets you
+  switch between or postpone backend decisions with substantially less overhead.
 
 * **Testability:** Emitting an event is just calling a method on an object you can mock or swap out—making your code
   easier to test and reason about.
