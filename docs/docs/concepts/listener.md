@@ -1,6 +1,6 @@
 # 📥 `EventListener`
 
-`EventListener` is Dispytch’s high-level abstraction for consuming events from a message broker (like Kafka or RabbitMQ)
+`EventListener` is Dispytch’s high-level abstraction for consuming events from a message broker
 and dispatching them to appropriate async handler functions. It’s where your event-driven logic lives — clean,
 decoupled, and dependency-injected.
 
