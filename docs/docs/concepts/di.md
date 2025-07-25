@@ -17,8 +17,7 @@ logic modular, testable, and DRY.
 
 ## How It Works
 
-Handlers declare dependencies using Python’s type annotations combined with Dispytch’s `Dependency` wrapper and `Event`
-generic class.
+Handlers declare dependencies using Python’s type annotations combined with Dispytch’s `Dependency` wrapper.
 
 Example:
 
@@ -54,7 +53,7 @@ At runtime, Dispytch:
 
 3. Injects results directly into the handler.
 
-4. Handles cleanup automatically for context-managed dependencies.
+4. Handles cleanup automatically for context-manager-based dependencies.
 
 ---
 
@@ -101,8 +100,6 @@ async def handle_nested(
 Dependency functions can receive contextual information about the current event—such as its topic, type, or payload—by
 accepting a typed `Event[T]` as an argument.
 
-This enables runtime-aware logic, such as per-event logging, dynamic configuration, or tenant resolution.
-
 ---
 
 ### ✍️ Example
@@ -135,8 +132,7 @@ async def handle_event_with_logger(
 ## 🔁 Alternative Syntax
 
 As an alternative for the `Annotated[T, Dependency(...)]` style, Dispytch lets you inject dependencies by assigning a
-`Dependency` instance directly as a default value for a handler parameter. Functionally the same—just a different
-flavor.
+`Dependency` instance directly as a default value for a handler parameter.
 
 > 📋 Note: This injection method **does not work** for the `Event` parameter. You must use explicit type hints for
 `Event` to enable proper injection.
