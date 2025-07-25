@@ -9,7 +9,7 @@ logic modular, testable, and DRY.
 
 ♻️ Decoupling – Separate business logic from infrastructure concerns
 
-✅ Testability – Easily mock or override dependencies in tests
+✅ Testability – Mock dependencies in tests
 
 🔄 Reusability – Centralize shared resources and logic
 
