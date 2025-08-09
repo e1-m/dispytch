@@ -5,7 +5,7 @@
 **Dispytch** is a lightweight, async Python framework for event-handling.
 It’s designed to streamline the development of clean and testable event-driven services.
 
-## 🚀 Features
+## 🚀 Highlights
 
 * 🔌 **FastAPI-style dependency injection** – clean, decoupled handlers
 * 🧠 **Async core** – built for modern Python I/O
