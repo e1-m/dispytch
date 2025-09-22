@@ -11,6 +11,7 @@ from dispytch.emitter.producer import Producer, ProducerTimeout
 
 
 class RabbitMQEventConfig(BaseModel):
+    exchange: str | None = None
     delivery_mode: DeliveryMode | int | None = None
     priority: int | None = None
     expiration: int | datetime | float | timedelta | None = None
@@ -29,9 +30,9 @@ class RabbitMQEventConfig(BaseModel):
 
 class RabbitMQProducer(Producer):
     def __init__(self,
-                 exchange: AbstractExchange,
+                 exchanges: list[AbstractExchange],
                  timeout: int | float | None = None) -> None:
-        self.exchange = exchange
+        self.exchanges = {exchange.name: exchange for exchange in exchanges}
         self.timeout = timeout
 
     async def send(self, topic: str, payload: bytes, config: BaseModel | None = None):
@@ -42,7 +43,7 @@ class RabbitMQProducer(Producer):
         config = config or RabbitMQEventConfig()
 
         try:
-            await self.exchange.publish(
+            await self.exchanges[config.exchange or next(iter(self.exchanges))].publish(
                 Message(
                     body=payload,
                     delivery_mode=config.delivery_mode,
