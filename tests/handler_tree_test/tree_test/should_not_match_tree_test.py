@@ -9,32 +9,26 @@ def handler(name):
 
 @pytest.fixture
 def tree():
-    return HandlerTree(delimiter=':')
-
-
-def test_mismatch_different_event(tree):
-    h = handler("E")
-    tree.insert("a:b", "create", h)
-    assert tree.get("a:b", "delete") == []
+    return HandlerTree()
 
 
 def test_mismatch_wrong_static_segment(tree):
     h = handler("G")
-    tree.insert("alpha:beta", "done", h)
-    assert tree.get("alpha:gamma", "done") == []
+    tree.insert("alpha:beta".split(':'), h)
+    assert tree.get("alpha:gamma".split(':')) == []
 
 
 def test_mismatch_partial_topic(tree):
     h = handler("F")
-    tree.insert("a:b:c", "event", h)
-    assert tree.get("a:b", "event") == []
+    tree.insert("a:b:c".split(':'), h)
+    assert tree.get("a:b".split(':')) == []
 
 
 def test_mismatch_with_dynamic_center(tree):
     h = handler("F")
-    tree.insert("a:{smth}:c", "event", h)
-    assert tree.get("a:b:d", "event") == []
+    tree.insert("a:{smth}:c".split(':'), h)
+    assert tree.get("a:b:d".split(':')) == []
 
 
 def test_no_handler(tree):
-    assert tree.get("ghost:topic", "event") == []
+    assert tree.get("ghost:topic".split(':')) == []

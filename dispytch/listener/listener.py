@@ -34,7 +34,7 @@ class EventListener:
         self.deserializer = deserializer or JSONDeserializer()
         self.route_delimiter: str = route_delimiter
         self._tasks = set()
-        self._handlers: HandlerTree = HandlerTree(route_delimiter)
+        self._handlers: HandlerTree = HandlerTree()
 
     async def listen(self):
         """
@@ -53,8 +53,8 @@ class EventListener:
         event = Event(
             **self.deserializer.deserialize(msg.payload).model_dump(),
         )
-
-        handlers = self._handlers.get(msg.subscription.get_segments())
+        path = self.route_delimiter.join(msg.subscription.get_segments())
+        handlers = self._handlers.get(path.split(self.route_delimiter))
         if not handlers:
             logging.info(f'There is no handler for `{msg.subscription}`')
             return
@@ -104,8 +104,10 @@ class EventListener:
             """
 
         def decorator(callback):
+            path = self.route_delimiter.join(subscription.get_segments())
+
             self._handlers.insert(
-                subscription.get_segments(),
+                path.split(self.route_delimiter),
                 Handler(callback, subscription, retries, retry_interval, retry_on)
             )
             return callback
@@ -120,4 +122,5 @@ class EventListener:
             group (HandlerGroup): A ``HandlerGroup`` object to register with the listener.
         """
         for subscription_segments in group._handlers:
-            self._handlers.insert(subscription_segments, *group._handlers[subscription_segments])
+            path = self.route_delimiter.join(subscription_segments)
+            self._handlers.insert(path.split(self.route_delimiter), *group._handlers[subscription_segments])

@@ -4,8 +4,7 @@ from dispytch.listener.handler import Handler
 
 
 class HandlerTree:
-    def __init__(self, delimiter: str = ':'):
-        self.delimiter: str = delimiter
+    def __init__(self):
         self.root: HandlerNode = HandlerNode()
 
     def insert(self, path: tuple[str, ...], *handlers: Handler):
@@ -13,7 +12,7 @@ class HandlerTree:
             '*'
             if (segment.startswith('{') and segment.endswith('}'))
             else segment
-            for part in path for segment in part.split(self.delimiter)
+            for segment in path
         )
 
         self.root.insert(segments, *handlers)
