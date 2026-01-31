@@ -7,13 +7,13 @@ from pydantic import BaseModel, TypeAdapter, ValidationError
 from dispytch.di.dependency import Dependency
 from dispytch.di.event import Event
 from dispytch.di.context import EventHandlerContext
-from dispytch.di.topic_segment import TopicSegment
+from dispytch.di.segment import SubscriptionSegment
 
 
 def extract_dependencies(func: Callable[..., Any]) -> dict[str, Dependency]:
     dependencies = _extract_user_defined_dependencies(func)
     dependencies.update(_extract_event_dependencies(func))
-    dependencies.update(_extract_topic_segment_dependencies(func))
+    dependencies.update(_extract_subscription_segment_dependencies(func))
 
     return dependencies
 
@@ -69,7 +69,7 @@ def _make_event_dependency(body_model):
     return Dependency(context_to_event)
 
 
-def _extract_topic_segment_dependencies(func: Callable[..., Any]) -> dict[str, Dependency]:
+def _extract_subscription_segment_dependencies(func: Callable[..., Any]) -> dict[str, Dependency]:
     deps = {}
 
     sig = inspect.signature(func)
@@ -77,8 +77,8 @@ def _extract_topic_segment_dependencies(func: Callable[..., Any]) -> dict[str, D
         default = param.default
         annotation = param.annotation
 
-        if isinstance(default, TopicSegment):
-            deps[name] = _make_topic_dependency(
+        if isinstance(default, SubscriptionSegment):
+            deps[name] = _make_subscription_dependency(
                 segment_name=default.validation_alias or default.alias or name,
                 field=Annotated[annotation, default]
             )
@@ -87,14 +87,14 @@ def _extract_topic_segment_dependencies(func: Callable[..., Any]) -> dict[str, D
             base_type, *metadata = get_args(annotation)
 
             for meta in metadata:
-                if isinstance(meta, TopicSegment):
-                    deps[name] = _make_topic_dependency(
+                if isinstance(meta, SubscriptionSegment):
+                    deps[name] = _make_subscription_dependency(
                         segment_name=meta.validation_alias or meta.alias or name,
                         field=annotation
                     )
                     break
-                elif meta is TopicSegment:
-                    deps[name] = _make_topic_dependency(
+                elif meta is SubscriptionSegment:
+                    deps[name] = _make_subscription_dependency(
                         segment_name=name,
                         field=base_type
                     )
@@ -103,18 +103,18 @@ def _extract_topic_segment_dependencies(func: Callable[..., Any]) -> dict[str, D
     return deps
 
 
-def _make_topic_dependency(segment_name, field):
-    def extract_field_from_topic(ctx: EventHandlerContext):
+def _make_subscription_dependency(segment_name, field):
+    def extract_field_from_subscription_patter(ctx: EventHandlerContext):
         value = _extract_segment(
-            actual=ctx.event.topic,
-            pattern=ctx.subscription_segments,
-            delimiter=ctx.segment_delimiter,
+            actual=ctx.actual_event_route,
+            pattern=ctx.subscription_pattern,
+            delimiter=ctx.route_delimiter,
             segment_name=segment_name
         )
 
         return _validate_field(value, field)
 
-    return Dependency(extract_field_from_topic)
+    return Dependency(extract_field_from_subscription_patter)
 
 
 def _extract_segment(actual: str,

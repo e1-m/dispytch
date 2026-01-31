@@ -21,17 +21,20 @@ class EventListener:
 
     Args:
         consumer (Consumer): The event source responsible for yielding incoming events.
-        topic_delimiter (str): The symbol used to split topic names into segments for dynamic routing (default: ':').
+        route_delimiter (str): The symbol used to split topic names into segments for dynamic routing (default: ':').
     """
 
-    def __init__(self, consumer: Consumer,
-                 deserializer: Deserializer = None,
-                 topic_delimiter: str = ':'):
+    def __init__(
+            self,
+            consumer: Consumer,
+            deserializer: Deserializer = None,
+            route_delimiter: str = ':'
+    ):
         self.consumer = consumer
         self.deserializer = deserializer or JSONDeserializer()
-        self.topic_delimiter: str = topic_delimiter  # TODO: rename, trace usage
+        self.route_delimiter: str = route_delimiter
         self._tasks = set()
-        self._handlers: HandlerTree = HandlerTree(topic_delimiter)
+        self._handlers: HandlerTree = HandlerTree(route_delimiter)
 
     async def listen(self):
         """
@@ -65,15 +68,18 @@ class EventListener:
 
     async def _call_handler_with_injected_dependencies(
             self,
-            subscription: EventSubscription,
+            route: EventSubscription,
             handler: Handler,
             event: Event
     ):
         async with solve_dependencies(handler.func,
                                       EventHandlerContext(
                                           event=event,
-                                          subscription_segments=subscription.get_segments(),
-                                          segment_delimiter=self.topic_delimiter
+                                          actual_event_route=f"{self.route_delimiter}"
+                                                  .join(subscription.get_segments()),
+                                          subscription_pattern=f"{self.route_delimiter}"
+                                                  .join(handler.subscription.get_segments()),
+                                          route_delimiter=self.route_delimiter
                                       )) as deps:
             try:
                 await handler.handle(**deps)
@@ -100,7 +106,7 @@ class EventListener:
         def decorator(callback):
             self._handlers.insert(
                 subscription.get_segments(),
-                Handler(callback, retries, retry_interval, retry_on)
+                Handler(callback, subscription, retries, retry_interval, retry_on)
             )
             return callback
 

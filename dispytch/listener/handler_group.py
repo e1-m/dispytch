@@ -29,7 +29,7 @@ class HandlerGroup:
         def decorator(callback):
             handlers = self.handlers[subscription.get_segments()]
 
-            handlers.append(Handler(callback, retries, retry_interval, retry_on))
+            handlers.append(Handler(callback, subscription, retries, retry_interval, retry_on))
             return callback
 
         return decorator
