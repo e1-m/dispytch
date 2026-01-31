@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from dispytch.di.event import Event
 from dispytch.di.extractor import extract_dependencies
 from dispytch.di.dependency import Dependency
-from dispytch.di.topic_segment import TopicSegment
+from dispytch.di.subscription_param import SubscriptionParam
 
 
 class EventBody(BaseModel):
@@ -14,7 +14,6 @@ class EventBody(BaseModel):
 
 
 def test_mixed_parameters():
-    """Test function with mix of regular params, dependencies, and annotated."""
     dep1 = Dependency(lambda: "test1")
     dep2 = Dependency(lambda: "test2")
 
@@ -58,7 +57,7 @@ def test_complex_signature():
 def test_mixed_event_and_regular_params():
     def func_with_mixed_params(
             event_param: Event[EventBody],
-            topic_param: Annotated[str, TopicSegment()],
+            topic_param: Annotated[str, SubscriptionParam()],
             regular_param: int,
             another_param: str = "default",
             dep_param=Dependency(lambda: "fake_dependency")
