@@ -29,8 +29,6 @@ class EventBody(BaseModel):
 def event_dict():
     return Event(**{
         'id': str(uuid.uuid4()),
-        'topic': 'test-topic',
-        'type': 'test-type',
         'body': {
             'name': 'test',
             'value': 42,
@@ -59,7 +57,12 @@ async def test_nested_event(event_dict):
     dep = result["event_param"]
     assert isinstance(dep, Dependency)
 
-    async with dep(ctx=EventHandlerContext(event=event_dict, topic_pattern="topic", topic_delimiter=':')) as event:
+    async with dep(ctx=EventHandlerContext(
+            event=event_dict,
+            subscription_pattern="topic",
+            actual_event_route="topic",
+            route_delimiter=':'
+    )) as event:
         assert isinstance(event, Event)
         assert isinstance(event.body, EventBody)
         assert event.body.name == event_dict.body['name']
