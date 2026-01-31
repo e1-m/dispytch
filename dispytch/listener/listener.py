@@ -119,5 +119,5 @@ class EventListener:
         Args:
             group (HandlerGroup): A ``HandlerGroup`` object to register with the listener.
         """
-        for subscription_segments in group.handlers:
-            self._handlers.insert(subscription_segments, *group.handlers[subscription_segments])
+        for subscription_segments in group._handlers:
+            self._handlers.insert(subscription_segments, *group._handlers[subscription_segments])
