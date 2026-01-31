@@ -2,8 +2,9 @@ from dispytch.emitter.producer import EventRoute
 
 
 class RabbitMQEventRoute(EventRoute):
-    exchange: str
-    routing_key: str
+    def __init__(self, exchange: str, routing_key: str):
+        self.exchange = exchange
+        self.routing_key = routing_key
 
     def format_dynamic(self, **kwargs):
         try:

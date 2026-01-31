@@ -2,7 +2,8 @@ from dispytch.emitter.producer import EventRoute
 
 
 class RedisEventRoute(EventRoute):
-    channel: str
+    def __init__(self, channel: str):
+        self.channel = channel
 
     def format_dynamic(self, **kwargs):
         try:

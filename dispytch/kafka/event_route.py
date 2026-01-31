@@ -2,7 +2,8 @@ from dispytch.emitter.producer import EventRoute
 
 
 class KafkaEventRoute(EventRoute):
-    topic: str
+    def __init__(self, topic: str):
+        self.topic = topic
 
     def format_dynamic(self, **kwargs):
         try:
