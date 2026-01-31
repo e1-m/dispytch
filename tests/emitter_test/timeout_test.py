@@ -1,14 +1,23 @@
 import pytest
 import asyncio
 from unittest.mock import AsyncMock
-from dispytch.emitter.producer import ProducerTimeout
+from dispytch.emitter.producer import ProducerTimeout, EventRoute
 from dispytch.emitter.event import EventBase
 from dispytch.emitter import EventEmitter
 
 
+class EventRouteTest(EventRoute):
+    def __init__(self, topic: str):
+        self.topic = topic
+
+    def format_dynamic(self, **kwargs):
+        return EventRouteTest(topic=self.topic)
+
+
 class DummyEvent(EventBase):
-    __topic__ = "test-topic"
-    __event_type__ = "dummy_event"
+    __route__ = EventRouteTest(
+        topic="test_topic"
+    )
 
 
 @pytest.mark.asyncio

@@ -5,7 +5,7 @@ from typing import AsyncIterator
 from pydantic import BaseModel, Field
 
 
-class EventSubscription(ABC):
+class EventSubscription(BaseModel, ABC):
     @abstractmethod
     def get_segments(self) -> tuple[str, ...]: ...
 

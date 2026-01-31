@@ -9,7 +9,7 @@ class ProducerTimeout(Exception):
 
 class EventRoute(ABC):
     @abstractmethod
-    def format_dynamic(self, **kwargs) -> EventRoute: ...
+    def format_dynamic(self, **kwargs) -> "EventRoute": ...
 
 
 class Producer(ABC):
