@@ -6,6 +6,7 @@ from uuid import UUID
 from aiokafka import AIOKafkaConsumer, ConsumerRecord, TopicPartition
 from aiokafka.errors import KafkaError
 
+from dispytch.kafka.subscription import KafkaEventSubscription
 from dispytch.listener.consumer import Consumer, Message
 
 logger = logging.getLogger(__name__)
@@ -18,7 +19,7 @@ class KafkaConsumer(Consumer):
 
     async def listen(self) -> AsyncIterator[Message]:
         async for message in self.consumer:
-            msg = Message(topic=message.topic,
+            msg = Message(subscription=KafkaEventSubscription(topic=message.topic),
                           payload=message.value)
 
             self._waiting_for_commit[msg.id] = message

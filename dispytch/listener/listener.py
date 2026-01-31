@@ -29,7 +29,7 @@ class EventListener:
                  topic_delimiter: str = ':'):
         self.consumer = consumer
         self.deserializer = deserializer or JSONDeserializer()
-        self.topic_delimiter: str = topic_delimiter
+        self.topic_delimiter: str = topic_delimiter  # TODO: rename, trace usage
         self._tasks = set()
         self._handlers: HandlerTree = HandlerTree(topic_delimiter)
 
@@ -48,13 +48,12 @@ class EventListener:
 
     async def _handle_message(self, msg: Message):
         event = Event(
-            topic=msg.topic,
             **self.deserializer.deserialize(msg.payload).model_dump(),
         )
 
-        handlers = self._handlers.get(event.topic, event.type)
+        handlers = self._handlers.get(msg.subscription.get_segments())
         if not handlers:
-            logging.info(f'There is no handler for topic `{event.topic}` and event type `{event.type}`')
+            logging.info(f'There is no handler for `{msg.subscription}`')
             return
 
         tasks = [asyncio.create_task(
@@ -70,7 +69,6 @@ class EventListener:
                                           event=event,
                                           topic_pattern=handler.topic,
                                           topic_delimiter=self.topic_delimiter
-
                                       )) as deps:
             try:
                 await handler.handle(**deps)

@@ -6,6 +6,7 @@ from uuid import UUID
 from aio_pika.abc import AbstractIncomingMessage, AbstractQueue
 
 from dispytch.listener.consumer import Consumer, Message
+from dispytch.rabbitmq.subscription import RabbitMQEventSubscription
 
 logger = logging.getLogger(__name__)
 
@@ -21,8 +22,14 @@ class RabbitMQConsumer(Consumer):
     async def _consume_queue(self, queue: AbstractQueue):
         async with queue.iterator() as queue_iter:
             async for message in queue_iter:
-                msg = Message(topic=message.routing_key,
-                              payload=message.body)
+                msg = Message(
+                    subscription=RabbitMQEventSubscription(
+                        exchange=message.exchange,
+                        queue=queue.name,
+                        routing_key=message.routing_key
+                    ),
+                    payload=message.body
+                )
 
                 self._waiting_for_ack[msg.id] = message
                 await self._consumed_messages_queue.put(msg)

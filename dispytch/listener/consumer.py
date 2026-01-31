@@ -5,10 +5,15 @@ from typing import AsyncIterator
 from pydantic import BaseModel, Field
 
 
+class EventSubscription(ABC):
+    @abstractmethod
+    def get_segments(self) -> tuple[str, ...]: ...
+
+
 class Message(BaseModel):
     """Represents a raw message received from a message broker."""
     id: uuid.UUID = Field(default_factory=uuid.uuid4)
-    topic: str
+    subscription: EventSubscription
     payload: bytes
 
 

@@ -8,10 +8,10 @@ from aio_pika.abc import AbstractExchange, DeliveryMode
 from pydantic import BaseModel
 
 from dispytch.emitter.producer import Producer, ProducerTimeout
+from dispytch.rabbitmq.event_route import RabbitMQEventRoute
 
 
 class RabbitMQEventConfig(BaseModel):
-    exchange: str | None = None
     delivery_mode: DeliveryMode | int | None = None
     priority: int | None = None
     expiration: int | datetime | float | timedelta | None = None
@@ -35,15 +35,20 @@ class RabbitMQProducer(Producer):
         self.exchanges = {exchange.name: exchange for exchange in exchanges}
         self.timeout = timeout
 
-    async def send(self, topic: str, payload: bytes, config: BaseModel | None = None):
+    async def send(self, payload: bytes, route: BaseModel, config: BaseModel | None = None):
         if config is not None and not isinstance(config, RabbitMQEventConfig):
-            raise ValueError(
+            raise TypeError(
                 f"Expected a RabbitMQEventConfig when using RabbitMQProducer got {type(config).__name__}"
             )
         config = config or RabbitMQEventConfig()
 
+        if not isinstance(route, RabbitMQEventRoute):
+            raise TypeError(
+                f"Expected a RabbitMQEventRoute when using RabbitMQProducer got {type(route).__name__}"
+            )
+
         try:
-            await self.exchanges[config.exchange or next(iter(self.exchanges))].publish(
+            await self.exchanges[route.exchange].publish(
                 Message(
                     body=payload,
                     delivery_mode=config.delivery_mode,
@@ -60,7 +65,7 @@ class RabbitMQProducer(Producer):
                     user_id=config.user_id,
                     app_id=config.app_id,
                 ),
-                routing_key=topic,
+                routing_key=route.routing_key,
                 timeout=self.timeout,
             )
         except TimeoutError:

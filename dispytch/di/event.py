@@ -3,6 +3,7 @@ from dataclasses import dataclass
 
 @dataclass
 class Event[Body]:
+    # TODO: change handler example api
     """ Represents an event to be used as a dependency in you handler functions
     This class is generic, allowing for schema-on-read validation using typed payloads.
 
@@ -19,7 +20,5 @@ class Event[Body]:
     """
 
     id: str
-    topic: str
-    type: str
     body: Body
     timestamp: int

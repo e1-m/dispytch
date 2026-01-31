@@ -8,17 +8,18 @@ class HandlerTree:
         self.delimiter: str = delimiter
         self.root: HandlerNode = HandlerNode()
 
-    def insert(self, topic: str, event: str, *handlers: Handler):
-        segments = ['*'
-                    if (segment.startswith('{') and segment.endswith('}'))
-                    else segment
-                    for segment in topic.split(self.delimiter)]
+    def insert(self, path: tuple[str, ...], *handlers: Handler):
+        segments = tuple(
+            '*'
+            if (segment.startswith('{') and segment.endswith('}'))
+            else segment
+            for part in path for segment in part.split(self.delimiter)
+        )
 
-        self.root.insert((*segments, event), *handlers)
+        self.root.insert(segments, *handlers)
 
-    def get(self, topic: str, event: str) -> list[Handler]:
-        segments = topic.split(self.delimiter)
-        return self.root.get((*segments, event))
+    def get(self, key: tuple[str, ...]) -> list[Handler]:
+        return self.root.get(key)
 
 
 class HandlerNode:

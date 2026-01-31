@@ -7,6 +7,11 @@ class ProducerTimeout(Exception):
     pass
 
 
+class EventRoute(ABC):
+    @abstractmethod
+    def format_dynamic(self, **kwargs) -> EventRoute: ...
+
+
 class Producer(ABC):
     @abstractmethod
-    async def send(self, topic: str, payload: bytes, config: BaseModel | None = None): ...
+    async def send(self, payload: bytes, route: EventRoute, config: BaseModel | None = None): ...

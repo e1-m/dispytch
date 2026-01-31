@@ -4,6 +4,7 @@ from typing import AsyncIterator
 from redis.asyncio.client import PubSub
 
 from dispytch.listener.consumer import Consumer, Message
+from dispytch.redis.subscription import RedisEventSubscription
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +20,7 @@ class RedisConsumer(Consumer):
                 continue
 
             yield Message(
-                topic=message['channel'].decode('utf-8'),
+                subscription=RedisEventSubscription(channel=message['channel'].decode('utf-8')),
                 payload=message['data'],
             )
 
