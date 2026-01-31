@@ -107,8 +107,8 @@ def _make_topic_dependency(segment_name, field):
     def extract_field_from_topic(ctx: EventHandlerContext):
         value = _extract_segment(
             actual=ctx.event.topic,
-            pattern=ctx.topic_pattern,
-            delimiter=ctx.topic_delimiter,
+            pattern=ctx.subscription_segments,
+            delimiter=ctx.segment_delimiter,
             segment_name=segment_name
         )
 

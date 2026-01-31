@@ -4,7 +4,7 @@ import logging
 from dispytch.di.event import Event
 from dispytch.di.context import EventHandlerContext
 from dispytch.di.solver import solve_dependencies
-from dispytch.listener.consumer import Consumer, Message
+from dispytch.listener.consumer import Consumer, Message, EventSubscription
 from dispytch.listener.handler import Handler
 from dispytch.listener.handler_group import HandlerGroup
 from dispytch.listener.handler_tree import HandlerTree
@@ -57,18 +57,23 @@ class EventListener:
             return
 
         tasks = [asyncio.create_task(
-            self._call_handler_with_injected_dependencies(handler, event)
+            self._call_handler_with_injected_dependencies(msg.subscription, handler, event)
         ) for handler in handlers]
         await asyncio.gather(*tasks)
 
         await self.consumer.ack(msg)
 
-    async def _call_handler_with_injected_dependencies(self, handler: Handler, event: Event):
+    async def _call_handler_with_injected_dependencies(
+            self,
+            subscription: EventSubscription,
+            handler: Handler,
+            event: Event
+    ):
         async with solve_dependencies(handler.func,
                                       EventHandlerContext(
                                           event=event,
-                                          topic_pattern=handler.topic,
-                                          topic_delimiter=self.topic_delimiter
+                                          subscription_segments=subscription.get_segments(),
+                                          segment_delimiter=self.topic_delimiter
                                       )) as deps:
             try:
                 await handler.handle(**deps)
@@ -76,8 +81,7 @@ class EventListener:
                 logging.exception(f"Handler {handler.func.__name__} failed for event {event.type}: {e}")
 
     def handler(self, *,
-                topic: str,
-                event: str,
+                subscription: EventSubscription,
                 retries: int = 0,
                 retry_on: type[Exception] = None,
                 retry_interval: float = 1.25):
@@ -85,8 +89,6 @@ class EventListener:
             Decorator to register a handler function for a specific topic and event type.
 
             Args:
-                topic (str): The topic this handler listens to.
-                event (str): The event type this handler handles.
                 retries (int, optional): Number of times to retry the handler on failure.
                     Defaults to 0 (no retries).
                 retry_on (type[Exception], optional): Exception type to trigger retries.
@@ -96,7 +98,10 @@ class EventListener:
             """
 
         def decorator(callback):
-            self._handlers.insert(topic, event, Handler(callback, topic, retries, retry_interval, retry_on))
+            self._handlers.insert(
+                subscription.get_segments(),
+                Handler(callback, retries, retry_interval, retry_on)
+            )
             return callback
 
         return decorator
@@ -108,6 +113,5 @@ class EventListener:
         Args:
             group (HandlerGroup): A ``HandlerGroup`` object to register with the listener.
         """
-        for topic in group.handlers:
-            for event in group.handlers[topic]:
-                self._handlers.insert(topic, event, *group.handlers[topic][event])
+        for subscription_segments in group.handlers:
+            self._handlers.insert(subscription_segments, *group.handlers[subscription_segments])

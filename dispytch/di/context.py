@@ -6,5 +6,5 @@ from dispytch.di.event import Event
 @dataclass
 class EventHandlerContext:
     event: Event[dict]
-    topic_pattern: str
-    topic_delimiter: str
+    subscription_segments: tuple[str, ...]
+    segment_delimiter: str
