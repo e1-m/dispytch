@@ -8,15 +8,13 @@ from dispytch.di.context import EventHandlerContext
 from dispytch.di.event import Event
 from dispytch.di.dependency import Dependency
 from dispytch.di.solver import solve_dependencies
-from dispytch.di.topic_segment import TopicSegment
+from dispytch.di.subscription_param import SubscriptionParam
 
 
 @pytest.fixture
 def event_dict():
     return Event(**{
         'id': str(uuid.uuid4()),
-        'topic': 'test:topic:123',
-        'type': 'test-type',
         'body': {
             'name': 'test',
             'value': 42
@@ -27,7 +25,7 @@ def event_dict():
 
 @pytest.fixture
 def func(request):
-    def dep(value: int = TopicSegment()):
+    def dep(value: int = SubscriptionParam()):
         return value + 1
 
     def func(val: Annotated[int, Dependency(dep)]):
@@ -44,7 +42,8 @@ async def test_segment_match(event_dict, func):
 
     async with solve_dependencies(func,
                                   ctx=EventHandlerContext(event=event_dict,
-                                                          topic_pattern="test:topic:{value}",
-                                                          topic_delimiter=':')) as deps:
+                                                          actual_event_route='test:topic:123',
+                                                          subscription_pattern="test:topic:{value}",
+                                                          route_delimiter=':')) as deps:
         assert len(deps) == 1
         assert deps["val"] == 124

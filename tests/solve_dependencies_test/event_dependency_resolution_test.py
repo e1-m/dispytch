@@ -15,8 +15,6 @@ def event_dict():
     return Event(
         **{
             'id': str(uuid.uuid4()),
-            'topic': 'test-topic',
-            'type': 'test-type',
             'body': {
                 'name': 'test',
                 'value': 42
@@ -28,7 +26,12 @@ def event_dict():
 
 @pytest.fixture
 def handler_context(event_dict):
-    return EventHandlerContext(event=event_dict, topic_pattern="topic", topic_delimiter=':')
+    return EventHandlerContext(
+        event=event_dict,
+        actual_event_route="test-topic",
+        subscription_pattern="topic",
+        route_delimiter=':'
+    )
 
 
 class EventBody(BaseModel):
@@ -50,8 +53,6 @@ async def test_single_event_dependency(handler_context):
 
         dep = deps["event"]
         assert isinstance(dep, Event)
-        assert dep.topic == handler_context.event.topic
-        assert dep.type == handler_context.event.type
         assert isinstance(dep.body, EventBody)
         assert dep.body.name == handler_context.event.body['name']
         assert dep.body.value == handler_context.event.body['value']
