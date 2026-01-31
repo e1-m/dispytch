@@ -7,15 +7,13 @@ from dispytch import Dependency
 from dispytch.di.extractor import extract_dependencies
 from dispytch.di.context import EventHandlerContext
 from dispytch.di.event import Event
-from dispytch.di.topic_segment import TopicSegment
+from dispytch.di.subscription_param import SubscriptionParam
 
 
 @pytest.fixture
 def event_dict():
     return Event(**{
         'id': str(uuid.uuid4()),
-        'topic': 'test:topic:123',
-        'type': 'test-type',
         'body': {
             'name': 'test',
             'value': 42
@@ -26,7 +24,7 @@ def event_dict():
 
 @pytest.fixture
 def func_annotated_instance():
-    def func(value: Annotated[int, TopicSegment()]):
+    def func(value: Annotated[int, SubscriptionParam()]):
         pass
 
     return func
@@ -34,7 +32,7 @@ def func_annotated_instance():
 
 @pytest.fixture
 def func_annotated_class():
-    def func(value: Annotated[int, TopicSegment]):
+    def func(value: Annotated[int, SubscriptionParam]):
         pass
 
     return func
@@ -42,7 +40,7 @@ def func_annotated_class():
 
 @pytest.fixture
 def func_default():
-    def func(value: int = TopicSegment()):
+    def func(value: int = SubscriptionParam()):
         pass
 
     return func
@@ -71,8 +69,13 @@ async def test_segment_match(event_dict, func):
     dep = result["value"]
     assert isinstance(dep, Dependency)
 
-    async with dep(ctx=EventHandlerContext(event=event_dict,
-                                           topic_pattern="test:topic:{value}",
-                                           topic_delimiter=':')) as param:
+    async with dep(
+            ctx=EventHandlerContext(
+                event=event_dict,
+                actual_event_route='test:topic:123',
+                subscription_pattern="test:topic:{value}",
+                route_delimiter=':'
+            )
+    ) as param:
         assert isinstance(param, int)
         assert param == 123
