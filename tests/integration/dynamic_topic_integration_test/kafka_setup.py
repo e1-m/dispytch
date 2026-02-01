@@ -2,7 +2,8 @@ import pytest_asyncio
 from aiokafka import AIOKafkaConsumer, AIOKafkaProducer
 
 from dispytch import EventEmitter, EventListener
-from dispytch.kafka import KafkaProducer, KafkaConsumer
+from dispytch.kafka import KafkaProducer, KafkaConsumer, KafkaEventRoute
+from dispytch.kafka.subscription import KafkaEventSubscription
 
 from dispytch.serialization.msgpack import MessagePackSerializer, MessagePackDeserializer
 
@@ -62,5 +63,26 @@ async def listener_kafka(dispytch_kafka_consumer):
     return EventListener(
         consumer=dispytch_kafka_consumer,
         deserializer=MessagePackDeserializer(),
-        topic_delimiter='.'
+        route_delimiter='.'
+    )
+
+
+@pytest_asyncio.fixture()
+async def subscription_kafka():
+    return KafkaEventSubscription(
+        topic="test.events.{value}"
+    )
+
+
+@pytest_asyncio.fixture()
+async def wildcard_subscription_kafka():
+    return KafkaEventSubscription(
+        topic="test.events.*"
+    )
+
+
+@pytest_asyncio.fixture()
+async def event_route_kafka():
+    return KafkaEventRoute(
+        topic="test.events.{value}"
     )
