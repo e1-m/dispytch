@@ -2,7 +2,8 @@ import pytest_asyncio
 import aio_pika
 
 from dispytch import EventEmitter, EventListener
-from dispytch.rabbitmq import RabbitMQProducer, RabbitMQConsumer
+from dispytch.rabbitmq import RabbitMQProducer, RabbitMQConsumer, RabbitMQEventRoute
+from dispytch.rabbitmq.subscription import RabbitMQEventSubscription
 
 
 @pytest_asyncio.fixture()
@@ -54,24 +55,39 @@ async def rabbitmq_queue(rabbitmq_channel, rabbitmq_exchange):
 
 
 @pytest_asyncio.fixture()
-async def producer(rabbitmq_exchange):
-    return RabbitMQProducer(rabbitmq_exchange)
+async def producer_rabbitmq(rabbitmq_exchange):
+    return RabbitMQProducer([rabbitmq_exchange])
 
 
 @pytest_asyncio.fixture()
-async def consumer(rabbitmq_queue):
+async def consumer_rabbitmq(rabbitmq_queue):
     return RabbitMQConsumer(rabbitmq_queue)
 
 
 @pytest_asyncio.fixture()
-async def emitter_rabbitmq(producer):
+async def emitter_rabbitmq(producer_rabbitmq):
     return EventEmitter(
-        producer=producer
+        producer=producer_rabbitmq
     )
 
 
 @pytest_asyncio.fixture()
-async def listener_rabbitmq(consumer):
+async def listener_rabbitmq(consumer_rabbitmq):
     return EventListener(
-        consumer=consumer,
+        consumer=consumer_rabbitmq,
+    )
+
+
+@pytest_asyncio.fixture()
+async def subscription_rabbitmq():
+    return RabbitMQEventSubscription(
+        routing_key="test_events"
+    )
+
+
+@pytest_asyncio.fixture()
+async def event_route_rabbitmq(topics):
+    return RabbitMQEventRoute(
+        exchange="test_events",
+        routing_key="test_events"
     )

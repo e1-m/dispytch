@@ -1,2 +1,3 @@
 from .producer import RedisProducer as RedisProducer
 from .consumer import RedisConsumer as RedisConsumer
+from .event_route import RedisEventRoute

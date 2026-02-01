@@ -2,7 +2,8 @@ import pytest_asyncio
 from aiokafka import AIOKafkaConsumer, AIOKafkaProducer
 
 from dispytch import EventEmitter, EventListener
-from dispytch.kafka import KafkaProducer, KafkaConsumer
+from dispytch.kafka import KafkaProducer, KafkaConsumer, KafkaEventRoute
+from dispytch.kafka.subscription import KafkaEventSubscription
 
 
 @pytest_asyncio.fixture()
@@ -38,24 +39,38 @@ async def kafka_producer(bootstrap_servers):
 
 
 @pytest_asyncio.fixture()
-async def producer(kafka_producer: AIOKafkaProducer):
+async def producer_kafka(kafka_producer: AIOKafkaProducer):
     return KafkaProducer(kafka_producer)
 
 
 @pytest_asyncio.fixture()
-async def consumer(kafka_consumer: AIOKafkaConsumer):
+async def consumer_kafka(kafka_consumer: AIOKafkaConsumer):
     return KafkaConsumer(kafka_consumer)
 
 
 @pytest_asyncio.fixture()
-async def emitter_kafka(producer):
+async def emitter_kafka(producer_kafka):
     return EventEmitter(
-        producer=producer
+        producer=producer_kafka
     )
 
 
 @pytest_asyncio.fixture()
-async def listener_kafka(consumer):
+async def listener_kafka(consumer_kafka):
     return EventListener(
-        consumer=consumer,
+        consumer=consumer_kafka,
+    )
+
+
+@pytest_asyncio.fixture()
+async def subscription_kafka(topics):
+    return KafkaEventSubscription(
+        topic=topics[0]
+    )
+
+
+@pytest_asyncio.fixture()
+async def event_route_kafka(topics):
+    return KafkaEventRoute(
+        topic=topics[0]
     )
