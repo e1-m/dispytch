@@ -51,9 +51,13 @@ class EventListener:
 
     async def _handle_message(self, msg: Message):
         event = Event(
-            **self.deserializer.deserialize(msg.payload).model_dump(),
+            **self.deserializer.deserialize(msg.payload).model_dump()
         )
-        handlers = self._handlers.get(msg.subscription.get_path_segments(self.route_delimiter))
+
+        handlers = self._handlers.get(
+            msg.subscription.get_path_segments(self.route_delimiter)
+        )
+
         if not handlers:
             logging.info(f'There is no handler for `{msg.subscription}`')
             return
