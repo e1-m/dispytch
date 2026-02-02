@@ -28,7 +28,7 @@ class EventListener:
             self,
             consumer: Consumer,
             deserializer: Deserializer = None,
-            route_delimiter: str = ':'
+            route_delimiter: str = None
     ):
         self.consumer = consumer
         self.deserializer = deserializer or JSONDeserializer()
@@ -75,7 +75,8 @@ class EventListener:
                                       EventHandlerContext(
                                           event=event,
                                           actual_event_route=route.get_path_segments(self.route_delimiter),
-                                          subscription_pattern=handler.subscription.get_path_segments(self.route_delimiter),
+                                          subscription_pattern=handler.subscription.get_path_segments(
+                                              self.route_delimiter),
                                       )) as deps:
             try:
                 await handler.handle(**deps)
