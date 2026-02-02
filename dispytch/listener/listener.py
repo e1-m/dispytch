@@ -93,6 +93,7 @@ class EventListener:
             Decorator to register a handler function for a specific topic and event type.
 
             Args:
+                subscription (EventSubscription): The subscription configuration for the handler.
                 retries (int, optional): Number of times to retry the handler on failure.
                     Defaults to 0 (no retries).
                 retry_on (type[Exception], optional): Exception type to trigger retries.
@@ -117,5 +118,8 @@ class EventListener:
         Args:
             group (HandlerGroup): A ``HandlerGroup`` object to register with the listener.
         """
-        for subscription in group._handlers:
-            self._handlers.insert(subscription.get_path_segments(self.route_delimiter), *group._handlers[subscription])
+        for subscription in group.get_subscriptions():
+            self._handlers.insert(
+                subscription.get_path_segments(self.route_delimiter),
+                *group.get_handlers(subscription)
+            )

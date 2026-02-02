@@ -37,3 +37,6 @@ class HandlerGroup:
 
     def get_handlers(self, subscription: EventSubscription):
         return self._handlers[subscription]
+
+    def get_subscriptions(self) -> list[EventSubscription]:
+        return list(self._handlers.keys())
