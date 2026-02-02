@@ -72,9 +72,8 @@ async def test_segment_match(event_dict, func):
     async with dep(
             ctx=EventHandlerContext(
                 event=event_dict,
-                actual_event_route='test:topic:123',
-                subscription_pattern="test:topic:{value}",
-                route_delimiter=':'
+                actual_event_route=tuple('test:topic:123'.split(':')),
+                subscription_pattern=tuple("test:topic:{value}".split(':'))
             )
     ) as param:
         assert isinstance(param, int)

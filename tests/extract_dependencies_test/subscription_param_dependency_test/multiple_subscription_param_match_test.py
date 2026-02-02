@@ -65,9 +65,8 @@ async def test_multiple_segments_match(event_dict, func):
     async with id_dep(
             ctx=EventHandlerContext(
                 event=event_dict,
-                actual_event_route="test.topic.user.123",
-                subscription_pattern="test.topic.{who}.{id}",
-                route_delimiter='.'
+                actual_event_route=tuple("test.topic.user.123".split('.')),
+                subscription_pattern=tuple("test.topic.{who}.{id}".split('.')),
             )
     ) as param:
         assert isinstance(param, int)
@@ -75,9 +74,8 @@ async def test_multiple_segments_match(event_dict, func):
 
     async with who_dep(ctx=EventHandlerContext(
             event=event_dict,
-            actual_event_route="test.topic.user.123",
-            subscription_pattern="test.topic.{who}.{id}",
-            route_delimiter='.'
+            actual_event_route=tuple("test.topic.user.123".split('.')),
+            subscription_pattern=tuple("test.topic.{who}.{id}".split('.')),
     )) as param:
         assert isinstance(param, str)
         assert param == "user"
@@ -99,18 +97,16 @@ async def test_multiple_args_depend_on_the_same_segment(event_dict):
 
     async with who_second_dep(ctx=EventHandlerContext(
             event=event_dict,
-            actual_event_route="test.topic.user.123",
-            subscription_pattern="test.topic.{who}.{id}",
-            route_delimiter='.'
+            actual_event_route=tuple("test.topic.user.123".split('.')),
+            subscription_pattern=tuple("test.topic.{who}.{id}".split('.')),
     )) as param:
         assert isinstance(param, str)
         assert param == "user"
 
     async with who_dep(ctx=EventHandlerContext(
             event=event_dict,
-            actual_event_route="test.topic.user.123",
-            subscription_pattern="test.topic.{who}.{id}",
-            route_delimiter='.'
+            actual_event_route=tuple("test.topic.user.123".split('.')),
+            subscription_pattern=tuple("test.topic.{who}.{id}".split('.')),
     )) as param:
         assert isinstance(param, str)
         assert param == "user"

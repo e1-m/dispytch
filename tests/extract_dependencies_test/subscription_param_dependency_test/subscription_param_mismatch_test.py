@@ -36,9 +36,9 @@ async def test_segment_mismatch(event_dict, ):
 
     with pytest.raises(ValueError):
         dep(ctx=EventHandlerContext(event=event_dict,
-                                    actual_event_route="test:topic:123",
-                                    subscription_pattern="test:topic:{not_value}",
-                                    route_delimiter=':'))
+                                    actual_event_route=tuple("test:topic:123".split(':')),
+                                    subscription_pattern=tuple("test:topic:{not_value}".split(':'))
+                                    ))
 
 
 @pytest.mark.asyncio
@@ -55,9 +55,9 @@ async def test_segment_mismatch_same_name_in_static_topic(event_dict, ):
 
     with pytest.raises(ValueError):
         dep(ctx=EventHandlerContext(event=event_dict,
-                                    actual_event_route="test:topic:123",
-                                    subscription_pattern="test:topic:value",
-                                    route_delimiter=':'))
+                                    actual_event_route=tuple("test:topic:123".split(':')),
+                                    subscription_pattern=tuple("test:topic:value".split(':'))
+                                    ))
 
 
 @pytest.mark.asyncio
@@ -74,6 +74,6 @@ async def test_segment_mismatch_different_delimiter(event_dict, ):
 
     with pytest.raises(ValueError):
         dep(ctx=EventHandlerContext(event=event_dict,
-                                    actual_event_route="test:topic:123",
-                                    subscription_pattern="test:topic:{value}",
-                                    route_delimiter='.'))
+                                    actual_event_route=tuple("test:topic:123".split('.')),
+                                    subscription_pattern=tuple("test:topic:{value}".split('.'))
+                                    ))

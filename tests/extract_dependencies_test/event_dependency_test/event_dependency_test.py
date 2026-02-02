@@ -48,9 +48,8 @@ def event_with_additional_data():
 def event_handler_context_base(event):
     return EventHandlerContext(
         event=event,
-        subscription_pattern="topic",
-        actual_event_route="topic",
-        route_delimiter=':'
+        subscription_pattern=("topic",),
+        actual_event_route=("topic",)
     )
 
 

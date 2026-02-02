@@ -108,7 +108,6 @@ def _make_subscription_param_dependency(segment_name, field):
         value = _extract_param(
             actual=ctx.actual_event_route,
             pattern=ctx.subscription_pattern,
-            delimiter=ctx.route_delimiter,
             segment_name=segment_name
         )
 
@@ -117,13 +116,12 @@ def _make_subscription_param_dependency(segment_name, field):
     return Dependency(extract_field_from_subscription_pattern)
 
 
-def _extract_param(actual: str,
-                   delimiter: str,
-                   pattern: str,
+def _extract_param(actual: tuple[str, ...],
+                   pattern: tuple[str, ...],
                    segment_name: str) -> str:
     try:
-        index = pattern.split(delimiter).index(f"{{{segment_name}}}")
-        value = actual.split(delimiter)[index]
+        index = pattern.index(f"{{{segment_name}}}")
+        value = actual[index]
 
         return value
     except ValueError:

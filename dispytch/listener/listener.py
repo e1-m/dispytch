@@ -74,16 +74,13 @@ class EventListener:
         async with solve_dependencies(handler.func,
                                       EventHandlerContext(
                                           event=event,
-                                          actual_event_route=f"{self.route_delimiter}"
-                                                  .join(route.get_path_segments()),
-                                          subscription_pattern=f"{self.route_delimiter}"
-                                                  .join(handler.subscription.get_path_segments()),
-                                          route_delimiter=self.route_delimiter
+                                          actual_event_route=route.get_path_segments(self.route_delimiter),
+                                          subscription_pattern=handler.subscription.get_path_segments(self.route_delimiter),
                                       )) as deps:
             try:
                 await handler.handle(**deps)
             except Exception as e:
-                logging.exception(f"Handler {handler.func.__name__} failed for event {event.type}: {e}")
+                logging.exception(f"Handler {handler.func.__name__} failed for event {event}: {e}")
 
     def handler(self,
                 subscription: EventSubscription,

@@ -35,9 +35,9 @@ async def test_literal_validation_success(event_dict):
     assert isinstance(dep, Dependency)
 
     async with dep(ctx=EventHandlerContext(event=event_dict,
-                                           actual_event_route="test:topic:123",
-                                           subscription_pattern="test:topic:{value}",
-                                           route_delimiter=':')) as param:
+                                           actual_event_route=tuple("test:topic:123".split(':')),
+                                           subscription_pattern=tuple("test:topic:{value}".split(':'))
+                                           )) as param:
         assert isinstance(param, str)
         assert param == "123"
 
@@ -55,9 +55,9 @@ async def test_literal_validation_failure(event_dict):
 
     with pytest.raises(ValueError):
         dep(ctx=EventHandlerContext(event=event_dict,
-                                    actual_event_route="test:topic:123",
-                                    subscription_pattern="test:topic:{value}",
-                                    route_delimiter=':')
+                                    actual_event_route=tuple("test:topic:123".split(':')),
+                                    subscription_pattern=tuple("test:topic:{value}".split(':'))
+                                    )
             )
 
 
@@ -73,9 +73,9 @@ async def test_int_validation_success(event_dict):
     assert isinstance(dep, Dependency)
 
     async with dep(ctx=EventHandlerContext(event=event_dict,
-                                           actual_event_route="test:topic:123",
-                                           subscription_pattern="test:topic:{value}",
-                                           route_delimiter=':')) as param:
+                                           actual_event_route=tuple("test:topic:123".split(':')),
+                                           subscription_pattern=tuple("test:topic:{value}".split(':'))
+                                           )) as param:
         assert isinstance(param, int)
         assert param == 123
 
@@ -93,9 +93,9 @@ async def test_int_validation_failure(event_dict):
 
     with pytest.raises(ValueError):
         dep(ctx=EventHandlerContext(event=event_dict,
-                                    actual_event_route="test:topic:123",
-                                    subscription_pattern="test:topic:{value}",
-                                    route_delimiter=':')
+                                    actual_event_route=tuple("test:topic:123".split(':')),
+                                    subscription_pattern=tuple("test:topic:{value}".split(':'))
+                                    )
             )
 
 
@@ -111,9 +111,9 @@ async def test_str_validation_success(event_dict):
     assert isinstance(dep, Dependency)
 
     async with dep(ctx=EventHandlerContext(event=event_dict,
-                                           actual_event_route="test:topic:123",
-                                           subscription_pattern="test:topic:{value}",
-                                           route_delimiter=':')) as param:
+                                           actual_event_route=tuple("test:topic:123".split(':')),
+                                           subscription_pattern=tuple("test:topic:{value}".split(':'))
+                                           )) as param:
         assert isinstance(param, str)
         assert param == "123"
 
@@ -131,9 +131,9 @@ async def test_str_validation_failure(event_dict):
 
     with pytest.raises(ValueError):
         dep(ctx=EventHandlerContext(event=event_dict,
-                                    actual_event_route="test:topic:123",
-                                    subscription_pattern="test:topic:{value}",
-                                    route_delimiter=':'))
+                                    actual_event_route=tuple("test:topic:123".split(':')),
+                                    subscription_pattern=tuple("test:topic:{value}".split(':'))
+                                    ))
 
 
 @pytest.mark.asyncio
@@ -150,9 +150,9 @@ async def test_str_validation_inappropriate_constrains(event_dict):
 
     with pytest.raises(TypeError):
         dep(ctx=EventHandlerContext(event=event_dict,
-                                    actual_event_route="test:topic:123",
-                                    subscription_pattern="test:topic:{value}",
-                                    route_delimiter=':'))
+                                    actual_event_route=tuple("test:topic:123".split(':')),
+                                    subscription_pattern=tuple("test:topic:{value}".split(':'))
+                                    ))
 
 
 @pytest.mark.asyncio
@@ -167,9 +167,9 @@ async def test_decimal_validation_success(event_dict):
     assert isinstance(dep, Dependency)
 
     async with dep(ctx=EventHandlerContext(event=event_dict,
-                                           actual_event_route='test:topic:123.45',
-                                           subscription_pattern="test:topic:{value}",
-                                           route_delimiter=':')) as param:
+                                           actual_event_route=tuple("test:topic:123.45".split(':')),
+                                           subscription_pattern=tuple("test:topic:{value}".split(':'))
+                                           )) as param:
         assert isinstance(param, Decimal)
         assert param == Decimal('123.45')
 
@@ -188,7 +188,7 @@ async def test_decimal_validation_failure(event_dict):
     with pytest.raises(ValueError):
         dep(
             ctx=EventHandlerContext(event=event_dict,
-                                    actual_event_route="test:topic:123.45",
-                                    subscription_pattern="test:topic:{value}",
-                                    route_delimiter=':')
+                                    actual_event_route=tuple("test:topic:123.45".split(':')),
+                                    subscription_pattern=tuple("test:topic:{value}".split(':'))
+                                    )
         )

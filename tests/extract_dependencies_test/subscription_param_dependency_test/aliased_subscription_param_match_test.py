@@ -77,9 +77,8 @@ async def test_aliased_segment_match(event_dict, func, alias):
     async with dep(
             ctx=EventHandlerContext(
                 event=event_dict,
-                subscription_pattern=f"test:topic:{{{alias}}}",
-                actual_event_route="test:topic:123",
-                route_delimiter=':'
+                subscription_pattern=tuple(f"test:topic:{{{alias}}}".split(':')),
+                actual_event_route=tuple("test:topic:123".split(':')),
             )
     ) as param:
         assert isinstance(param, int)

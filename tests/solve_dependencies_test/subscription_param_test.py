@@ -41,9 +41,10 @@ async def test_segment_match(event_dict, func):
     assert len(result) == 1
 
     async with solve_dependencies(func,
-                                  ctx=EventHandlerContext(event=event_dict,
-                                                          actual_event_route='test:topic:123',
-                                                          subscription_pattern="test:topic:{value}",
-                                                          route_delimiter=':')) as deps:
+                                  ctx=EventHandlerContext(
+                                      event=event_dict,
+                                      actual_event_route=tuple('test:topic:123'.split(':')),
+                                      subscription_pattern=tuple("test:topic:{value}".split(':')))
+                                  ) as deps:
         assert len(deps) == 1
         assert deps["val"] == 124

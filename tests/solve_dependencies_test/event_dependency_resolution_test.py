@@ -28,9 +28,8 @@ def event_dict():
 def handler_context(event_dict):
     return EventHandlerContext(
         event=event_dict,
-        actual_event_route="test-topic",
-        subscription_pattern="topic",
-        route_delimiter=':'
+        actual_event_route=("test-topic",),
+        subscription_pattern=("test-topic",)
     )
 
 
