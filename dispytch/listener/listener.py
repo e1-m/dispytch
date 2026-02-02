@@ -120,4 +120,4 @@ class EventListener:
             group (HandlerGroup): A ``HandlerGroup`` object to register with the listener.
         """
         for subscription in group._handlers:
-            self._handlers.insert(subscription.get_path_segments(), *group._handlers[subscription])
+            self._handlers.insert(subscription.get_path_segments(self.route_delimiter), *group._handlers[subscription])
