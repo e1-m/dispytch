@@ -6,10 +6,16 @@ from uuid import UUID
 from aiokafka import AIOKafkaConsumer, ConsumerRecord, TopicPartition
 from aiokafka.errors import KafkaError
 
-from dispytch.kafka.subscription import KafkaEventSubscription
-from dispytch.listener.consumer import Consumer, Message
+from dispytch.listener.consumer import Consumer, Message, EventSubscription
 
 logger = logging.getLogger(__name__)
+
+
+class KafkaEventSubscription(EventSubscription):
+    topic: str = "*"
+
+    def get_segments(self) -> tuple[str, ...]:
+        return (self.topic,)
 
 
 class KafkaConsumer(Consumer):

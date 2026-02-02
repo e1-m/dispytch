@@ -4,22 +4,38 @@ from aiokafka import AIOKafkaProducer
 from aiokafka.errors import KafkaTimeoutError
 from pydantic import BaseModel
 
-from dispytch.emitter.producer import Producer, ProducerTimeout
-from dispytch.kafka.event_route import KafkaEventRoute
+from dispytch.emitter.producer import Producer, ProducerTimeout, EventRoute
 
 
 class KafkaEventConfig(BaseModel):
-    partition_key: Optional[Any] = None  # TODO: should it be moved to route obj ?
+    partition_key: Optional[Any] = None
     partition: Optional[int] = None
     timestamp_ms: Optional[int] = None
     headers: Optional[dict] = None
+
+
+class KafkaEventRoute(EventRoute):
+    def __init__(self, topic: str):
+        self.topic = topic
+
+    def format_dynamic(self, **kwargs):
+        try:
+            return KafkaEventRoute(topic=self.topic.format(**kwargs))
+        except KeyError as e:
+            raise RuntimeError(
+                f"Missing an event field `{e.args[0]}` "
+                f"used to form a topic name `{self.topic}`") from e
+        except IndexError:
+            raise RuntimeError(
+                f"Malformed topic name `{self.topic}`. Use an event field name in {{}} "
+            )
 
 
 class KafkaProducer(Producer):
     def __init__(self, producer: AIOKafkaProducer) -> None:
         self.producer = producer
 
-    async def send(self, payload: bytes, route: BaseModel, config: BaseModel | None = None) -> None:
+    async def send(self, payload: bytes, route: EventRoute, config: BaseModel | None = None) -> None:
         if config is not None and not isinstance(config, KafkaEventConfig):
             raise TypeError(
                 f"Expected a KafkaEventConfig when using KafkaProducer got {type(config).__name__}"

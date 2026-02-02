@@ -2,8 +2,7 @@ import pytest_asyncio
 import aio_pika
 
 from dispytch import EventEmitter, EventListener
-from dispytch.rabbitmq import RabbitMQProducer, RabbitMQConsumer, RabbitMQEventRoute
-from dispytch.rabbitmq.subscription import RabbitMQEventSubscription
+from dispytch.rabbitmq import RabbitMQProducer, RabbitMQConsumer, RabbitMQEventRoute, RabbitMQEventSubscription
 
 
 @pytest_asyncio.fixture()

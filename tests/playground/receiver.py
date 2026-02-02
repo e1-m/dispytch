@@ -6,6 +6,7 @@ from pydantic import BaseModel
 
 from dispytch import EventListener, Event, Dependency
 from dispytch.kafka import KafkaConsumer
+from dispytch.kafka.consumer import KafkaEventSubscription
 
 
 class MyEventBody(BaseModel):
@@ -34,7 +35,7 @@ async def main():
     consumer = KafkaConsumer(kafka_consumer)
     event_listener = EventListener(consumer)
 
-    @event_listener.handler(topic='test_events', event='test_event')
+    @event_listener.handler(KafkaEventSubscription(topic='test_events'))
     async def handle_event(event: Event[MyEventBody], test: Annotated[int, Dependency(outer_dep)]):
         print(event)
         print(test)

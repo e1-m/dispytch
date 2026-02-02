@@ -2,13 +2,14 @@ import asyncio
 
 from aiokafka import AIOKafkaProducer
 
-from dispytch.kafka import KafkaProducer
+from dispytch.kafka import KafkaProducer, KafkaEventRoute
 from dispytch import EventEmitter, EventBase
 
 
 class MyEvent(EventBase):
-    __topic__ = 'test_events'
-    __event_type__ = 'test_event'
+    __route__ = KafkaEventRoute(
+        topic='test_events',
+    )
 
     test: int
 

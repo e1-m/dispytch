@@ -2,8 +2,7 @@ import pytest_asyncio
 from redis.asyncio import Redis
 
 from dispytch import EventEmitter, EventListener
-from dispytch.redis import RedisConsumer, RedisProducer, RedisEventRoute
-from dispytch.redis.subscription import RedisEventSubscription
+from dispytch.redis import RedisConsumer, RedisProducer, RedisEventRoute, RedisEventSubscription
 from dispytch.serialization.msgpack import MessagePackDeserializer, MessagePackSerializer
 
 

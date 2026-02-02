@@ -2,8 +2,7 @@ import pytest_asyncio
 from aiokafka import AIOKafkaConsumer, AIOKafkaProducer
 
 from dispytch import EventEmitter, EventListener
-from dispytch.kafka import KafkaProducer, KafkaConsumer, KafkaEventRoute
-from dispytch.kafka.subscription import KafkaEventSubscription
+from dispytch.kafka import KafkaProducer, KafkaConsumer, KafkaEventRoute, KafkaEventSubscription
 
 from dispytch.serialization.msgpack import MessagePackSerializer, MessagePackDeserializer
 

@@ -5,10 +5,19 @@ from uuid import UUID
 
 from aio_pika.abc import AbstractIncomingMessage, AbstractQueue
 
+from dispytch import EventSubscription
 from dispytch.listener.consumer import Consumer, Message
-from dispytch.rabbitmq.subscription import RabbitMQEventSubscription
 
 logger = logging.getLogger(__name__)
+
+
+class RabbitMQEventSubscription(EventSubscription):
+    exchange: str = "*"
+    queue: str = "*"
+    routing_key: str = "*"
+
+    def get_segments(self) -> tuple[str, ...]:
+        return self.exchange, self.queue, self.routing_key
 
 
 class RabbitMQConsumer(Consumer):

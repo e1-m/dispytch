@@ -7,8 +7,7 @@ from aio_pika import Message
 from aio_pika.abc import AbstractExchange, DeliveryMode
 from pydantic import BaseModel
 
-from dispytch.emitter.producer import Producer, ProducerTimeout
-from dispytch.rabbitmq.event_route import RabbitMQEventRoute
+from dispytch.emitter.producer import Producer, ProducerTimeout, EventRoute
 
 
 class RabbitMQEventConfig(BaseModel):
@@ -28,6 +27,40 @@ class RabbitMQEventConfig(BaseModel):
     app_id: str | None = None
 
 
+class RabbitMQEventRoute(EventRoute):
+    def __init__(self, exchange: str, routing_key: str):
+        self.exchange = exchange
+        self.routing_key = routing_key
+
+    def format_dynamic(self, **kwargs):
+        try:
+            exchange = self.exchange.format(**kwargs)
+        except KeyError as e:
+            raise RuntimeError(
+                f"Missing an event field `{e.args[0]}` "
+                f"used to form a exchange name `{self.exchange}`") from e
+        except IndexError:
+            raise RuntimeError(
+                f"Malformed exchange name `{self.exchange}`. Use an event field name in {{}} "
+            )
+
+        try:
+            routing_key = self.routing_key.format(**kwargs)
+        except KeyError as e:
+            raise RuntimeError(
+                f"Missing an event field `{e.args[0]}` "
+                f"used to form a routing_key name `{self.routing_key}`") from e
+        except IndexError:
+            raise RuntimeError(
+                f"Malformed routing_key name `{self.routing_key}`. Use an event field name in {{}} "
+            )
+
+        return RabbitMQEventRoute(
+            exchange=exchange,
+            routing_key=routing_key,
+        )
+
+
 class RabbitMQProducer(Producer):
     def __init__(self,
                  exchanges: list[AbstractExchange],
@@ -35,7 +68,7 @@ class RabbitMQProducer(Producer):
         self.exchanges = {exchange.name: exchange for exchange in exchanges}
         self.timeout = timeout
 
-    async def send(self, payload: bytes, route: BaseModel, config: BaseModel | None = None):
+    async def send(self, payload: bytes, route: EventRoute, config: BaseModel | None = None):
         if config is not None and not isinstance(config, RabbitMQEventConfig):
             raise TypeError(
                 f"Expected a RabbitMQEventConfig when using RabbitMQProducer got {type(config).__name__}"

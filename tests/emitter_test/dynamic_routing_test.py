@@ -2,9 +2,9 @@ import pytest
 from unittest.mock import AsyncMock
 from dispytch.emitter.event import EventBase
 from dispytch.emitter import EventEmitter
-from dispytch.kafka.event_route import KafkaEventRoute
-from dispytch.rabbitmq.event_route import RabbitMQEventRoute
-from dispytch.redis.event_route import RedisEventRoute
+from dispytch.kafka import KafkaEventRoute
+from dispytch.rabbitmq import RabbitMQEventRoute
+from dispytch.redis import RedisEventRoute
 
 
 @pytest.fixture
