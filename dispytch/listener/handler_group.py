@@ -6,7 +6,7 @@ from dispytch.listener.consumer import EventSubscription
 
 class HandlerGroup:
     def __init__(self):
-        self._handlers: dict[tuple[str, ...], list[Handler]] = defaultdict(list)
+        self._handlers: dict[EventSubscription, list[Handler]] = defaultdict(list)
 
     def handler(self,
                 subscription: EventSubscription,
@@ -28,7 +28,7 @@ class HandlerGroup:
            """
 
         def decorator(callback):
-            handlers = self._handlers[subscription.get_segments()]
+            handlers = self._handlers[subscription]
 
             handlers.append(Handler(callback, subscription, retries, retry_interval, retry_on))
             return callback
@@ -36,4 +36,4 @@ class HandlerGroup:
         return decorator
 
     def get_handlers(self, subscription: EventSubscription):
-        return self._handlers[subscription.get_segments()]
+        return self._handlers[subscription]

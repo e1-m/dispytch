@@ -8,9 +8,6 @@ class BrokerNeutralTestSubscription(EventSubscription):
     topic: str = "*"
     event: str = "*"
 
-    def get_segments(self) -> tuple[str, ...]:
-        return (self.topic, self.event)
-
 
 def test_register_handler_with_explicit_topic_and_event():
     hg = HandlerGroup()

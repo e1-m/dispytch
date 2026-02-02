@@ -53,8 +53,7 @@ class EventListener:
         event = Event(
             **self.deserializer.deserialize(msg.payload).model_dump(),
         )
-        path = self.route_delimiter.join(msg.subscription.get_segments())
-        handlers = self._handlers.get(tuple(path.split(self.route_delimiter)))
+        handlers = self._handlers.get(msg.subscription.get_path_segments(self.route_delimiter))
         if not handlers:
             logging.info(f'There is no handler for `{msg.subscription}`')
             return
@@ -76,9 +75,9 @@ class EventListener:
                                       EventHandlerContext(
                                           event=event,
                                           actual_event_route=f"{self.route_delimiter}"
-                                                  .join(route.get_segments()),
+                                                  .join(route.get_path_segments()),
                                           subscription_pattern=f"{self.route_delimiter}"
-                                                  .join(handler.subscription.get_segments()),
+                                                  .join(handler.subscription.get_path_segments()),
                                           route_delimiter=self.route_delimiter
                                       )) as deps:
             try:
@@ -105,9 +104,8 @@ class EventListener:
             """
 
         def decorator(callback):
-            path = self.route_delimiter.join(subscription.get_segments())
             self._handlers.insert(
-                tuple(path.split(self.route_delimiter)),
+                subscription.get_path_segments(self.route_delimiter),
                 Handler(callback, subscription, retries, retry_interval, retry_on)
             )
             return callback
@@ -121,6 +119,5 @@ class EventListener:
         Args:
             group (HandlerGroup): A ``HandlerGroup`` object to register with the listener.
         """
-        for subscription_segments in group._handlers:
-            path = self.route_delimiter.join(subscription_segments)
-            self._handlers.insert(tuple(path.split(self.route_delimiter)), *group._handlers[subscription_segments])
+        for subscription in group._handlers:
+            self._handlers.insert(subscription.get_path_segments(), *group._handlers[subscription])

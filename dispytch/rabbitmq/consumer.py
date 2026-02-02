@@ -16,9 +16,6 @@ class RabbitMQEventSubscription(EventSubscription):
     queue: str = "*"
     routing_key: str = "*"
 
-    def get_segments(self) -> tuple[str, ...]:
-        return self.exchange, self.queue, self.routing_key
-
 
 class RabbitMQConsumer(Consumer):
     def __init__(self,

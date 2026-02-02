@@ -14,9 +14,6 @@ logger = logging.getLogger(__name__)
 class KafkaEventSubscription(EventSubscription):
     topic: str = "*"
 
-    def get_segments(self) -> tuple[str, ...]:
-        return (self.topic,)
-
 
 class KafkaConsumer(Consumer):
     def __init__(self, consumer: AIOKafkaConsumer):

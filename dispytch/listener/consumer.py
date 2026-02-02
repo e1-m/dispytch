@@ -2,12 +2,26 @@ import uuid
 from abc import ABC, abstractmethod
 from typing import AsyncIterator
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 
 class EventSubscription(BaseModel, ABC):
-    @abstractmethod
-    def get_segments(self) -> tuple[str, ...]: ...
+    model_config = ConfigDict(frozen=True)
+
+    @property
+    def _values(self) -> tuple:
+        return tuple(self.model_dump().values())
+
+    def get_path_segments(self, delimiter: str = None) -> tuple[str, ...]:
+        str_values = [str(v) for v in self._values]
+
+        if delimiter is None:
+            return tuple(str_values)
+
+        return tuple(delimiter.join(str_values).split(delimiter))
+
+    def __hash__(self) -> int:
+        return hash(self._values)
 
 
 class Message(BaseModel):
