@@ -5,12 +5,11 @@ import pytest
 from dispytch.listener.handler import Handler
 
 
-
 @pytest.mark.asyncio
 async def test_handler_with_retries_all_exceptions():
     """Test that handler retries on all exceptions when retry_on is None."""
     mock_func = Mock(side_effect=[ValueError, KeyError, "success"])
-    handler = Handler(func=mock_func, subscription=None, retries=3)
+    handler = Handler(func=mock_func, subscription=None, retries=3, base_delay_sec=0.1)
 
     result = await handler.handle()
 
@@ -34,7 +33,7 @@ async def test_handler_with_retries_no_exceptions():
 async def test_handler_with_specific_retry_exceptions():
     """Test that handler only retries on specified exceptions."""
     mock_func = Mock(side_effect=[ValueError, KeyError, "success"])
-    handler = Handler(func=mock_func, subscription=None, retries=3, retry_on=[ValueError])
+    handler = Handler(func=mock_func, subscription=None, retries=3, retry_on=[ValueError], base_delay_sec=0.1)
 
     with pytest.raises(KeyError):
         await handler.handle()
@@ -47,7 +46,7 @@ async def test_handler_multiple_retry_exceptions():
     """Test that handler retries on multiple specified exception types."""
     mock_func = Mock(side_effect=[ValueError, KeyError, TypeError, "success"])
     handler = Handler(func=mock_func, subscription=None, retries=5,
-                      retry_on=[ValueError, KeyError])
+                      retry_on=[ValueError, KeyError], base_delay_sec=0.1)
 
     with pytest.raises(TypeError):
         await handler.handle()
@@ -63,7 +62,7 @@ async def test_handler_exception_inheritance():
         pass
 
     mock_func = Mock(side_effect=[CustomError, "success"])
-    handler = Handler(func=mock_func, subscription=None, retries=2, retry_on=[ValueError])
+    handler = Handler(func=mock_func, subscription=None, retries=2, retry_on=[ValueError], base_delay_sec=0.1)
 
     result = await handler.handle()
 

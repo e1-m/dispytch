@@ -21,7 +21,7 @@ async def test_handler_without_retries():
 async def test_handler_with_retries_no_exception():
     """Test that handler doesn't retry when no exception is raised."""
     mock_func = Mock(return_value="success")
-    handler = Handler(func=mock_func, subscription=None, retries=3)
+    handler = Handler(func=mock_func, subscription=None, retries=3, base_delay_sec=0.1)
 
     result = await handler.handle()
 
@@ -33,7 +33,7 @@ async def test_handler_with_retries_no_exception():
 async def test_handler_zero_retries_with_exception():
     """Test that handler doesn't retry when retries=0 and exception occurs."""
     mock_func = Mock(side_effect=ValueError)
-    handler = Handler(func=mock_func, subscription=None, retries=0)
+    handler = Handler(func=mock_func, subscription=None, retries=0, base_delay_sec=0.1)
 
     with pytest.raises(ValueError):
         await handler.handle()
@@ -45,7 +45,7 @@ async def test_handler_zero_retries_with_exception():
 async def test_handler_exhausts_retries():
     """Test that handler raises exception when retries are exhausted."""
     mock_func = Mock(side_effect=[ValueError, ValueError, ValueError, ValueError])
-    handler = Handler(func=mock_func, subscription=None, retries=3)
+    handler = Handler(func=mock_func, subscription=None, retries=3, base_delay_sec=0.1)
 
     with pytest.raises(ValueError):
         await handler.handle()
@@ -57,7 +57,7 @@ async def test_handler_exhausts_retries():
 async def test_handler_with_successful_retry_after_multiple_failures():
     """Test success after exactly max retries."""
     mock_func = Mock(side_effect=[ValueError, ValueError, ValueError, "success"])
-    handler = Handler(func=mock_func, subscription=None, retries=3)
+    handler = Handler(func=mock_func, subscription=None, retries=3, base_delay_sec=0.1)
 
     result = await handler.handle()
 
@@ -70,7 +70,7 @@ async def test_handler_with_negative_retries():
     """Test that handler handles negative retry values correctly."""
     mock_func = Mock(side_effect=[ValueError, "success"])
     # Handler should convert negative retries to positive
-    handler = Handler(func=mock_func, subscription=None, retries=-2)
+    handler = Handler(func=mock_func, subscription=None, retries=-2, base_delay_sec=0.1)
 
     result = await handler.handle()
 

@@ -1,5 +1,7 @@
 import asyncio
 import logging
+import random
+from typing import Sequence, Callable
 
 from dispytch.di.event import Event
 from dispytch.di.context import EventHandlerContext
@@ -87,29 +89,24 @@ class EventListener:
             except Exception as e:
                 logging.exception(f"Handler {handler.func.__name__} failed for event {event}: {e}")
 
-    def handler(self,
-                subscription: EventSubscription,
-                *,
-                retries: int = 0,
-                retry_on: type[Exception] = None,
-                retry_interval: float = 1.25):
+    def handler(
+            self,
+            subscription: EventSubscription,
+            *,
+            retries: int = 0,
+            retry_on: Sequence[type[Exception]] | None = None,
+            base_delay_sec: float = 1.0,
+            max_delay_sec: float = 30.0,
+            jitter: Callable[[float], float] = lambda t: random.uniform(0, t)
+    ):
         """
             Decorator to register a handler function for a specific topic and event type.
-
-            Args:
-                subscription (EventSubscription): The subscription configuration for the handler.
-                retries (int, optional): Number of times to retry the handler on failure.
-                    Defaults to 0 (no retries).
-                retry_on (type[Exception], optional): Exception type to trigger retries.
-                    If not set, retries will be attempted on any exception.
-                retry_interval (float, optional): Delay in seconds between retries.
-                    Defaults to 1.25 seconds.
-            """
+        """
 
         def decorator(callback):
             self._handlers.insert(
                 subscription.get_path_segments(self.route_delimiter),
-                Handler(callback, subscription, retries, retry_interval, retry_on)
+                Handler(callback, subscription, retries, retry_on, base_delay_sec, max_delay_sec, jitter)
             )
             return callback
 

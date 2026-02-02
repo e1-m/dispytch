@@ -1,4 +1,6 @@
+import random
 from collections import defaultdict
+from typing import Callable, Sequence
 
 from dispytch.listener.handler import Handler
 from dispytch.listener.consumer import EventSubscription
@@ -8,29 +10,24 @@ class HandlerGroup:
     def __init__(self):
         self._handlers: dict[EventSubscription, list[Handler]] = defaultdict(list)
 
-    def handler(self,
-                subscription: EventSubscription,
-                *,
-                retries: int = 0,
-                retry_on: type[Exception] = None,
-                retry_interval: float = 1.25):
+    def handler(
+            self,
+            subscription: EventSubscription,
+            *,
+            retries: int = 0,
+            retry_on: Sequence[type[Exception]] | None = None,
+            base_delay_sec: float = 1.0,
+            max_delay_sec: float = 30.0,
+            jitter: Callable[[float], float] = lambda t: random.uniform(0, t)
+    ):
         """
-           Decorator to register a handler function for a specific topic and event type.
-
-           Args:
-               retries (int, optional): Number of times to retry the handler on failure.
-                   Defaults to 0 (no retries).
-               retry_on (type[Exception], optional): Exception type to trigger retries.
-                   If not set, retries will be attempted on any exception.
-               retry_interval (float, optional): Delay in seconds between retries.
-                   Defaults to 1.25 seconds.
-
-           """
+        Decorator to register a handler function for a specific topic and event type.
+        """
 
         def decorator(callback):
             handlers = self._handlers[subscription]
 
-            handlers.append(Handler(callback, subscription, retries, retry_interval, retry_on))
+            handlers.append(Handler(callback, subscription, retries, retry_on, base_delay_sec, max_delay_sec, jitter))
             return callback
 
         return decorator
