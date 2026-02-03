@@ -21,9 +21,6 @@ class EventListener:
     Listens to an async event stream from the provided consumer and routes each event
     to the appropriate handler(s) based on topic and event type.
 
-    Args:
-        consumer (Consumer): The event source responsible for yielding incoming events.
-        route_delimiter (str): The symbol used to split topic names into segments for dynamic routing (default: ':').
     """
 
     def __init__(

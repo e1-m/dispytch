@@ -17,9 +17,6 @@ class EventEmitter:
 
     Wraps a low-level producer and emits structured EventBase instances
     to the appropriate topic with metadata and payload.
-
-    Args:
-        producer (Producer): The message producer responsible for sending events.
     """
 
     def __init__(self, producer: Producer, serializer: Serializer = None) -> None:
