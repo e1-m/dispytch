@@ -7,6 +7,8 @@ from dispytch.di.context import EventHandlerContext
 
 @asynccontextmanager
 async def solve_dependencies(func: Callable[..., Any], ctx: EventHandlerContext = None):
-    tree = get_dependency_tree(func)
-    async with tree.resolve(ctx) as deps:
-        yield deps
+    # TODO: Get rid of this function
+    # tree = get_dependency_tree(func)
+    # async with tree.resolve(ctx) as deps:
+    #     yield deps
+    ...

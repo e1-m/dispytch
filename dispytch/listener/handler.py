@@ -3,6 +3,8 @@ import random
 from inspect import isawaitable
 from typing import Callable, Any, Sequence
 
+from dispytch.di.builder import get_dependency_tree
+from dispytch.di.context import EventHandlerContext
 from dispytch.listener.consumer import EventSubscription
 
 
@@ -18,20 +20,24 @@ class Handler:
             jitter: Callable[[float], float] = lambda t: random.uniform(0, t),
     ):
         self.func = func
+        self.dependency_tree = get_dependency_tree(func)
         self.subscription = subscription
+
         self.retries = abs(retries)
         self.base_delay = max(0.0, base_delay_sec)
         self.max_delay = max_delay_sec
         self.retry_on = tuple(retry_on) if retry_on is not None else None
         self.jitter = jitter
 
-    async def handle(self, *args, **kwargs):
+    async def handle(self, ctx: EventHandlerContext):
         for attempt in range(self.retries + 1):  # noqa
             try:
-                res = self.func(*args, **kwargs)
-                if isawaitable(res):
-                    return await res
-                return res
+                async with self.dependency_tree.resolve(ctx) as deps:
+                    res = self.func(**deps)
+
+                    if isawaitable(res):
+                        return await res
+                    return res
             except Exception as e:
                 should_retry = (
                         self.retry_on is None or
