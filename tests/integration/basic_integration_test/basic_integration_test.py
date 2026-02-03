@@ -157,7 +157,7 @@ async def test_handler_with_retries(
     """Test handler retry functionality."""
     attempts = []
 
-    @listener.handler(subscription, retries=2, retry_interval=0)
+    @listener.handler(subscription, retries=2, base_delay_sec=0.1)
     async def handle_event_with_retries(event: Event[MyEventBody]):
         attempts.append(1)
         if len(attempts) <= 2:
