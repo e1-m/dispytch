@@ -6,9 +6,9 @@ from pydantic import BaseModel
 
 from dispytch import EventBase, Event, SubscriptionParam, EventSubscription
 from dispytch.emitter.producer import EventRoute
-from tests.integration.dynamic_topic_integration_test.redis_setup import *
-from tests.integration.dynamic_topic_integration_test.kafka_setup import *
-from tests.integration.dynamic_topic_integration_test.rabbitmq_setup import *
+from tests.integration.subscription_param_integration_test.redis_setup import *
+from tests.integration.subscription_param_integration_test.kafka_setup import *
+from tests.integration.subscription_param_integration_test.rabbitmq_setup import *
 
 
 class MyEventBody(BaseModel):
