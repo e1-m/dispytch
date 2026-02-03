@@ -5,7 +5,7 @@ import pytest
 
 from dispytch import Dependency
 from dispytch.di.extractor import extract_dependencies
-from dispytch.di.context import EventHandlerContext
+from dispytch.di.context import DIContext
 from dispytch.di.event import Event
 from dispytch.di.subscription_param import SubscriptionParam
 
@@ -63,7 +63,7 @@ async def test_multiple_segments_match(event_dict, func):
     assert isinstance(who_dep, Dependency)
 
     async with id_dep(
-            ctx=EventHandlerContext(
+            ctx=DIContext(
                 event=event_dict,
                 actual_event_route=tuple("test.topic.user.123".split('.')),
                 subscription_pattern=tuple("test.topic.{who}.{id}".split('.')),
@@ -72,7 +72,7 @@ async def test_multiple_segments_match(event_dict, func):
         assert isinstance(param, int)
         assert param == 123
 
-    async with who_dep(ctx=EventHandlerContext(
+    async with who_dep(ctx=DIContext(
             event=event_dict,
             actual_event_route=tuple("test.topic.user.123".split('.')),
             subscription_pattern=tuple("test.topic.{who}.{id}".split('.')),
@@ -95,7 +95,7 @@ async def test_multiple_args_depend_on_the_same_segment(event_dict):
     assert isinstance(who_second_dep, Dependency)
     assert isinstance(who_dep, Dependency)
 
-    async with who_second_dep(ctx=EventHandlerContext(
+    async with who_second_dep(ctx=DIContext(
             event=event_dict,
             actual_event_route=tuple("test.topic.user.123".split('.')),
             subscription_pattern=tuple("test.topic.{who}.{id}".split('.')),
@@ -103,7 +103,7 @@ async def test_multiple_args_depend_on_the_same_segment(event_dict):
         assert isinstance(param, str)
         assert param == "user"
 
-    async with who_dep(ctx=EventHandlerContext(
+    async with who_dep(ctx=DIContext(
             event=event_dict,
             actual_event_route=tuple("test.topic.user.123".split('.')),
             subscription_pattern=tuple("test.topic.{who}.{id}".split('.')),

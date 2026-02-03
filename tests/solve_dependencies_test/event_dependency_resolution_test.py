@@ -5,7 +5,7 @@ import pytest
 from pydantic import BaseModel
 
 from dispytch.di.dependency import Dependency
-from dispytch.di.context import EventHandlerContext
+from dispytch.di.context import DIContext
 from dispytch.di.event import Event
 from dispytch.di.solver import solve_dependencies
 
@@ -26,7 +26,7 @@ def event_dict():
 
 @pytest.fixture
 def handler_context(event_dict):
-    return EventHandlerContext(
+    return DIContext(
         event=event_dict,
         actual_event_route=("test-topic",),
         subscription_pattern=("test-topic",)

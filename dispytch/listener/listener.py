@@ -3,8 +3,7 @@ import logging
 import random
 from typing import Sequence, Callable
 
-from dispytch.di.event import Event
-from dispytch.di.context import EventHandlerContext
+from dispytch.di.context import DIContext
 from dispytch.listener.consumer import Consumer, Message, EventSubscription
 from dispytch.listener.dlq import DeadLetterHandler
 from dispytch.listener.handler import Handler
@@ -51,9 +50,7 @@ class EventListener:
             await asyncio.wait(self._tasks)
 
     async def _handle_message(self, msg: Message):
-        event = Event(
-            **self.deserializer.deserialize(msg.payload).model_dump()
-        )
+        event = self.deserializer.deserialize(msg.payload).model_dump()
 
         handlers = self._handlers.get(
             msg.subscription.get_path_segments(self.route_delimiter)
@@ -65,7 +62,7 @@ class EventListener:
 
         tasks = [asyncio.create_task(
             handler.handle(
-                EventHandlerContext(
+                DIContext(  # todo: replace with event handler context
                     event=event,
                     actual_event_route=msg.subscription.get_path_segments(self.route_delimiter),
                     subscription_pattern=handler.subscription.get_path_segments(self.route_delimiter),

@@ -3,7 +3,7 @@ import uuid
 import pytest
 from pydantic import BaseModel, ValidationError
 
-from dispytch.di.context import EventHandlerContext
+from dispytch.di.context import DIContext
 from dispytch.di.event import Event
 from dispytch.di.extractor import extract_dependencies
 from dispytch.di.dependency import Dependency
@@ -46,7 +46,7 @@ def event_with_additional_data():
 
 @pytest.fixture
 def event_handler_context_base(event):
-    return EventHandlerContext(
+    return DIContext(
         event=event,
         subscription_pattern=("topic",),
         actual_event_route=("topic",)

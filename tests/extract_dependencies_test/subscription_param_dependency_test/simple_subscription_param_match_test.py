@@ -5,7 +5,7 @@ import pytest
 
 from dispytch import Dependency
 from dispytch.di.extractor import extract_dependencies
-from dispytch.di.context import EventHandlerContext
+from dispytch.di.context import DIContext
 from dispytch.di.event import Event
 from dispytch.di.subscription_param import SubscriptionParam
 
@@ -70,7 +70,7 @@ async def test_segment_match(event_dict, func):
     assert isinstance(dep, Dependency)
 
     async with dep(
-            ctx=EventHandlerContext(
+            ctx=DIContext(
                 event=event_dict,
                 actual_event_route=tuple('test:topic:123'.split(':')),
                 subscription_pattern=tuple("test:topic:{value}".split(':'))

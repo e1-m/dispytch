@@ -6,7 +6,7 @@ import pytest
 
 from dispytch import Dependency
 from dispytch.di.extractor import extract_dependencies
-from dispytch.di.context import EventHandlerContext
+from dispytch.di.context import DIContext
 from dispytch.di.event import Event
 from dispytch.di.subscription_param import SubscriptionParam
 
@@ -34,10 +34,10 @@ async def test_literal_validation_success(event_dict):
     dep = result["value"]
     assert isinstance(dep, Dependency)
 
-    async with dep(ctx=EventHandlerContext(event=event_dict,
-                                           actual_event_route=tuple("test:topic:123".split(':')),
-                                           subscription_pattern=tuple("test:topic:{value}".split(':'))
-                                           )) as param:
+    async with dep(ctx=DIContext(event=event_dict,
+                                 actual_event_route=tuple("test:topic:123".split(':')),
+                                 subscription_pattern=tuple("test:topic:{value}".split(':'))
+                                 )) as param:
         assert isinstance(param, str)
         assert param == "123"
 
@@ -54,10 +54,10 @@ async def test_literal_validation_failure(event_dict):
     assert isinstance(dep, Dependency)
 
     with pytest.raises(ValueError):
-        dep(ctx=EventHandlerContext(event=event_dict,
-                                    actual_event_route=tuple("test:topic:123".split(':')),
-                                    subscription_pattern=tuple("test:topic:{value}".split(':'))
-                                    )
+        dep(ctx=DIContext(event=event_dict,
+                          actual_event_route=tuple("test:topic:123".split(':')),
+                          subscription_pattern=tuple("test:topic:{value}".split(':'))
+                          )
             )
 
 
@@ -72,10 +72,10 @@ async def test_int_validation_success(event_dict):
     dep = result["value"]
     assert isinstance(dep, Dependency)
 
-    async with dep(ctx=EventHandlerContext(event=event_dict,
-                                           actual_event_route=tuple("test:topic:123".split(':')),
-                                           subscription_pattern=tuple("test:topic:{value}".split(':'))
-                                           )) as param:
+    async with dep(ctx=DIContext(event=event_dict,
+                                 actual_event_route=tuple("test:topic:123".split(':')),
+                                 subscription_pattern=tuple("test:topic:{value}".split(':'))
+                                 )) as param:
         assert isinstance(param, int)
         assert param == 123
 
@@ -92,10 +92,10 @@ async def test_int_validation_failure(event_dict):
     assert isinstance(dep, Dependency)
 
     with pytest.raises(ValueError):
-        dep(ctx=EventHandlerContext(event=event_dict,
-                                    actual_event_route=tuple("test:topic:123".split(':')),
-                                    subscription_pattern=tuple("test:topic:{value}".split(':'))
-                                    )
+        dep(ctx=DIContext(event=event_dict,
+                          actual_event_route=tuple("test:topic:123".split(':')),
+                          subscription_pattern=tuple("test:topic:{value}".split(':'))
+                          )
             )
 
 
@@ -110,10 +110,10 @@ async def test_str_validation_success(event_dict):
     dep = result["value"]
     assert isinstance(dep, Dependency)
 
-    async with dep(ctx=EventHandlerContext(event=event_dict,
-                                           actual_event_route=tuple("test:topic:123".split(':')),
-                                           subscription_pattern=tuple("test:topic:{value}".split(':'))
-                                           )) as param:
+    async with dep(ctx=DIContext(event=event_dict,
+                                 actual_event_route=tuple("test:topic:123".split(':')),
+                                 subscription_pattern=tuple("test:topic:{value}".split(':'))
+                                 )) as param:
         assert isinstance(param, str)
         assert param == "123"
 
@@ -130,10 +130,10 @@ async def test_str_validation_failure(event_dict):
     assert isinstance(dep, Dependency)
 
     with pytest.raises(ValueError):
-        dep(ctx=EventHandlerContext(event=event_dict,
-                                    actual_event_route=tuple("test:topic:123".split(':')),
-                                    subscription_pattern=tuple("test:topic:{value}".split(':'))
-                                    ))
+        dep(ctx=DIContext(event=event_dict,
+                          actual_event_route=tuple("test:topic:123".split(':')),
+                          subscription_pattern=tuple("test:topic:{value}".split(':'))
+                          ))
 
 
 @pytest.mark.asyncio
@@ -149,10 +149,10 @@ async def test_str_validation_inappropriate_constrains(event_dict):
     assert isinstance(dep, Dependency)
 
     with pytest.raises(TypeError):
-        dep(ctx=EventHandlerContext(event=event_dict,
-                                    actual_event_route=tuple("test:topic:123".split(':')),
-                                    subscription_pattern=tuple("test:topic:{value}".split(':'))
-                                    ))
+        dep(ctx=DIContext(event=event_dict,
+                          actual_event_route=tuple("test:topic:123".split(':')),
+                          subscription_pattern=tuple("test:topic:{value}".split(':'))
+                          ))
 
 
 @pytest.mark.asyncio
@@ -166,10 +166,10 @@ async def test_decimal_validation_success(event_dict):
     dep = result["value"]
     assert isinstance(dep, Dependency)
 
-    async with dep(ctx=EventHandlerContext(event=event_dict,
-                                           actual_event_route=tuple("test:topic:123.45".split(':')),
-                                           subscription_pattern=tuple("test:topic:{value}".split(':'))
-                                           )) as param:
+    async with dep(ctx=DIContext(event=event_dict,
+                                 actual_event_route=tuple("test:topic:123.45".split(':')),
+                                 subscription_pattern=tuple("test:topic:{value}".split(':'))
+                                 )) as param:
         assert isinstance(param, Decimal)
         assert param == Decimal('123.45')
 
@@ -187,8 +187,8 @@ async def test_decimal_validation_failure(event_dict):
 
     with pytest.raises(ValueError):
         dep(
-            ctx=EventHandlerContext(event=event_dict,
-                                    actual_event_route=tuple("test:topic:123.45".split(':')),
-                                    subscription_pattern=tuple("test:topic:{value}".split(':'))
-                                    )
+            ctx=DIContext(event=event_dict,
+                          actual_event_route=tuple("test:topic:123.45".split(':')),
+                          subscription_pattern=tuple("test:topic:{value}".split(':'))
+                          )
         )

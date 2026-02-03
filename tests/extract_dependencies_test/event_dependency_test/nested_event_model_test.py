@@ -4,7 +4,7 @@ import pytest
 from pydantic import BaseModel
 
 from dispytch.di.dependency import Dependency
-from dispytch.di.context import EventHandlerContext
+from dispytch.di.context import DIContext
 from dispytch.di.event import Event
 from dispytch.di.extractor import extract_dependencies
 
@@ -57,7 +57,7 @@ async def test_nested_event(event_dict):
     dep = result["event_param"]
     assert isinstance(dep, Dependency)
 
-    async with dep(ctx=EventHandlerContext(
+    async with dep(ctx=DIContext(
             event=event_dict,
             subscription_pattern=("topic",),
             actual_event_route=("topic",)

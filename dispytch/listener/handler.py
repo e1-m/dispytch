@@ -4,7 +4,7 @@ from inspect import isawaitable
 from typing import Callable, Any, Sequence
 
 from dispytch.di.builder import get_dependency_tree
-from dispytch.di.context import EventHandlerContext
+from dispytch.di.context import DIContext
 from dispytch.listener.consumer import EventSubscription
 from dispytch.listener.dlq import DeadLetterHandler
 
@@ -32,10 +32,12 @@ class Handler:
         self.retry_on = tuple(retry_on) if retry_on is not None else None
         self.jitter = jitter
 
-    async def handle(self, ctx: EventHandlerContext):
+    async def handle(self, ctx: DIContext):
         for attempt in range(self.retries + 1):  # noqa
             try:
-                async with self.dependency_tree.resolve(ctx) as deps:
+                async with self.dependency_tree.resolve(
+                    ctx
+                ) as deps:
                     res = self.func(**deps)
 
                     if isawaitable(res):

@@ -6,7 +6,7 @@ from pydantic import BaseModel, TypeAdapter, ValidationError
 
 from dispytch.di.dependency import Dependency
 from dispytch.di.event import Event
-from dispytch.di.context import EventHandlerContext
+from dispytch.di.context import DIContext
 from dispytch.di.subscription_param import SubscriptionParam
 
 
@@ -60,8 +60,8 @@ def _extract_event_dependencies(func: Callable[..., Any]) -> dict[str, Dependenc
 
 
 def _make_event_dependency(body_model):
-    def context_to_event(ctx: EventHandlerContext) -> Event:
-        event_data = asdict(ctx.event)
+    def context_to_event(ctx: DIContext) -> Event:
+        event_data = ctx.event.copy()
         body = event_data.pop('body')
 
         return Event(body=body_model(**body), **event_data)
@@ -104,7 +104,7 @@ def _extract_subscription_param_dependencies(func: Callable[..., Any]) -> dict[s
 
 
 def _make_subscription_param_dependency(segment_name, field):
-    def extract_field_from_subscription_pattern(ctx: EventHandlerContext):
+    def extract_field_from_subscription_pattern(ctx: DIContext):
         value = _extract_param(
             actual=ctx.actual_event_route,
             pattern=ctx.subscription_pattern,

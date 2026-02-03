@@ -2,7 +2,7 @@ import asyncio
 from contextlib import AsyncExitStack, asynccontextmanager
 
 from dispytch.di.dependency import Dependency
-from dispytch.di.context import EventHandlerContext
+from dispytch.di.context import DIContext
 
 
 class DependencyNode:
@@ -14,7 +14,7 @@ class DependencyNode:
         self._tasks: dict[AsyncExitStack, asyncio.Task] = {}
 
     @asynccontextmanager
-    async def resolve(self, stack: AsyncExitStack, ctx: EventHandlerContext):
+    async def resolve(self, stack: AsyncExitStack, ctx: DIContext):
         tasks = [asyncio.create_task(
             stack.enter_async_context(
                 node.dependency.resolve(stack, ctx)
@@ -48,7 +48,7 @@ class DependencyTree:
         self.root_nodes = root_nodes
 
     @asynccontextmanager
-    async def resolve(self, ctx: EventHandlerContext):
+    async def resolve(self, ctx: DIContext):
         async with AsyncExitStack() as stack:  # noqa
             tasks = [asyncio.create_task(
                 stack.enter_async_context(
