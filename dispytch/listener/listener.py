@@ -6,7 +6,7 @@ from typing import Sequence, Callable
 from dispytch.di.event import Event
 from dispytch.di.context import EventHandlerContext
 from dispytch.listener.consumer import Consumer, Message, EventSubscription
-from dispytch.listener.dlq import DeadLetterHandler, DeadLetterLogger
+from dispytch.listener.dlq import DeadLetterHandler
 from dispytch.listener.handler import Handler
 from dispytch.listener.handler_group import HandlerGroup
 from dispytch.listener.handler_tree import HandlerTree
@@ -64,26 +64,17 @@ class EventListener:
             return
 
         tasks = [asyncio.create_task(
-            self._call_handler_with_injected_dependencies(msg.subscription, handler, event)
+            handler.handle(
+                EventHandlerContext(
+                    event=event,
+                    actual_event_route=msg.subscription.get_path_segments(self.route_delimiter),
+                    subscription_pattern=handler.subscription.get_path_segments(self.route_delimiter),
+                )
+            )
         ) for handler in handlers]
         await asyncio.gather(*tasks)
 
         await self.consumer.ack(msg)
-
-    async def _call_handler_with_injected_dependencies(
-            self,
-            route: EventSubscription,
-            handler: Handler,
-            event: Event
-    ):
-        actual_event_route = route.get_path_segments(self.route_delimiter)
-        subscription_pattern = handler.subscription.get_path_segments(self.route_delimiter)
-
-        await handler.handle(EventHandlerContext(
-            event=event,
-            actual_event_route=actual_event_route,
-            subscription_pattern=subscription_pattern,
-        ))
 
     def handler(
             self,
