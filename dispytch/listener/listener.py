@@ -89,7 +89,7 @@ class EventListener:
             try:
                 await handler.handle(**deps)
             except Exception as e:
-                await self.dlq.handle_dead_letter(event, e)
+                await self.dlq.handle(event, e)
 
     def handler(
             self,
