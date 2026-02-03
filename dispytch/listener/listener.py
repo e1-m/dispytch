@@ -7,6 +7,7 @@ from dispytch.di.event import Event
 from dispytch.di.context import EventHandlerContext
 from dispytch.di.solver import solve_dependencies
 from dispytch.listener.consumer import Consumer, Message, EventSubscription
+from dispytch.listener.dlq import DeadLetterHandler, DeadLetterLogger
 from dispytch.listener.handler import Handler
 from dispytch.listener.handler_group import HandlerGroup
 from dispytch.listener.handler_tree import HandlerTree
@@ -26,12 +27,14 @@ class EventListener:
     def __init__(
             self,
             consumer: Consumer,
+            route_delimiter: str = None,
             deserializer: Deserializer = None,
-            route_delimiter: str = None
+            dead_letter_handler: DeadLetterHandler = None,
     ):
         self.consumer = consumer
-        self.deserializer = deserializer or JSONDeserializer()
         self.route_delimiter: str = route_delimiter
+        self.deserializer = deserializer or JSONDeserializer()
+        self.dlq = dead_letter_handler or DeadLetterLogger()
         self._tasks = set()
         self._handlers: HandlerTree = HandlerTree()
 
@@ -74,17 +77,19 @@ class EventListener:
             handler: Handler,
             event: Event
     ):
+        actual_event_route = route.get_path_segments(self.route_delimiter)
+        subscription_pattern = handler.subscription.get_path_segments(self.route_delimiter)
+
         async with solve_dependencies(handler.func,
                                       EventHandlerContext(
                                           event=event,
-                                          actual_event_route=route.get_path_segments(self.route_delimiter),
-                                          subscription_pattern=handler.subscription.get_path_segments(
-                                              self.route_delimiter),
+                                          actual_event_route=actual_event_route,
+                                          subscription_pattern=subscription_pattern,
                                       )) as deps:
             try:
                 await handler.handle(**deps)
             except Exception as e:
-                logging.exception(f"Handler {handler.func.__name__} failed for event {event}: {e}")
+                await self.dlq.handle_dead_letter(event, e)
 
     def handler(
             self,
