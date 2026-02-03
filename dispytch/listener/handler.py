@@ -6,6 +6,7 @@ from typing import Callable, Any, Sequence
 from dispytch.di.builder import get_dependency_tree
 from dispytch.di.context import EventHandlerContext
 from dispytch.listener.consumer import EventSubscription
+from dispytch.listener.dlq import DeadLetterHandler
 
 
 class Handler:
@@ -13,6 +14,7 @@ class Handler:
             self,
             func: Callable[..., Any],
             subscription: EventSubscription,
+            dlh: DeadLetterHandler = None,
             retries: int = 0,
             retry_on: Sequence[type[Exception]] | None = None,
             base_delay_sec: float = 1.0,
@@ -22,6 +24,7 @@ class Handler:
         self.func = func
         self.dependency_tree = get_dependency_tree(func)
         self.subscription = subscription
+        self.dlh = dlh
 
         self.retries = abs(retries)
         self.base_delay = max(0.0, base_delay_sec)
@@ -45,7 +48,9 @@ class Handler:
                 )
 
                 if attempt == self.retries or not should_retry:
-                    raise e
+                    if self.dlh is None:
+                        raise e
+                    return await self.dlh.handle(ctx.event, e)
 
                 delay = min(
                     self.max_delay,

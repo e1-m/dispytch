@@ -28,12 +28,12 @@ class EventListener:
             consumer: Consumer,
             route_delimiter: str = None,
             deserializer: Deserializer = None,
-            dead_letter_handler: DeadLetterHandler = None,
+            default_dlh: DeadLetterHandler = None,
     ):
         self.consumer = consumer
         self.route_delimiter: str = route_delimiter
         self.deserializer = deserializer or JSONDeserializer()
-        self.dlq = dead_letter_handler or DeadLetterLogger()
+        self.default_dlh = default_dlh
         self._tasks = set()
         self._handlers: HandlerTree = HandlerTree()
 
@@ -79,19 +79,17 @@ class EventListener:
         actual_event_route = route.get_path_segments(self.route_delimiter)
         subscription_pattern = handler.subscription.get_path_segments(self.route_delimiter)
 
-        try:
-            await handler.handle(EventHandlerContext(
-                event=event,
-                actual_event_route=actual_event_route,
-                subscription_pattern=subscription_pattern,
-            ))
-        except Exception as e:
-            await self.dlq.handle(event, e)
+        await handler.handle(EventHandlerContext(
+            event=event,
+            actual_event_route=actual_event_route,
+            subscription_pattern=subscription_pattern,
+        ))
 
     def handler(
             self,
             subscription: EventSubscription,
             *,
+            dlh: DeadLetterHandler = None,
             retries: int = 0,
             retry_on: Sequence[type[Exception]] | None = None,
             base_delay_sec: float = 1.0,
@@ -105,7 +103,16 @@ class EventListener:
         def decorator(callback):
             self._handlers.insert(
                 subscription.get_path_segments(self.route_delimiter),
-                Handler(callback, subscription, retries, retry_on, base_delay_sec, max_delay_sec, jitter)
+                Handler(
+                    func=callback,
+                    subscription=subscription,
+                    dlh=dlh or self.default_dlh,
+                    retries=retries,
+                    retry_on=retry_on,
+                    base_delay_sec=base_delay_sec,
+                    max_delay_sec=max_delay_sec,
+                    jitter=jitter
+                )
             )
             return callback
 

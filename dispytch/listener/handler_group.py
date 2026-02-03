@@ -2,18 +2,22 @@ import random
 from collections import defaultdict
 from typing import Callable, Sequence
 
+from dispytch.listener.dlq import DeadLetterHandler
 from dispytch.listener.handler import Handler
 from dispytch.listener.consumer import EventSubscription
 
 
 class HandlerGroup:
-    def __init__(self):
+    def __init__(self, default_dlh: DeadLetterHandler = None):
+        self.default_dlh = default_dlh
+
         self._handlers: dict[EventSubscription, list[Handler]] = defaultdict(list)
 
     def handler(
             self,
             subscription: EventSubscription,
             *,
+            dlh: DeadLetterHandler = None,
             retries: int = 0,
             retry_on: Sequence[type[Exception]] | None = None,
             base_delay_sec: float = 1.0,
@@ -27,7 +31,18 @@ class HandlerGroup:
         def decorator(callback):
             handlers = self._handlers[subscription]
 
-            handlers.append(Handler(callback, subscription, retries, retry_on, base_delay_sec, max_delay_sec, jitter))
+            handlers.append(
+                Handler(
+                    func=callback,
+                    subscription=subscription,
+                    dlh=dlh or self.default_dlh,
+                    retries=retries,
+                    retry_on=retry_on,
+                    base_delay_sec=base_delay_sec,
+                    max_delay_sec=max_delay_sec,
+                    jitter=jitter
+                )
+            )
             return callback
 
         return decorator
