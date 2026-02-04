@@ -51,10 +51,9 @@ class EventListener:
 
     async def _handle_message(self, msg: Message):
         event = self.deserializer.deserialize(msg.payload).model_dump()
+        event_route = msg.subscription.get_path_segments(self.route_delimiter)
 
-        handlers = self._handlers.get(
-            msg.subscription.get_path_segments(self.route_delimiter)
-        )
+        handlers = self._handlers.get(event_route)
 
         if not handlers:
             logging.info(f'There is no handler for `{msg.subscription}`')
@@ -62,9 +61,9 @@ class EventListener:
 
         tasks = [asyncio.create_task(
             handler.handle(
-                DIContext(  # todo: replace with event handler context
+                DIContext(
                     event=event,
-                    actual_event_route=msg.subscription.get_path_segments(self.route_delimiter),
+                    actual_event_route=event_route,
                     subscription_pattern=handler.subscription.get_path_segments(self.route_delimiter),
                 )
             )
