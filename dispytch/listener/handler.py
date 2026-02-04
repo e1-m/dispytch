@@ -25,8 +25,9 @@ class Handler:
 
     async def handle(self, ctx: DIContext):
         prev_delay = 0.0
+        attempt = 0
 
-        for attempt in range(self.retries + 1):  # noqa
+        while True:
             try:
                 async with self.dependency_tree.resolve(ctx) as deps:
                     res = self.func(**deps)
@@ -41,4 +42,5 @@ class Handler:
                     return await self.dlh.handle(ctx.event, err)
 
                 prev_delay = self.retry_policy.get_delay(attempt, prev_delay)
+                attempt += 1
                 await asyncio.sleep(prev_delay)
