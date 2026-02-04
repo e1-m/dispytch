@@ -1,5 +1,6 @@
 from collections import defaultdict
 
+from dispytch.listener.consumer import EventSubscription
 from dispytch.listener.handler import Handler
 
 
@@ -7,7 +8,7 @@ class HandlerTree:
     def __init__(self):
         self.root: HandlerNode = HandlerNode()
 
-    def insert(self, path: tuple[str, ...], *handlers: Handler):
+    def insert(self, path: tuple[str, ...], *handlers: tuple[EventSubscription, Handler]):
         segments = tuple(
             '*'
             if (segment.startswith('{') and segment.endswith('}'))
@@ -17,23 +18,23 @@ class HandlerTree:
 
         self.root.insert(segments, *handlers)
 
-    def get(self, key: tuple[str, ...]) -> list[Handler]:
+    def get(self, key: tuple[str, ...]) -> list[tuple[EventSubscription, Handler]]:
         return self.root.get(key)
 
 
 class HandlerNode:
     def __init__(self):
-        self.handlers: list[Handler] = []
+        self.handlers: list[tuple[EventSubscription, Handler]] = []
         self.children: dict[str, HandlerNode] = defaultdict(HandlerNode)
 
-    def insert(self, key: tuple[str, ...], *handlers: Handler):
+    def insert(self, key: tuple[str, ...], *handlers: tuple[EventSubscription, Handler]):
         if len(key) == 0:
             self.handlers.extend(handlers)
             return
 
         self.children[key[0]].insert(key[1:], *handlers)
 
-    def get(self, key: tuple[str, ...]) -> list[Handler]:
+    def get(self, key: tuple[str, ...]) -> list[tuple[EventSubscription, Handler]]:
         if len(key) == 0:
             return self.handlers
 

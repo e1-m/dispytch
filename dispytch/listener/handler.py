@@ -3,7 +3,6 @@ from inspect import isawaitable
 from typing import Callable, Any
 
 from dispytch.di.solver import DIResolver
-from dispytch.listener.consumer import EventSubscription
 from dispytch.listener.dlq import DeadLetterHandler
 from dispytch.listener.retry import RetryPolicy
 
@@ -12,12 +11,10 @@ class Handler:
     def __init__(
             self,
             func: Callable[..., Any],
-            subscription: EventSubscription,
             dlh: DeadLetterHandler = None,
             retry_policy: RetryPolicy = None,
     ):
         self.func = func
-        self.subscription = subscription
         self.dlh = dlh
         self.retry_policy = retry_policy
 

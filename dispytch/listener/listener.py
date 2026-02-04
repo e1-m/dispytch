@@ -67,11 +67,11 @@ class EventListener:
                     DIContext(
                         event=event,
                         actual_event_route=event_route,
-                        subscription_pattern=handler.subscription.get_path_segments(self.route_delimiter),
+                        subscription_pattern=subscription.get_path_segments(self.route_delimiter),
                     )
                 )
             )
-        ) for handler in handlers]
+        ) for subscription, handler in handlers]
         await asyncio.gather(*tasks)
 
         await self.consumer.ack(msg)
@@ -90,11 +90,13 @@ class EventListener:
         def decorator(callback):
             self._handlers.insert(
                 subscription.get_path_segments(self.route_delimiter),
-                Handler(
-                    func=callback,
-                    subscription=subscription,
-                    dlh=dlh or self.default_dlh,
-                    retry_policy=retry_policy or self.default_retry_policy,
+                (
+                    subscription,
+                    Handler(
+                        func=callback,
+                        dlh=dlh or self.default_dlh,
+                        retry_policy=retry_policy or self.default_retry_policy,
+                    )
                 )
             )
             return callback
@@ -111,5 +113,5 @@ class EventListener:
         for subscription in group.get_subscriptions():
             self._handlers.insert(
                 subscription.get_path_segments(self.route_delimiter),
-                *group.get_handlers(subscription)
+                *[(subscription, handler) for handler in group.get_handlers(subscription)]
             )

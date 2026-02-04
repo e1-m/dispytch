@@ -36,7 +36,6 @@ class HandlerGroup:
             handlers.append(
                 Handler(
                     func=callback,
-                    subscription=subscription,
                     dlh=dlh or self.default_dlh,
                     retry_policy=retry_policy or self.default_retry_policy,
                 )
