@@ -6,6 +6,7 @@ from typing import Annotated
 
 from dispytch import EventBase, Event, EventEmitter, EventListener, Dependency, EventSubscription
 from dispytch.emitter.producer import EventRoute
+from dispytch.listener.retry import ExponentialBackoffWithFullJitter
 
 from tests.integration.basic_integration_test.kafka_setup import *
 from tests.integration.basic_integration_test.rabbitmq_setup import *
@@ -157,7 +158,7 @@ async def test_handler_with_retries(
     """Test handler retry functionality."""
     attempts = []
 
-    @listener.handler(subscription, retries=2, base_delay_sec=0.1)
+    @listener.handler(subscription, retry_policy=ExponentialBackoffWithFullJitter(retries=2, base_delay_sec=0.1))
     async def handle_event_with_retries(event: Event[MyEventBody]):
         attempts.append(1)
         if len(attempts) <= 2:
