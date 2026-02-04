@@ -9,6 +9,7 @@ from dispytch.listener.dlq import DeadLetterHandler
 from dispytch.listener.handler import Handler
 from dispytch.listener.handler_group import HandlerGroup
 from dispytch.listener.handler_tree import HandlerTree
+from dispytch.listener.retry import RetryPolicy
 from dispytch.serialization import Deserializer
 from dispytch.serialization.json import JSONDeserializer
 
@@ -28,11 +29,13 @@ class EventListener:
             route_delimiter: str = None,
             deserializer: Deserializer = None,
             default_dlh: DeadLetterHandler = None,
+            default_retry_policy: RetryPolicy = None,
     ):
         self.consumer = consumer
         self.route_delimiter: str = route_delimiter
         self.deserializer = deserializer or JSONDeserializer()
         self.default_dlh = default_dlh
+        self.default_retry_policy = default_retry_policy
         self._tasks = set()
         self._handlers: HandlerTree = HandlerTree()
 
@@ -77,11 +80,7 @@ class EventListener:
             subscription: EventSubscription,
             *,
             dlh: DeadLetterHandler = None,
-            retries: int = 0,
-            retry_on: Sequence[type[Exception]] | None = None,
-            base_delay_sec: float = 1.0,
-            max_delay_sec: float = 30.0,
-            jitter: Callable[[float], float] = lambda t: random.uniform(0, t)
+            retry_policy: RetryPolicy = None,
     ):
         """
             Decorator to register a handler function for a specific topic and event type.
@@ -94,11 +93,7 @@ class EventListener:
                     func=callback,
                     subscription=subscription,
                     dlh=dlh or self.default_dlh,
-                    retries=retries,
-                    retry_on=retry_on,
-                    base_delay_sec=base_delay_sec,
-                    max_delay_sec=max_delay_sec,
-                    jitter=jitter
+                    retry_policy=retry_policy or self.default_retry_policy,
                 )
             )
             return callback
