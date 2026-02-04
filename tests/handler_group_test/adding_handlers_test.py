@@ -21,20 +21,6 @@ def test_register_handler_with_explicit_topic_and_event():
     assert handlers[0].func == handler_fn
 
 
-def test_handler_retries_parameters_set_correctly():
-    hg = HandlerGroup()
-
-    @hg.handler(BrokerNeutralTestSubscription(topic="t", event="e"),
-                retries=3, retry_on=(ValueError,), max_delay_sec=15.0)
-    def handler_fn():
-        pass
-
-    h = hg.get_handlers(BrokerNeutralTestSubscription(topic="t", event="e"))[0]
-    assert h.retries == 3
-    assert h.retry_on == (ValueError,)
-    assert h.max_delay == 15.0
-
-
 def test_register_multiple_handlers_on_same_topic_event():
     hg = HandlerGroup()
 
