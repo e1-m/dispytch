@@ -3,7 +3,7 @@ from unittest.mock import Mock
 from dispytch.listener.handler_group import HandlerGroup
 from dispytch.listener.consumer import EventSubscription
 from dispytch.listener.dlq import DeadLetterHandler
-from dispytch.listener.retry import RetryPolicy
+from dispytch.listener.retry_policy import RetryPolicy
 
 
 class MockSubscription(EventSubscription):

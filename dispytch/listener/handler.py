@@ -4,7 +4,7 @@ from typing import Callable, Any
 
 from dispytch.di.solver import DIResolver
 from dispytch.listener.dlq import DeadLetterHandler
-from dispytch.listener.retry import RetryPolicy
+from dispytch.listener.retry_policy import RetryPolicy
 
 
 class Handler:

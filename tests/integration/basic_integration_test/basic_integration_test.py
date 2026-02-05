@@ -6,7 +6,7 @@ from typing import Annotated
 
 from dispytch import EventBase, Event, EventEmitter, EventListener, Dependency, EventSubscription
 from dispytch.emitter.producer import EventRoute
-from dispytch.listener.retry import ExponentialBackoffWithFullJitter
+from dispytch.listener.retry_policy import ExponentialBackoffWithFullJitter
 
 from tests.integration.basic_integration_test.kafka_setup import *
 from tests.integration.basic_integration_test.rabbitmq_setup import *

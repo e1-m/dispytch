@@ -8,7 +8,7 @@ from dispytch.listener.dlq import DeadLetterHandler
 from dispytch.listener.handler import Handler
 from dispytch.listener.handler_group import HandlerGroup
 from dispytch.listener.handler_tree import HandlerTree
-from dispytch.listener.retry import RetryPolicy
+from dispytch.listener.retry_policy import RetryPolicy
 from dispytch.serialization import Deserializer
 from dispytch.serialization.json import JSONDeserializer
 

@@ -5,7 +5,7 @@ from typing import Callable, Sequence
 from dispytch.listener.dlq import DeadLetterHandler
 from dispytch.listener.handler import Handler
 from dispytch.listener.consumer import EventSubscription
-from dispytch.listener.retry import RetryPolicy
+from dispytch.listener.retry_policy import RetryPolicy
 
 
 class HandlerGroup:
