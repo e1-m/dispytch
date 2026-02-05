@@ -1,12 +1,14 @@
 import logging
-from abc import ABC, abstractmethod
+
+from dispytch.di.event import Event
+from typing import Protocol
 
 
-class DeadLetterHandler(ABC):
-    @abstractmethod
-    async def handle(self, error: Exception) -> None: ...
+class DeadLetterHandler(Protocol):
+    async def handle(self, error: Exception, **kwargs) -> None: ...
 
 
-class DeadLetterLogger(DeadLetterHandler):
-    async def handle(self, error: Exception) -> None:
-        logging.exception(f"Handling failed for event with error: {error}")
+class DeadLetterLogger:
+    @staticmethod
+    async def handle(error: Exception, event: Event) -> None:
+        logging.exception(f"Handling failed for event {event} with error: {error}")

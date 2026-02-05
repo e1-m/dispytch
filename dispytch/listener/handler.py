@@ -34,7 +34,9 @@ class Handler:
                 if self.retry_policy is None or not self.retry_policy.should_retry(attempt, err):
                     if self.dlh is None:
                         raise err
-                    return await self.dlh.handle(err)
+
+                    async with di.resolve_internal_only(self.func) as deps:
+                        return await self.dlh.handle(err, **deps)
 
                 prev_delay = self.retry_policy.get_delay(attempt, prev_delay)
                 attempt += 1

@@ -16,6 +16,7 @@ def di_mock():
 
         di = Mock()
         di.resolve.return_value = cm_mock
+        di.resolve_internal_only.return_value = cm_mock
         return di
 
     return inner
@@ -81,3 +82,16 @@ async def test_handler_dlh_is_not_called_when_retries_exhausted_on_success(di_mo
     assert mock_func.call_count == 3
     assert result == "success"
     mock_dlh.handle.assert_not_called()
+
+
+@pytest.mark.asyncio
+async def test_handler_dlh_is_called_with_dependencies_injected(di_mock):
+    err = ValueError()
+    mock_func = Mock(side_effect=[err, "success"])
+    mock_dlh = AsyncMock()
+
+    handler = Handler(func=mock_func, retry_policy=None, dlh=mock_dlh)
+
+    await handler.handle(di_mock({"dep1": "deps"}))
+
+    mock_dlh.handle.assert_called_once_with(err, dep1="deps")

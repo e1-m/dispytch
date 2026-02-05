@@ -18,6 +18,13 @@ def extract_dependencies(func: Callable[..., Any]) -> dict[str, Dependency]:
     return dependencies
 
 
+def extract_internal_dependencies(func: Callable[..., Any]) -> dict[str, Dependency]:
+    dependencies = _extract_event_dependencies(func)
+    dependencies.update(_extract_subscription_param_dependencies(func))
+
+    return dependencies
+
+
 def _extract_user_defined_dependencies(func: Callable[..., Any]) -> dict[str, Dependency]:
     deps = {}
 

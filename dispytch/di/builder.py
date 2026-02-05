@@ -2,7 +2,7 @@ from functools import lru_cache
 from typing import Callable, Any
 
 from dispytch.di.exc import CyclicDependencyError
-from dispytch.di.extractor import extract_dependencies
+from dispytch.di.extractor import extract_dependencies, extract_internal_dependencies
 
 from dispytch.di.tree import DependencyNode, ChildNode, DependencyTree
 
@@ -10,6 +10,18 @@ from dispytch.di.tree import DependencyNode, ChildNode, DependencyTree
 @lru_cache
 def get_dependency_tree(func: Callable[..., Any]) -> DependencyTree:
     return DependencyTree(_build_dependency_branches(func, {}, set()))
+
+
+@lru_cache
+def get_internal_dependencies_tree(func: Callable[..., Any]) -> DependencyTree:
+    children = []
+
+    dependencies = extract_internal_dependencies(func)
+
+    for param_name, dependency in dependencies.items():
+        children.append(ChildNode(param_name, DependencyNode(dependency, [])))
+
+    return DependencyTree(children)
 
 
 def _build_dependency_branches(func: Callable[..., Any],

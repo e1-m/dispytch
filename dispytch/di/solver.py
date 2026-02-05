@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 from typing import Callable, Any
 
-from dispytch.di.builder import get_dependency_tree
+from dispytch.di.builder import get_dependency_tree, get_internal_dependencies_tree
 from dispytch.di.context import DIContext
 
 
@@ -20,5 +20,11 @@ class DIResolver:
     @asynccontextmanager
     async def resolve(self, func: Callable[..., Any]) -> dict[str, Any]:
         tree = get_dependency_tree(func)
+        async with tree.resolve(self.ctx) as deps:
+            yield deps
+
+    @asynccontextmanager
+    async def resolve_internal_only(self, func: Callable[..., Any]) -> dict[str, Any]:
+        tree = get_internal_dependencies_tree(func)
         async with tree.resolve(self.ctx) as deps:
             yield deps
