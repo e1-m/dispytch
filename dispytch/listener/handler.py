@@ -27,15 +27,13 @@ class Handler:
                 async with di.resolve(self.func) as deps:
                     res = self.func(**deps)
 
-                    if isawaitable(res):
-                        return await res
-                    return res
+                    return await res if isawaitable(res) else res
             except Exception as err:
                 if self.retry_policy is None or not self.retry_policy.should_retry(attempt, err):
                     if self.dlh is None:
                         raise err
 
-                    async with di.resolve_internal_only(self.func) as deps:
+                    async with di.resolve_internal_only(self.dlh.handle) as deps:
                         return await self.dlh.handle(err, **deps)
 
                 prev_delay = self.retry_policy.get_delay(attempt, prev_delay)
