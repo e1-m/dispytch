@@ -29,7 +29,9 @@ class Handler:
 
                     return await res if isawaitable(res) else res
             except Exception as err:
-                if self.retry_policy is None or not self.retry_policy.should_retry(attempt, err):
+                should_retry = self.retry_policy is not None and self.retry_policy.should_retry(attempt, err)
+
+                if not should_retry:
                     if self.dlh is None:
                         raise err
 
