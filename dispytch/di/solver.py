@@ -5,6 +5,14 @@ from dispytch.di.builder import get_dependency_tree
 from dispytch.di.context import DIContext
 
 
+# This is a bridge for tests. Shouldn't be used anywhere in the source code except tests
+@asynccontextmanager
+async def solve_dependencies(func: Callable[..., Any], ctx: DIContext = None) -> dict[str, Any]:
+    di = DIResolver(ctx)
+    async with di.resolve(func) as deps:
+        yield deps
+
+
 class DIResolver:
     def __init__(self, ctx: DIContext):
         self.ctx = ctx
