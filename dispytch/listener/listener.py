@@ -4,7 +4,7 @@ import logging
 from dispytch.di.context import DIContext
 from dispytch.di.solver import DIResolver
 from dispytch.listener.consumer import Consumer, Message, EventSubscription
-from dispytch.listener.dlq import DeadLetterHandler
+from dispytch.listener.dlh import DeadLetterHandler
 from dispytch.listener.handler import Handler
 from dispytch.listener.handler_group import HandlerGroup
 from dispytch.listener.handler_tree import HandlerTree

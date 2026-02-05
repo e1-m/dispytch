@@ -3,7 +3,7 @@ from inspect import isawaitable
 from typing import Callable, Any
 
 from dispytch.di.solver import DIResolver
-from dispytch.listener.dlq import DeadLetterHandler
+from dispytch.listener.dlh import DeadLetterHandler
 from dispytch.listener.retry_policy import RetryPolicy
 
 
