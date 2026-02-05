@@ -48,7 +48,8 @@ class Dependency:
     Args:
         func: A callable, generator, or context manager that provides the dependency.
         use_cache:
-            If True (default), the result will be cached and reused across injections.
+            If True (default), the result will be cached and reused within the same function call
+             if this dependency is referenced multiple times.
             If False, the dependency will be freshly resolved every time, and no caching will occur.
     """
 
