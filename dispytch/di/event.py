@@ -1,11 +1,9 @@
-from dataclasses import dataclass
+from typing import Annotated
 
 
-@dataclass
-class Event[Body]:
-    # TODO: change handler example api
-    """ Represents an event to be used as a dependency in you handler functions
-    This class is generic, allowing for schema-on-read validation using typed payloads.
+class _Event:
+    # TODO: Rewrite the handler example
+    """ Represents an event marker to be used as a dependency in you handler functions
 
     Example::
 
@@ -19,6 +17,7 @@ class Event[Body]:
 
     """
 
-    id: str
-    body: Body
-    timestamp: int
+    pass
+
+
+type Event[T] = Annotated[T, _Event]

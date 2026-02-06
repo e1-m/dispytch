@@ -54,24 +54,24 @@ def _extract_event_dependencies(func: Callable[..., Any]) -> dict[str, Dependenc
     hints.pop('return', None)
 
     for name, annotation in hints.items():
-        if get_origin(annotation) is Event:
-            event_body_model, *_ = get_args(annotation)
-            if not issubclass(event_body_model, BaseModel):
-                raise TypeError(f"Event body model must be a subclass of pydantic.BaseModel, got {event_body_model}")
-            deps[name] = _make_event_dependency(body_model=event_body_model)
-
-        elif annotation is Event:
+        if annotation is Event:
             deps[name] = _make_event_dependency(body_model=dict)
+
+        elif get_origin(annotation) is Event:
+            event_body_model, *_ = get_args(annotation)
+
+            if not issubclass(event_body_model, BaseModel):
+                raise TypeError(
+                    f"Event body model must be a subclass of pydantic.BaseModel, got {event_body_model}"
+                )
+            deps[name] = _make_event_dependency(body_model=event_body_model)
 
     return deps
 
 
 def _make_event_dependency(body_model):
     def context_to_event(ctx: DIContext) -> Event:
-        event_data = ctx.event.copy()
-        body = event_data.pop('body')
-
-        return Event(body=body_model(**body), **event_data)
+        return body_model(**ctx.event)
 
     return Dependency(context_to_event)
 

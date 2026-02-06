@@ -52,7 +52,7 @@ class EventListener:
             await asyncio.wait(self._tasks)
 
     async def _handle_message(self, msg: Message):
-        event = self.deserializer.deserialize(msg.payload).model_dump()
+        event = self.deserializer.deserialize(msg.payload)
         event_route = msg.subscription.get_path_segments(self.route_delimiter)
 
         handlers = self._handlers.get(event_route)

@@ -1,9 +1,8 @@
 import msgpack
 
-from dispytch.serialization.deserializer import Deserializer, MessagePayload
-from dispytch.serialization.validator import validate_payload
+from dispytch.serialization.deserializer import Deserializer
 
 
 class MessagePackDeserializer(Deserializer):
-    def deserialize(self, payload: bytes) -> MessagePayload:
-        return validate_payload(msgpack.unpackb(payload, raw=False))
+    def deserialize(self, payload: bytes) -> dict:
+        return msgpack.unpackb(payload, raw=False)
