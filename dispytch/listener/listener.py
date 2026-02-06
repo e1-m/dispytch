@@ -1,11 +1,9 @@
 import asyncio
 import logging
 
-from dispytch.di.context import DIContext
-from dispytch.di.solver import DIResolver
 from dispytch.listener.consumer import Consumer, Message, EventSubscription
 from dispytch.listener.dlh import DeadLetterHandler
-from dispytch.listener.handler import Handler
+from dispytch.listener.handler import Handler, EventHandlerContext
 from dispytch.listener.handler_group import HandlerGroup
 from dispytch.listener.handler_tree import HandlerTree
 from dispytch.listener.retry_policy import RetryPolicy
@@ -63,12 +61,10 @@ class EventListener:
 
         tasks = [asyncio.create_task(
             handler.handle(
-                DIResolver(
-                    DIContext(
-                        event=event,
-                        actual_event_route=event_route,
-                        subscription_pattern=subscription.get_path_segments(self.route_delimiter),
-                    )
+                EventHandlerContext(
+                    event=event,
+                    actual_event_route=event_route,
+                    subscription_pattern=subscription.get_path_segments(self.route_delimiter),
                 )
             )
         ) for subscription, handler in handlers]

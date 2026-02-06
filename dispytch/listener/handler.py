@@ -1,10 +1,20 @@
 import asyncio
+from dataclasses import dataclass
 from inspect import isawaitable
 from typing import Callable, Any
 
+from dispytch.di.context import DIContext
 from dispytch.di.solver import DIResolver
 from dispytch.listener.dlh import DeadLetterHandler
+from dispytch.listener.middleware import Middleware
 from dispytch.listener.retry_policy import RetryPolicy
+
+
+@dataclass
+class EventHandlerContext:
+    event: dict
+    subscription_pattern: tuple[str, ...]
+    actual_event_route: tuple[str, ...]
 
 
 class Handler:
@@ -13,15 +23,23 @@ class Handler:
             func: Callable[..., Any],
             dlh: DeadLetterHandler = None,
             retry_policy: RetryPolicy = None,
+            middlewares: list[Middleware] = None,
     ):
         self.func = func
         self.dlh = dlh
         self.retry_policy = retry_policy
+        self.middlewares = middlewares
 
-    async def handle(self, di: DIResolver):
+    async def handle(self, ctx: EventHandlerContext):
+        di = DIResolver(
+            DIContext(
+                event=ctx.event,
+                subscription_pattern=ctx.subscription_pattern,
+                actual_event_route=ctx.actual_event_route,
+            )
+        )
         prev_delay = 0.0
         attempt = 0
-
         while True:
             try:
                 async with di.resolve(self.func) as deps:
