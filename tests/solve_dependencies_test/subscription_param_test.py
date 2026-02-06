@@ -13,14 +13,10 @@ from dispytch.di.subscription_param import SubscriptionParam
 
 @pytest.fixture
 def event_dict():
-    return Event(**{
-        'id': str(uuid.uuid4()),
-        'body': {
-            'name': 'test',
-            'value': 42
-        },
-        'timestamp': 100
-    })
+    return {
+        'name': 'test',
+        'value': 42
+    }
 
 
 @pytest.fixture

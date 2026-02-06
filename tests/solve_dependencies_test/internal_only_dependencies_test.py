@@ -21,7 +21,7 @@ def some_user_dep():
 @pytest.mark.asyncio
 async def test_resolve_event_dependency():
     ctx = DIContext(
-        event={"id": "123", "timestamp": 1000, "body": {"name": "John", "age": 30}},
+        event={"name": "John", "age": 30},
         subscription_pattern=("user", "{id}"),
         actual_event_route=("user", "123")
     )
@@ -33,18 +33,15 @@ async def test_resolve_event_dependency():
     async with resolver.resolve_internal_only(my_handler) as deps:
         assert "event" in deps
         event = deps["event"]
-        assert isinstance(event, Event)
-        assert isinstance(event.body, MyBody)
-        assert event.body.name == "John"
-        assert event.body.age == 30
-        assert event.id == "123"
-        assert event.timestamp == 1000
+        assert isinstance(event, MyBody)
+        assert event.name == "John"
+        assert event.age == 30
 
 
 @pytest.mark.asyncio
 async def test_resolve_subscription_param():
     ctx = DIContext(
-        event={"id": "123", "timestamp": 1000, "body": {}},
+        event={},
         subscription_pattern=("user", "{user_id}", "action", "{action_id}"),
         actual_event_route=("user", "456", "action", "789")
     )
@@ -61,7 +58,7 @@ async def test_resolve_subscription_param():
 @pytest.mark.asyncio
 async def test_ignores_user_defined_dependencies():
     ctx = DIContext(
-        event={"id": "123", "timestamp": 1000, "body": {"name": "John", "age": 30}},
+        event={"name": "John", "age": 30},
         subscription_pattern=(),
         actual_event_route=()
     )
@@ -78,7 +75,7 @@ async def test_ignores_user_defined_dependencies():
 @pytest.mark.asyncio
 async def test_mixed_internal_dependencies():
     ctx = DIContext(
-        event={"id": "123", "timestamp": 1000, "body": {"name": "John", "age": 30}},
+        event={"name": "John", "age": 30},
         subscription_pattern=("org", "{org_id}"),
         actual_event_route=("org", "my-org")
     )
@@ -89,13 +86,13 @@ async def test_mixed_internal_dependencies():
 
     async with resolver.resolve_internal_only(my_handler) as deps:
         assert deps["org_id"] == "my-org"
-        assert deps["event"].body.name == "John"
+        assert deps["event"].name == "John"
 
 
 @pytest.mark.asyncio
 async def test_resolve_generic_event():
     ctx = DIContext(
-        event={"id": "123", "timestamp": 1000, "body": {"any": "data"}},
+        event={"any": "data"},
         subscription_pattern=(),
         actual_event_route=()
     )
@@ -105,13 +102,13 @@ async def test_resolve_generic_event():
         pass
 
     async with resolver.resolve_internal_only(my_handler) as deps:
-        assert deps["event"].body == {"any": "data"}
+        assert deps["event"] == {"any": "data"}
 
 
 @pytest.mark.asyncio
 async def test_subscription_param_missing_in_pattern():
     ctx = DIContext(
-        event={"id": "123", "timestamp": 1000, "body": {}},
+        event={},
         subscription_pattern=("user", "{id}"),
         actual_event_route=("user", "123")
     )
@@ -128,7 +125,7 @@ async def test_subscription_param_missing_in_pattern():
 @pytest.mark.asyncio
 async def test_subscription_param_validation_error():
     ctx = DIContext(
-        event={"id": "123", "timestamp": 1000, "body": {}},
+        event={},
         subscription_pattern=("user", "{user_id}"),
         actual_event_route=("user", "not-an-int")
     )
@@ -145,7 +142,7 @@ async def test_subscription_param_validation_error():
 @pytest.mark.asyncio
 async def test_resolve_internal_only_same_dependency_twice():
     ctx = DIContext(
-        event={"id": "123", "timestamp": 1000, "body": {"data": "test"}},
+        event={"data": "test"},
         subscription_pattern=(),
         actual_event_route=()
     )
@@ -157,7 +154,7 @@ async def test_resolve_internal_only_same_dependency_twice():
     async with resolver.resolve_internal_only(my_handler) as deps:
         assert "event1" in deps
         assert "event2" in deps
-        assert deps["event1"].id == "123"
-        assert deps["event2"].id == "123"
+        assert deps["event1"]["data"] == "test"
+        assert deps["event2"]["data"] == "test"
 
         assert deps["event1"] is not deps["event2"]

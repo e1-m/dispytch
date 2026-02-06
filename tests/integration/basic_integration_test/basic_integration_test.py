@@ -87,8 +87,8 @@ async def test_emit_and_receive(
         pass
 
     assert len(received_events) == 1
-    assert received_events[0].body.value == test_event.value
-    assert received_events[0].body.message == test_event.message
+    assert received_events[0].value == test_event.value
+    assert received_events[0].message == test_event.message
 
 
 @pytest.mark.asyncio
@@ -135,8 +135,8 @@ async def test_multiple_events(
 
     assert len(received_events) == num_events
     for i in range(num_events):
-        assert received_events[i].body.value == i
-        assert received_events[i].body.message == f"test message {i}"
+        assert received_events[i].value == i
+        assert received_events[i].message == f"test message {i}"
 
 
 @pytest.mark.asyncio
@@ -204,10 +204,10 @@ async def test_handler_with_dependencies(
     results = []
 
     async def value_provider(event: Event[MyEventBody]):
-        return event.body.value * 2
+        return event.value * 2
 
     async def message_provider(event: Event[MyEventBody]):
-        return f"Processed: {event.body.message}"
+        return f"Processed: {event.message}"
 
     @listener.handler(subscription)
     async def handle_event_with_deps(
@@ -216,7 +216,7 @@ async def test_handler_with_dependencies(
             processed_message: Annotated[str, Dependency(message_provider)]
     ):
         results.append({
-            "original_value": event.body.value,
+            "original_value": event.value,
             "doubled_value": doubled_value,
             "processed_message": processed_message
         })

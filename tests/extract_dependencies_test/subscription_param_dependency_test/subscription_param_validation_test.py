@@ -1,4 +1,3 @@
-import uuid
 from decimal import Decimal
 from typing import Annotated, Literal
 
@@ -7,20 +6,15 @@ import pytest
 from dispytch import Dependency
 from dispytch.di.extractor import extract_dependencies
 from dispytch.di.context import DIContext
-from dispytch.di.event import Event
 from dispytch.di.subscription_param import SubscriptionParam
 
 
 @pytest.fixture
 def event_dict():
-    return Event(**{
-        'id': str(uuid.uuid4()),
-        'body': {
-            'name': 'test',
-            'value': 42
-        },
-        'timestamp': 100
-    })
+    return {
+        'name': 'test',
+        'value': 42
+    }
 
 
 @pytest.mark.asyncio

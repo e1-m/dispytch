@@ -13,12 +13,8 @@ from dispytch.di.solver import solve_dependencies
 @pytest.fixture
 def event_dict():
     return {
-        'id': str(uuid.uuid4()),
-        'body': {
-            'name': 'test',
-            'value': 42
-        },
-        'timestamp': 100
+        'name': 'test',
+        'value': 42
     }
 
 
@@ -49,10 +45,9 @@ async def test_single_event_dependency(handler_context):
         assert len(deps) == 1
 
         dep = deps["event"]
-        assert isinstance(dep, Event)
-        assert isinstance(dep.body, EventBody)
-        assert dep.body.name == handler_context.event['body']['name']
-        assert dep.body.value == handler_context.event['body']['value']
+        assert isinstance(dep, EventBody)
+        assert dep.name == handler_context.event['name']
+        assert dep.value == handler_context.event['value']
 
 
 @pytest.mark.asyncio
@@ -60,7 +55,7 @@ async def test_nested_event_dependency(handler_context):
     """Test function with a single event as a dependency of another dependency."""
 
     def get_value(event: Event[EventBody]):
-        return event.body.value + 1
+        return event.value + 1
 
     default_dep = Dependency(get_value)
 
@@ -71,7 +66,7 @@ async def test_nested_event_dependency(handler_context):
 
     async with solve_dependencies(target_func, handler_context) as deps:
         assert len(deps) == 1
-        assert deps["dep"] == handler_context.event['body']['value'] + 1
+        assert deps["dep"] == handler_context.event['value'] + 1
 
 
 @pytest.mark.asyncio
@@ -83,10 +78,10 @@ async def test_various_body_models(handler_context):
         name: str
 
     def get_value(event: Event[Value]):
-        return event.body.value + 1
+        return event.value + 1
 
     def get_name(event: Event[Name]):
-        return event.body.name
+        return event.name
 
     value_dep = Annotated[int, Dependency(get_value)]
     name_dep = Annotated[str, Dependency(get_name)]
@@ -103,8 +98,8 @@ async def test_various_body_models(handler_context):
 
     async with solve_dependencies(target_func, handler_context) as deps:
         assert len(deps) == 3
-        name = handler_context.event['body']['name']
-        value = handler_context.event['body']['value'] + 1
+        name = handler_context.event['name']
+        value = handler_context.event['value'] + 1
 
         assert deps["value"] == value
         assert deps["name"] == name
@@ -117,7 +112,7 @@ async def test_dependency_mixed_with_event(handler_context):
         value: int
 
     def get_value(event: Event[Value]):
-        return event.body.value + 1
+        return event.value + 1
 
     value_dep = Annotated[int, Dependency(get_value)]
 
@@ -136,7 +131,7 @@ async def test_dependency_mixed_with_event(handler_context):
     async with solve_dependencies(target_func, handler_context) as deps:
         assert len(deps) == 2
 
-        value = handler_context.event['body']['value'] + 1
+        value = handler_context.event['value'] + 1
 
         assert deps["multiplied_value"] == value * 2
         assert deps["service"] == "test_service"

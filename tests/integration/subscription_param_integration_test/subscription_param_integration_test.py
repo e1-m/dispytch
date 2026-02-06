@@ -112,7 +112,7 @@ async def test_dynamic_wildcard_topics(
 
     @listener.handler(subscription)
     async def handle_event(event: Event[MyEventBody]):
-        received_values.append(event.body.value)
+        received_values.append(event.value)
         await asyncio.sleep(0.3)
 
     listener_task = asyncio.create_task(listener.listen())
