@@ -1,7 +1,8 @@
 import asyncio
 from dataclasses import dataclass
+from functools import reduce
 from inspect import isawaitable
-from typing import Callable, Any
+from typing import Callable, Any, Awaitable, Iterable
 
 from dispytch.di.context import DIContext
 from dispytch.di.solver import DIResolver
@@ -15,6 +16,34 @@ class EventHandlerContext:
     event: dict
     subscription_pattern: tuple[str, ...]
     actual_event_route: tuple[str, ...]
+
+
+class MiddlewareChain:
+    def __init__(
+            self,
+            func: Callable[..., Awaitable[Any]],
+            middlewares: Iterable[Any] | None = None
+    ):
+        self.func = func
+        self.middlewares = list(middlewares) if middlewares else []
+        self._chain = self._build_chain()
+
+    def _build_chain(self) -> Callable[..., Awaitable[Any]]:
+        return reduce(
+            lambda next_step, mw: self._wrap_middleware(mw, next_step),
+            reversed(self.middlewares),
+            self.func
+        )
+
+    @staticmethod
+    def _wrap_middleware(mw, next_step):
+        async def layer(ctx):
+            return await mw.dispatch(ctx, next_step)
+
+        return layer
+
+    async def __call__(self, ctx: EventHandlerContext) -> Any:
+        return await self._chain(ctx)
 
 
 class Handler:

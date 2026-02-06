@@ -1,7 +1,7 @@
 from typing import Protocol, Callable, Awaitable, Any
 
-from pydantic import BaseModel
+from dispytch.listener.handler import EventHandlerContext
 
 
 class Middleware(Protocol):
-    async def dispatch(self, event: BaseModel, call_next: Callable[..., Awaitable[Any]]): ...
+    async def dispatch(self, ctx: EventHandlerContext, call_next: Callable[..., Awaitable[Any]]): ...
