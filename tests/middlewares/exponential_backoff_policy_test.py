@@ -1,6 +1,5 @@
 import random
 
-import pytest
 
 from dispytch.middleware.retry import ExponentialBackoffWithFullJitter
 

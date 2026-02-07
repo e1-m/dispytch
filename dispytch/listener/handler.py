@@ -7,7 +7,7 @@ from dispytch.di.context import DIContext
 from dispytch.di.solver import DIResolver
 
 
-@dataclass(frozen=True)
+@dataclass
 class EventHandlerContext:
     event: dict
     subscription_pattern: tuple[str, ...]
