@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from functools import reduce
 from inspect import isawaitable
-from typing import Callable, Any, Iterable
+from typing import Callable, Any
 
 from dispytch.di.context import DIContext
 from dispytch.di.solver import DIResolver
@@ -19,10 +19,10 @@ class MiddlewarePipeline:
     def __init__(
             self,
             target_handler: NextCall,
-            middlewares: Iterable[Middleware] | None = None
+            middlewares: list[Middleware] | None = None
     ):
         self._target_handler = target_handler
-        self._middlewares = list(middlewares) if middlewares else []
+        self._middlewares = middlewares if middlewares else []
         self._pipeline = self._compose_pipeline()
 
     def _compose_pipeline(self) -> NextCall:

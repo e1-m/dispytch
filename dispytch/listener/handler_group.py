@@ -1,50 +1,47 @@
-import random
 from collections import defaultdict
-from typing import Callable, Sequence
+from dataclasses import dataclass
+from typing import Callable, Any
 
-from dispytch.listener.dlh import DeadLetterHandler
-from dispytch.listener.handler import Handler
 from dispytch.listener.consumer import EventSubscription
-from dispytch.listener.retry_policy import RetryPolicy
+from dispytch.listener.middleware import Middleware
+
+
+@dataclass
+class HandlerData:
+    func: Callable[..., Any]
+    middlewares: list[Middleware]
 
 
 class HandlerGroup:
     def __init__(
             self,
-            default_dlh: DeadLetterHandler = None,
-            default_retry_policy: RetryPolicy = None,
+            middlewares: list[Middleware] = None,
     ):
-        self.default_dlh = default_dlh
-        self.default_retry_policy = default_retry_policy
-
-        self._handlers: dict[EventSubscription, list[Handler]] = defaultdict(list)
+        self._middlewares = middlewares if middlewares else []
+        self._handlers: dict[EventSubscription, list[HandlerData]] = defaultdict(list)
 
     def handler(
             self,
             subscription: EventSubscription,
             *,
-            dlh: DeadLetterHandler = None,
-            retry_policy: RetryPolicy = None,
+            middlewares: list[Middleware] = None,
     ):
-        """
-        Decorator to register a handler function for a specific topic and event type.
-        """
+        middlewares = middlewares if middlewares else []
 
         def decorator(callback):
             handlers = self._handlers[subscription]
 
             handlers.append(
-                Handler(
+                HandlerData(
                     func=callback,
-                    dlh=dlh or self.default_dlh,
-                    retry_policy=retry_policy or self.default_retry_policy,
+                    middlewares=self._middlewares + middlewares
                 )
             )
             return callback
 
         return decorator
 
-    def get_handlers(self, subscription: EventSubscription):
+    def get_handlers(self, subscription: EventSubscription) -> list[HandlerData]:
         return self._handlers[subscription]
 
     def get_subscriptions(self) -> list[EventSubscription]:

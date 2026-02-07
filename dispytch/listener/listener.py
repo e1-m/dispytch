@@ -2,11 +2,10 @@ import asyncio
 import logging
 
 from dispytch.listener.consumer import Consumer, Message, EventSubscription
-from dispytch.listener.dlh import DeadLetterHandler
 from dispytch.listener.handler import Handler, EventHandlerContext
 from dispytch.listener.handler_group import HandlerGroup
 from dispytch.listener.handler_tree import HandlerTree
-from dispytch.listener.retry_policy import RetryPolicy
+from dispytch.listener.middleware import Middleware
 from dispytch.serialization import Deserializer
 from dispytch.serialization.json import JSONDeserializer
 
@@ -25,16 +24,15 @@ class EventListener:
             consumer: Consumer,
             route_delimiter: str = None,
             deserializer: Deserializer = None,
-            default_dlh: DeadLetterHandler = None,
-            default_retry_policy: RetryPolicy = None,
+            middlewares: list[Middleware] = None,
     ):
         self.consumer = consumer
         self.route_delimiter: str = route_delimiter
         self.deserializer = deserializer or JSONDeserializer()
-        self.default_dlh = default_dlh
-        self.default_retry_policy = default_retry_policy
-        self._tasks = set()
+        self._middlewares = middlewares if middlewares else []
         self._handlers: HandlerTree = HandlerTree()
+
+        self._tasks = set()
 
     async def listen(self):
         """
@@ -76,12 +74,12 @@ class EventListener:
             self,
             subscription: EventSubscription,
             *,
-            dlh: DeadLetterHandler = None,
-            retry_policy: RetryPolicy = None,
+            middlewares: list[Middleware] = None,
     ):
         """
             Decorator to register a handler function for a specific topic and event type.
         """
+        middlewares = middlewares if middlewares else []
 
         def decorator(callback):
             self._handlers.insert(
@@ -90,8 +88,7 @@ class EventListener:
                     subscription,
                     Handler(
                         func=callback,
-                        dlh=dlh or self.default_dlh,
-                        retry_policy=retry_policy or self.default_retry_policy,
+                        middlewares=self._middlewares + middlewares
                     )
                 )
             )
@@ -109,5 +106,6 @@ class EventListener:
         for subscription in group.get_subscriptions():
             self._handlers.insert(
                 subscription.get_path_segments(self.route_delimiter),
-                *[(subscription, handler) for handler in group.get_handlers(subscription)]
+                *[(subscription, Handler(handler_data.func, self._middlewares + handler_data.middlewares))
+                  for handler_data in group.get_handlers(subscription)]
             )
