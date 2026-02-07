@@ -1,9 +1,8 @@
 import pytest
 from unittest.mock import Mock
-from dispytch.listener.handler_group import HandlerGroup
+from dispytch.listener import Router
 from dispytch.listener.consumer import EventSubscription
-from dispytch.listener.dlh import DeadLetterHandler
-from dispytch.listener.retry_policy import RetryPolicy
+from dispytch.listener.handler import Middleware, EventHandlerContext, NextCall
 
 
 class MockSubscription(EventSubscription):
@@ -11,31 +10,29 @@ class MockSubscription(EventSubscription):
     event: str
 
 
-@pytest.fixture
-def mock_dlh():
-    return Mock(spec=DeadLetterHandler)
+class MockMiddleware(Middleware):
+    def __init__(self, name: str):
+        self.name = name
+
+    async def dispatch(self, ctx: EventHandlerContext, call_next: NextCall):
+        return await call_next(ctx)
+
+    def __repr__(self):
+        return f"MockMiddleware(name={self.name})"
 
 
 @pytest.fixture
-def mock_retry_policy():
-    return Mock(spec=RetryPolicy)
+def mw1():
+    return MockMiddleware("mw1")
 
 
-def test_handler_group_initialization():
-    hg = HandlerGroup()
-    assert hg.default_dlh is None
-    assert hg.default_retry_policy is None
-    assert hg.get_subscriptions() == []
+@pytest.fixture
+def mw2():
+    return MockMiddleware("mw2")
 
 
-def test_handler_group_initialization_with_defaults(mock_dlh, mock_retry_policy):
-    hg = HandlerGroup(default_dlh=mock_dlh, default_retry_policy=mock_retry_policy)
-    assert hg.default_dlh == mock_dlh
-    assert hg.default_retry_policy == mock_retry_policy
-
-
-def test_register_handler_uses_group_defaults(mock_dlh, mock_retry_policy):
-    hg = HandlerGroup(default_dlh=mock_dlh, default_retry_policy=mock_retry_policy)
+def test_register_handler_uses_shared_middlewares(mw1, mw2):
+    hg = Router(middlewares=[mw1, mw2])
     sub = MockSubscription(topic="t1", event="e1")
 
     @hg.handler(sub)
@@ -45,37 +42,32 @@ def test_register_handler_uses_group_defaults(mock_dlh, mock_retry_policy):
     handlers = hg.get_handlers(sub)
     assert len(handlers) == 1
     assert handlers[0].func == my_handler
-    assert handlers[0].dlh == mock_dlh
-    assert handlers[0].retry_policy == mock_retry_policy
+    assert handlers[0].middlewares == [mw1, mw2]
 
 
-def test_register_handler_overrides_group_defaults(mock_dlh, mock_retry_policy):
-    hg = HandlerGroup(default_dlh=mock_dlh, default_retry_policy=mock_retry_policy)
+def test_register_handler_adds_router_and_handler_specific_middlewares(mw1, mw2):
+    hg = Router(middlewares=[mw1])
     sub = MockSubscription(topic="t1", event="e1")
-    
-    custom_dlh = Mock(spec=DeadLetterHandler)
-    custom_retry = Mock(spec=RetryPolicy)
 
-    @hg.handler(sub, dlh=custom_dlh, retry_policy=custom_retry)
+    custom_mw = MockMiddleware("custom")
+
+    @hg.handler(sub, middlewares=[custom_mw])
     def my_handler():
         pass
 
     handlers = hg.get_handlers(sub)
     assert len(handlers) == 1
-    assert handlers[0].dlh == custom_dlh
-    assert handlers[0].retry_policy == custom_retry
-    assert handlers[0].dlh != mock_dlh
-    assert handlers[0].retry_policy != mock_retry_policy
+    assert handlers[0].middlewares == [mw1, custom_mw]
 
 
 def test_get_handlers_returns_empty_list_for_unknown_subscription():
-    hg = HandlerGroup()
+    hg = Router()
     sub = MockSubscription(topic="unknown", event="unknown")
     assert hg.get_handlers(sub) == []
 
 
 def test_multiple_handlers_for_same_subscription():
-    hg = HandlerGroup()
+    hg = Router()
     sub = MockSubscription(topic="t1", event="e1")
 
     @hg.handler(sub)
@@ -91,7 +83,7 @@ def test_multiple_handlers_for_same_subscription():
 
 
 def test_get_subscriptions_returns_unique_subscriptions():
-    hg = HandlerGroup()
+    hg = Router()
     sub1 = MockSubscription(topic="t1", event="e1")
     sub2 = MockSubscription(topic="t2", event="e2")
 
@@ -111,13 +103,13 @@ def test_get_subscriptions_returns_unique_subscriptions():
 
 
 def test_handler_decorator_returns_original_function():
-    hg = HandlerGroup()
+    hg = Router()
     sub = MockSubscription(topic="t1", event="e1")
 
     def my_handler(x):
         return x + 1
 
     decorated = hg.handler(sub)(my_handler)
-    
+
     assert decorated == my_handler
     assert decorated(5) == 6
