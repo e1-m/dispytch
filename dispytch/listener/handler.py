@@ -1,90 +1,77 @@
-import asyncio
 from dataclasses import dataclass
 from functools import reduce
 from inspect import isawaitable
-from typing import Callable, Any, Awaitable, Iterable
+from typing import Callable, Any, Iterable
 
 from dispytch.di.context import DIContext
 from dispytch.di.solver import DIResolver
-from dispytch.listener.dlh import DeadLetterHandler
-from dispytch.listener.middleware import Middleware
-from dispytch.listener.retry_policy import RetryPolicy
+from dispytch.listener.middleware import Middleware, NextCall
 
 
-@dataclass
+@dataclass(frozen=True)
 class EventHandlerContext:
     event: dict
     subscription_pattern: tuple[str, ...]
     actual_event_route: tuple[str, ...]
 
 
-class MiddlewareChain:
+class MiddlewarePipeline:
     def __init__(
             self,
-            func: Callable[..., Awaitable[Any]],
-            middlewares: Iterable[Any] | None = None
+            target_handler: NextCall,
+            middlewares: Iterable[Middleware] | None = None
     ):
-        self.func = func
-        self.middlewares = list(middlewares) if middlewares else []
-        self._chain = self._build_chain()
+        self._target_handler = target_handler
+        self._middlewares = list(middlewares) if middlewares else []
+        self._pipeline = self._compose_pipeline()
 
-    def _build_chain(self) -> Callable[..., Awaitable[Any]]:
+    def _compose_pipeline(self) -> NextCall:
+        def apply_middleware(
+                inner_handler: NextCall,
+                middleware: Middleware
+        ) -> NextCall:
+            async def wrapped_layer(ctx: EventHandlerContext) -> Any:
+                return await middleware.dispatch(ctx, inner_handler)
+
+            return wrapped_layer
+
         return reduce(
-            lambda next_step, mw: self._wrap_middleware(mw, next_step),
-            reversed(self.middlewares),
-            self.func
+            apply_middleware,
+            reversed(self._middlewares),
+            self._target_handler
         )
 
-    @staticmethod
-    def _wrap_middleware(mw, next_step):
-        async def layer(ctx):
-            return await mw.dispatch(ctx, next_step)
-
-        return layer
-
-    async def __call__(self, ctx: EventHandlerContext) -> Any:
-        return await self._chain(ctx)
+    async def execute(self, ctx: EventHandlerContext) -> Any:
+        return await self._pipeline(ctx)
 
 
 class Handler:
     def __init__(
             self,
             func: Callable[..., Any],
-            dlh: DeadLetterHandler = None,
-            retry_policy: RetryPolicy = None,
             middlewares: list[Middleware] = None,
     ):
-        self.func = func
-        self.dlh = dlh
-        self.retry_policy = retry_policy
-        self.middlewares = middlewares
+        self._user_func = func
+        self._pipeline = MiddlewarePipeline(
+            target_handler=self._invoke_with_injection,
+            middlewares=middlewares
+        )
 
     async def handle(self, ctx: EventHandlerContext):
-        di = DIResolver(
+        return await self._pipeline.execute(ctx)
+
+    async def _invoke_with_injection(self, ctx: EventHandlerContext):
+        resolver = DIResolver(
             DIContext(
                 event=ctx.event,
                 subscription_pattern=ctx.subscription_pattern,
                 actual_event_route=ctx.actual_event_route,
             )
         )
-        prev_delay = 0.0
-        attempt = 0
-        while True:
-            try:
-                async with di.resolve(self.func) as deps:
-                    res = self.func(**deps)
 
-                    return await res if isawaitable(res) else res
-            except Exception as err:
-                should_retry = self.retry_policy is not None and self.retry_policy.should_retry(attempt, err)
+        async with resolver.resolve(self._user_func) as dependencies:
+            result = self._user_func(**dependencies)
 
-                if not should_retry:
-                    if self.dlh is None:
-                        raise err
-
-                    async with di.resolve_internal_only(self.dlh.handle) as deps:
-                        return await self.dlh.handle(err, **deps)
-
-                prev_delay = self.retry_policy.get_delay(attempt, prev_delay)
-                attempt += 1
-                await asyncio.sleep(prev_delay)
+            if isawaitable(result):
+                return await result
+            return result
