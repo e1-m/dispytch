@@ -1,6 +1,9 @@
+import asyncio
 import random
 from abc import ABC, abstractmethod
 from typing import Sequence
+
+from dispytch.listener.handler import EventHandlerContext, NextCall
 
 
 class RetryPolicy(ABC):
@@ -9,6 +12,25 @@ class RetryPolicy(ABC):
 
     @abstractmethod
     def get_delay(self, attempt: int, prev_delay: float) -> float: ...
+
+
+class RetryMiddleware:
+    def __init__(self, retry_policy: RetryPolicy):
+        self.retry_policy = retry_policy
+
+    async def dispatch(self, ctx: EventHandlerContext, call_next: NextCall):
+        prev_delay = 0.0
+        attempt = 0
+        while True:
+            try:
+                return await call_next(ctx)
+            except Exception as err:
+                if not self.retry_policy.should_retry(attempt, err):
+                    raise err
+
+                prev_delay = self.retry_policy.get_delay(attempt, prev_delay)
+                attempt += 1
+                await asyncio.sleep(prev_delay)
 
 
 class ExponentialBackoffWithFullJitter(RetryPolicy):

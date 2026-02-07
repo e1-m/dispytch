@@ -1,11 +1,10 @@
 from dataclasses import dataclass
 from functools import reduce
 from inspect import isawaitable
-from typing import Callable, Any
+from typing import Callable, Any, TypeAlias, Awaitable, Protocol
 
 from dispytch.di.context import DIContext
 from dispytch.di.solver import DIResolver
-from dispytch.listener.middleware import Middleware, NextCall
 
 
 @dataclass(frozen=True)
@@ -13,6 +12,13 @@ class EventHandlerContext:
     event: dict
     subscription_pattern: tuple[str, ...]
     actual_event_route: tuple[str, ...]
+
+
+NextCall: TypeAlias = Callable[[EventHandlerContext], Awaitable[Any]]
+
+
+class Middleware(Protocol):
+    async def dispatch(self, ctx: EventHandlerContext, call_next: NextCall): ...
 
 
 class MiddlewarePipeline:

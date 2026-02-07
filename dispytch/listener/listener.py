@@ -2,10 +2,9 @@ import asyncio
 import logging
 
 from dispytch.listener.consumer import Consumer, Message, EventSubscription
-from dispytch.listener.handler import Handler, EventHandlerContext
-from dispytch.listener import Router
+from dispytch.listener.handler import Handler, EventHandlerContext, Middleware
+from dispytch.listener.router import Router
 from dispytch.listener.handler_tree import HandlerTree
-from dispytch.listener.middleware import Middleware
 from dispytch.serialization import Deserializer
 from dispytch.serialization.json import JSONDeserializer
 

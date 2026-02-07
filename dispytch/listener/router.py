@@ -2,8 +2,8 @@ from collections import defaultdict
 from dataclasses import dataclass
 from typing import Callable, Any
 
-from dispytch import EventSubscription
-from dispytch.listener.middleware import Middleware
+from dispytch.listener.consumer import EventSubscription
+from dispytch.listener.handler import Middleware
 
 
 @dataclass

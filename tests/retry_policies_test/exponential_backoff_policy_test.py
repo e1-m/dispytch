@@ -2,7 +2,7 @@ import random
 
 import pytest
 
-from dispytch.listener.retry_policy import ExponentialBackoffWithFullJitter
+from dispytch.middleware.retry import ExponentialBackoffWithFullJitter
 
 
 def test_should_retry_when_retry_on_is_none_retries_on_any_exception():
