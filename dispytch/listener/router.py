@@ -2,7 +2,7 @@ from collections import defaultdict
 from dataclasses import dataclass
 from typing import Callable, Any
 
-from dispytch.listener.consumer import EventSubscription
+from dispytch import EventSubscription
 from dispytch.listener.middleware import Middleware
 
 
@@ -12,7 +12,7 @@ class HandlerData:
     middlewares: list[Middleware]
 
 
-class HandlerGroup:
+class Router:
     def __init__(
             self,
             middlewares: list[Middleware] = None,

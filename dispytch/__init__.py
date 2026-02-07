@@ -1,5 +1,5 @@
 from .listener import EventListener as EventListener
-from .listener import HandlerGroup as HandlerGroup
+from .listener import Router as Router
 from .listener import EventSubscription as EventSubscription
 
 from .emitter import EventEmitter as EventEmitter

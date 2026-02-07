@@ -3,7 +3,7 @@ import logging
 
 from dispytch.listener.consumer import Consumer, Message, EventSubscription
 from dispytch.listener.handler import Handler, EventHandlerContext
-from dispytch.listener.handler_group import HandlerGroup
+from dispytch.listener import Router
 from dispytch.listener.handler_tree import HandlerTree
 from dispytch.listener.middleware import Middleware
 from dispytch.serialization import Deserializer
@@ -96,12 +96,12 @@ class EventListener:
 
         return decorator
 
-    def add_handler_group(self, group: HandlerGroup):
+    def add_handler_group(self, group: Router):
         """
         Registers ``HandlerGroup``'s handlers with the listener.
 
         Args:
-            group (HandlerGroup): A ``HandlerGroup`` object to register with the listener.
+            group (Router): A ``HandlerGroup`` object to register with the listener.
         """
         for subscription in group.get_subscriptions():
             self._handlers.insert(
