@@ -17,5 +17,9 @@ class ExceptionInterceptor:
 
             raise err
 
-    def add_handler(self, exception_type: type[Exception], handler: Callable[[EventHandlerContext, Exception], Awaitable[Any]]):
+    def add_handler(
+            self,
+            exception_type: type[Exception],
+            handler: Callable[[EventHandlerContext, Exception], Awaitable[Any]]
+    ):
         self._handlers[exception_type] = handler
