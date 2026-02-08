@@ -2,7 +2,7 @@ import asyncio
 from unittest.mock import Mock, AsyncMock, call, patch
 import pytest
 from dispytch.listener.handler import EventHandlerContext
-from dispytch.middleware.retry import RetryMiddleware
+from dispytch.middleware.retry import Retry
 
 
 @pytest.fixture
@@ -17,7 +17,7 @@ def ctx():
 @pytest.mark.asyncio
 async def test_retry_middleware_success_on_first_try(ctx):
     mock_policy = Mock()
-    middleware = RetryMiddleware(retry_policy=mock_policy)
+    middleware = Retry(retry_policy=mock_policy)
 
     call_next = AsyncMock(return_value="success")
 
@@ -38,7 +38,7 @@ async def test_retry_middleware_retries_and_succeeds(ctx):
     err2 = ValueError("fail2")
     call_next = AsyncMock(side_effect=[err1, err2, "success"])
 
-    middleware = RetryMiddleware(retry_policy=mock_policy)
+    middleware = Retry(retry_policy=mock_policy)
 
     with patch("asyncio.sleep", AsyncMock()) as mock_sleep:
         result = await middleware.dispatch(ctx, call_next)
@@ -65,7 +65,7 @@ async def test_retry_middleware_raises_after_max_retries(ctx):
     err3 = ValueError("fail3")
     call_next = AsyncMock(side_effect=[err1, err2, err3])
 
-    middleware = RetryMiddleware(retry_policy=mock_policy)
+    middleware = Retry(retry_policy=mock_policy)
 
     with patch("asyncio.sleep", AsyncMock()) as mock_sleep:
         with pytest.raises(ValueError) as exc_info:
@@ -88,7 +88,7 @@ async def test_retry_middleware_passes_prev_delay_correctly(ctx):
     mock_policy.get_delay.side_effect = [1.0, 2.0]
 
     call_next = AsyncMock(side_effect=[ValueError, ValueError, ValueError])
-    middleware = RetryMiddleware(retry_policy=mock_policy)
+    middleware = Retry(retry_policy=mock_policy)
 
     with patch("asyncio.sleep", AsyncMock()) as mock_sleep:
         with pytest.raises(ValueError):

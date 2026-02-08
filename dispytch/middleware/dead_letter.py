@@ -8,7 +8,7 @@ class DeadLetterHandler(Protocol):
     async def handle(self, ctx: EventHandlerContext, error: Exception) -> None: ...
 
 
-class DeadLetterMiddleware:
+class DeadLetter:
     def __init__(self, dlh: DeadLetterHandler):
         self.dlh = dlh
 

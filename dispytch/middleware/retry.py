@@ -14,7 +14,7 @@ class RetryPolicy(ABC):
     def get_delay(self, attempt: int, prev_delay: float) -> float: ...
 
 
-class RetryMiddleware:
+class Retry:
     def __init__(self, retry_policy: RetryPolicy):
         self.retry_policy = retry_policy
 

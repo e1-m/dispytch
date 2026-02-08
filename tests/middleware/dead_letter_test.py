@@ -1,7 +1,7 @@
 from unittest.mock import Mock, AsyncMock
 import pytest
 from dispytch.listener.handler import EventHandlerContext
-from dispytch.middleware.dead_letter import DeadLetterMiddleware, DeadLetterHandler
+from dispytch.middleware.dead_letter import DeadLetter, DeadLetterHandler
 
 
 @pytest.fixture
@@ -16,7 +16,7 @@ def ctx():
 @pytest.mark.asyncio
 async def test_dead_letter_middleware_success(ctx):
     mock_dlh = AsyncMock()
-    middleware = DeadLetterMiddleware(dlh=mock_dlh)
+    middleware = DeadLetter(dlh=mock_dlh)
 
     call_next = AsyncMock(return_value="success")
 
@@ -30,7 +30,7 @@ async def test_dead_letter_middleware_success(ctx):
 @pytest.mark.asyncio
 async def test_dead_letter_middleware_calls_dlh_on_failure(ctx):
     mock_dlh = AsyncMock()
-    middleware = DeadLetterMiddleware(dlh=mock_dlh)
+    middleware = DeadLetter(dlh=mock_dlh)
 
     err = ValueError("failure")
     call_next = AsyncMock(side_effect=err)
@@ -45,7 +45,7 @@ async def test_dead_letter_middleware_calls_dlh_on_failure(ctx):
 async def test_dead_letter_middleware_does_not_swallow_dlh_errors(ctx):
     mock_dlh = AsyncMock()
     mock_dlh.handle.side_effect = RuntimeError("dlh failed")
-    middleware = DeadLetterMiddleware(dlh=mock_dlh)
+    middleware = DeadLetter(dlh=mock_dlh)
 
     call_next = AsyncMock(side_effect=ValueError("original failure"))
 

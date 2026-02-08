@@ -1,7 +1,7 @@
 from unittest.mock import Mock, AsyncMock
 import pytest
 from dispytch.listener.handler import EventHandlerContext
-from dispytch.middleware.filter import FilterMiddleware
+from dispytch.middleware.filter import Filter
 
 
 @pytest.fixture
@@ -16,7 +16,7 @@ def ctx():
 @pytest.mark.asyncio
 async def test_filter_middleware_allows_event(ctx):
     filter_func = Mock(return_value=True)
-    middleware = FilterMiddleware(filter=filter_func)
+    middleware = Filter(filter=filter_func)
     call_next = AsyncMock(return_value="success")
 
     result = await middleware.dispatch(ctx, call_next)
@@ -29,7 +29,7 @@ async def test_filter_middleware_allows_event(ctx):
 @pytest.mark.asyncio
 async def test_filter_middleware_blocks_event(ctx):
     filter_func = Mock(return_value=False)
-    middleware = FilterMiddleware(filter=filter_func)
+    middleware = Filter(filter=filter_func)
     call_next = AsyncMock()
 
     result = await middleware.dispatch(ctx, call_next)
