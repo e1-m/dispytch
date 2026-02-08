@@ -22,9 +22,3 @@ class DIResolver:
         tree = get_dependency_tree(func)
         async with tree.resolve(self.ctx) as deps:
             yield deps
-
-    @asynccontextmanager
-    async def resolve_internal_only(self, func: Callable[..., Any]) -> dict[str, Any]:
-        tree = get_internal_dependencies_tree(func)
-        async with tree.resolve(self.ctx) as deps:
-            yield deps
