@@ -14,7 +14,7 @@ class EventListener:
     Coordinates the dispatch of consumed events to their corresponding handlers.
 
     Listens to an async event stream from the provided consumer and routes each event
-    to the appropriate handler(s) based on topic and event type.
+    to the appropriate handler(s) based on subscription.
 
     """
 
