@@ -12,7 +12,7 @@ class EventSubscription(BaseModel, ABC):
     def _values(self) -> tuple:
         return tuple(self.model_dump().values())
 
-    def get_path_segments(self, delimiter: str = None) -> tuple[str, ...]:
+    def get_route_segments(self, delimiter: str = None) -> tuple[str, ...]:
         str_values = [str(v) for v in self._values]
 
         if delimiter is None:

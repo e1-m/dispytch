@@ -48,7 +48,7 @@ class EventListener:
 
     async def _handle_message(self, msg: Message):
         event = self.deserializer.deserialize(msg.payload)
-        event_route = msg.subscription.get_path_segments(self.route_delimiter)
+        event_route = msg.subscription.get_route_segments(self.route_delimiter)
 
         handlers = self._handlers.get(event_route)
 
@@ -61,7 +61,7 @@ class EventListener:
                 EventHandlerContext(
                     event=event,
                     actual_event_route=event_route,
-                    subscription_pattern=subscription.get_path_segments(self.route_delimiter),
+                    subscription_pattern=subscription.get_route_segments(self.route_delimiter),
                 )
             )
         ) for subscription, handler in handlers]
@@ -82,7 +82,7 @@ class EventListener:
 
         def decorator(callback):
             self._handlers.insert(
-                subscription.get_path_segments(self.route_delimiter),
+                subscription.get_route_segments(self.route_delimiter),
                 (
                     subscription,
                     Handler(
@@ -104,7 +104,7 @@ class EventListener:
         """
         for subscription in router.get_subscriptions():
             self._handlers.insert(
-                subscription.get_path_segments(self.route_delimiter),
+                subscription.get_route_segments(self.route_delimiter),
                 *[(subscription, Handler(handler_data.func, self._middlewares + handler_data.middlewares))
                   for handler_data in router.get_handlers(subscription)]
             )
