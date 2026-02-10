@@ -76,7 +76,7 @@ class EventListener:
             middlewares: list[Middleware] = None,
     ):
         """
-            Decorator to register a handler function for a specific topic and event type.
+            Decorator to register a handler function for a subscription.
         """
         middlewares = middlewares if middlewares else []
 
@@ -95,16 +95,16 @@ class EventListener:
 
         return decorator
 
-    def add_handler_group(self, group: Router):
+    def add_router(self, router: Router):
         """
-        Registers ``HandlerGroup``'s handlers with the listener.
+        Registers ``Router``'s handlers with the listener.
 
         Args:
-            group (Router): A ``HandlerGroup`` object to register with the listener.
+            router (Router): A ``Router`` object to register with the listener.
         """
-        for subscription in group.get_subscriptions():
+        for subscription in router.get_subscriptions():
             self._handlers.insert(
                 subscription.get_path_segments(self.route_delimiter),
                 *[(subscription, Handler(handler_data.func, self._middlewares + handler_data.middlewares))
-                  for handler_data in group.get_handlers(subscription)]
+                  for handler_data in router.get_handlers(subscription)]
             )
