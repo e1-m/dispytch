@@ -1,8 +1,8 @@
-from dispytch.listener.handler_tree import HandlerNode
+from dispytch.listener.trie import TrieNode
 
 
 def test_overlapping_wildcards():
-    node = HandlerNode()
+    node = TrieNode()
     node.insert(("*", "bar"), "wildcard_1")
     node.insert(("foo", "*"), "wildcard_2")
     node.insert(("foo", "bar"), "exact")
@@ -12,7 +12,7 @@ def test_overlapping_wildcards():
 
 
 def test_shared_prefixes():
-    node = HandlerNode()
+    node = TrieNode()
     # should match
     node.insert(("a", "b", "c"), "abc")
     node.insert(("a", "*", "c"), "a_wc")
@@ -28,7 +28,7 @@ def test_shared_prefixes():
 
 
 def test_direct_wildcard_access():
-    node = HandlerNode()
+    node = TrieNode()
     node.insert(("*", "bar"), "wildcard_1")
 
     result = node.get(("*", "bar"))

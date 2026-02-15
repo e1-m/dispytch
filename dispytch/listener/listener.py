@@ -1,10 +1,11 @@
 import asyncio
 import logging
 
+from dispytch.listener.ack_policy import AckPolicy
 from dispytch.listener.consumer import Consumer, Message, EventSubscription
 from dispytch.listener.handler import Handler, EventHandlerContext, Middleware
 from dispytch.listener.router import Router
-from dispytch.listener.handler_tree import HandlerTree
+from dispytch.listener.trie import Trie
 from dispytch.serialization import Deserializer
 from dispytch.serialization.json import JSONDeserializer
 
@@ -29,7 +30,7 @@ class EventListener:
         self.route_delimiter: str = route_delimiter
         self.deserializer = deserializer or JSONDeserializer()
         self._middlewares = middlewares if middlewares else []
-        self._handlers: HandlerTree = HandlerTree()
+        self._handlers: Trie[tuple[EventSubscription, Handler]] = Trie()
 
         self._tasks = set()
 
@@ -53,6 +54,7 @@ class EventListener:
         handlers = self._handlers.get(event_route)
 
         if not handlers:
+            # TODO: add formating for EventSubscription
             logging.info(f'There is no handler for `{msg.subscription}`')
             return
 
@@ -65,7 +67,7 @@ class EventListener:
                 )
             )
         ) for subscription, handler in handlers]
-        await asyncio.gather(*tasks)
+        await asyncio.gather(*tasks, return_exceptions=True)
 
         await self.consumer.ack(msg)
 
@@ -103,8 +105,11 @@ class EventListener:
             router (Router): A ``Router`` object to register with the listener.
         """
         for subscription in router.get_subscriptions():
-            self._handlers.insert(
-                subscription.get_route_segments(self.route_delimiter),
-                *[(subscription, Handler(handler_data.func, self._middlewares + handler_data.middlewares))
-                  for handler_data in router.get_handlers(subscription)]
-            )
+            for handler_data in router.get_handlers(subscription):
+                self._handlers.insert(
+                    subscription.get_route_segments(self.route_delimiter),
+                    (subscription, Handler(handler_data.func, self._middlewares + handler_data.middlewares))
+                )
+
+    def set_ack_policy(self, subscription: EventSubscription, policy: AckPolicy):
+        ...

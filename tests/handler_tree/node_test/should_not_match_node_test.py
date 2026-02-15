@@ -1,8 +1,8 @@
-from dispytch.listener.handler_tree import HandlerNode
+from dispytch.listener.trie import TrieNode
 
 
 def test_get_nonexistent_key_returns_empty_list():
-    node = HandlerNode()
+    node = TrieNode()
     node.insert(("foo", "bar"), "handler")
 
     result = node.get(("nope", "nah"))
@@ -10,7 +10,7 @@ def test_get_nonexistent_key_returns_empty_list():
 
 
 def test_partial_match_does_not_return_handler():
-    node = HandlerNode()
+    node = TrieNode()
     node.insert(("foo", "bar", "baz"), "handler")
 
     result = node.get(("foo", "bar"))
@@ -18,7 +18,7 @@ def test_partial_match_does_not_return_handler():
 
 
 def test_partial_wildcard_match_does_not_return_handler():
-    node = HandlerNode()
+    node = TrieNode()
     node.insert(("foo", "*", "baz"), "handler")
 
     result = node.get(("foo", "bar"))
@@ -26,7 +26,7 @@ def test_partial_wildcard_match_does_not_return_handler():
 
 
 def test_redundant_wildcard_does_not_return_handler():
-    node = HandlerNode()
+    node = TrieNode()
     node.insert(("foo", "*", "*"), "handler")
 
     result = node.get(("foo", "bar"))

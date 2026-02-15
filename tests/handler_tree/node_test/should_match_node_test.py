@@ -1,8 +1,8 @@
-from dispytch.listener.handler_tree import HandlerNode
+from dispytch.listener.trie import TrieNode
 
 
 def test_get_empty_key_returns_root_handlers():
-    node = HandlerNode()
+    node = TrieNode()
     handler = "root_handler"
     node.insert((), handler)
 
@@ -11,7 +11,7 @@ def test_get_empty_key_returns_root_handlers():
 
 
 def test_insert_and_get_exact_match():
-    node = HandlerNode()
+    node = TrieNode()
     handler = "handler1"
     node.insert(("foo",), handler)
 
@@ -20,13 +20,13 @@ def test_insert_and_get_exact_match():
 
 
 def test_wildcard():
-    node = HandlerNode()
+    node = TrieNode()
     node.insert(("*",), "wildcard")
     assert node.get(("anything",)) == ["wildcard"]
 
 
 def test_two_wildcards_only():
-    node = HandlerNode()
+    node = TrieNode()
     handler = "fallback"
     node.insert(("*", "*"), handler)
 
@@ -35,7 +35,7 @@ def test_two_wildcards_only():
 
 
 def test_wildcard_handler_matches_any_segment():
-    node = HandlerNode()
+    node = TrieNode()
     handler = "wildcard"
     node.insert(("foo", "*", "baz"), handler)
 
@@ -44,7 +44,7 @@ def test_wildcard_handler_matches_any_segment():
 
 
 def test_multiple_handlers_same_key():
-    node = HandlerNode()
+    node = TrieNode()
     node.insert(("foo", "bar"), "h1")
     node.insert(("foo", "bar"), "h2")
 

@@ -1,6 +1,6 @@
 import pytest
 
-from dispytch.listener.handler_tree import HandlerTree
+from dispytch.listener.trie import Trie
 
 
 def handler(name):
@@ -9,7 +9,7 @@ def handler(name):
 
 @pytest.fixture
 def tree():
-    return HandlerTree()
+    return Trie()
 
 
 def test_exact_match(tree):
@@ -40,7 +40,8 @@ def test_dynamic_segment_match(tree):
 def test_multiple_handlers_same_key(tree):
     h1 = handler("C1")
     h2 = handler("C2")
-    tree.insert("x:y".split(':'), h1, h2)
+    tree.insert("x:y".split(':'), h1)
+    tree.insert("x:y".split(':'), h2)
     assert tree.get("x:y".split(':'),) == [h1, h2]
 
 

@@ -1,6 +1,6 @@
 import pytest
 
-from dispytch.listener.handler_tree import HandlerTree
+from dispytch.listener.trie import Trie
 
 
 def handler(name):
@@ -9,7 +9,7 @@ def handler(name):
 
 @pytest.fixture
 def tree():
-    return HandlerTree()
+    return Trie()
 
 
 def test_mismatch_wrong_static_segment(tree):
