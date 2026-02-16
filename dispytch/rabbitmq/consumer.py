@@ -55,14 +55,5 @@ class RabbitMQConsumer(Consumer):
             await asyncio.gather(*self._consumer_tasks, return_exceptions=True)
 
     async def ack(self, message: Message):
-        try:
-            message = self._waiting_for_ack.pop(message.id)
-        except KeyError as e:
-            logger.warning(f"Tried to ack a non-existent or already acked message")
-            raise e
-
-        try:
-            await message.ack()
-        except Exception as e:
-            logger.error(f"Failed to ack message: {e}")
-            raise e
+        message = self._waiting_for_ack.pop(message.id)
+        await message.ack()
