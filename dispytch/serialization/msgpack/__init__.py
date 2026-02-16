@@ -1,2 +1,7 @@
-from .deserializer import MessagePackDeserializer as MessagePackDeserializer
-from .serializer import MessagePackSerializer as MessagePackSerializer
+from .deserializer import MessagePackDeserializer
+from .serializer import MessagePackSerializer
+
+__all__ = [
+    "MessagePackDeserializer",
+    "MessagePackSerializer",
+]

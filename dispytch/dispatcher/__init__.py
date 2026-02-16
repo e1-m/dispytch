@@ -1,3 +1,10 @@
-from .dispatcher import EventDispatcher as EventDispatcher
-from .router import Router as Router
-from .consumer import EventSubscription as EventSubscription
+from .dispatcher import EventDispatcher
+from .router import Router
+from .consumer import EventSubscription
+
+__all__ = [
+    "EventDispatcher",
+    "Router",
+    "EventSubscription",
+]
+

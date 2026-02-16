@@ -1,2 +1,7 @@
-from .serializer import Serializer as Serializer
-from .deserializer import Deserializer as Deserializer
+from .serializer import Serializer
+from .deserializer import Deserializer
+
+__all__ = [
+    "Serializer",
+    "Deserializer",
+]

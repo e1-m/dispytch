@@ -1,5 +1,13 @@
-from .producer import RabbitMQProducer as RabbitMQProducer
-from .producer import RabbitMQEventRoute as RabbitMQEventRoute
-from .producer import RabbitMQEventConfig as RabbitMQEventConfig
-from .consumer import RabbitMQConsumer as RabbitMQConsumer
-from .consumer import RabbitMQEventSubscription as RabbitMQEventSubscription
+from .producer import RabbitMQProducer
+from .producer import RabbitMQEventRoute
+from .producer import RabbitMQEventConfig
+from .consumer import RabbitMQConsumer
+from .consumer import RabbitMQEventSubscription
+
+__all__ = [
+    "RabbitMQProducer",
+    "RabbitMQEventRoute",
+    "RabbitMQEventConfig",
+    "RabbitMQConsumer",
+    "RabbitMQEventSubscription",
+]
