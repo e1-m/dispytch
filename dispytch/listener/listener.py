@@ -1,7 +1,7 @@
 import asyncio
 import logging
 
-from dispytch.listener.ack_policy import AckPolicy
+from dispytch.listener.ack_policy import AckPolicy, AckAfterProcessing
 from dispytch.listener.consumer import Consumer, Message, EventSubscription
 from dispytch.listener.handler import Handler, EventHandlerContext, Middleware
 from dispytch.listener.router import Router
@@ -24,13 +24,16 @@ class EventListener:
             consumer: Consumer,
             route_delimiter: str = None,
             deserializer: Deserializer = None,
+            default_ack_policy: AckPolicy = None,
             middlewares: list[Middleware] = None,
     ):
         self.consumer = consumer
         self.route_delimiter: str = route_delimiter
         self.deserializer = deserializer or JSONDeserializer()
+        self.default_ack_policy = default_ack_policy or AckAfterProcessing()
         self._middlewares = middlewares if middlewares else []
         self._handlers: Trie[tuple[EventSubscription, Handler]] = Trie()
+        self._ack_policies: Trie[AckPolicy] = Trie()
 
         self._tasks = set()
 
@@ -52,6 +55,8 @@ class EventListener:
         event_route = msg.subscription.get_route_segments(self.route_delimiter)
 
         handlers = self._handlers.get(event_route)
+        policies = self._ack_policies.get(event_route)
+        ack_policy = policies[0] if len(policies) > 0 else self.default_ack_policy
 
         if not handlers:
             # TODO: add formating for EventSubscription
@@ -67,9 +72,11 @@ class EventListener:
                 )
             )
         ) for subscription, handler in handlers]
-        await asyncio.gather(*tasks, return_exceptions=True)
 
-        await self.consumer.ack(msg)
+        await ack_policy.execute(
+            lambda: self.consumer.ack(msg),
+            lambda: asyncio.gather(*tasks, return_exceptions=True),
+        )
 
     def handler(
             self,
@@ -112,4 +119,7 @@ class EventListener:
                 )
 
     def set_ack_policy(self, subscription: EventSubscription, policy: AckPolicy):
-        ...
+        self._ack_policies.insert(
+            subscription.get_route_segments(self.route_delimiter),
+            policy
+        )
