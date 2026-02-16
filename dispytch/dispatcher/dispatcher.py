@@ -10,6 +10,8 @@ from dispytch.dispatcher.router import Router
 from dispytch.serialization import Deserializer
 from dispytch.serialization.json import JSONDeserializer
 
+logger = logging.getLogger(__name__)
+
 
 class EventDispatcher:
     """
@@ -60,8 +62,7 @@ class EventDispatcher:
         ack_policy = policies[0] if len(policies) > 0 else self.default_ack_policy
 
         if not handlers:
-            # TODO: add formating for EventSubscription
-            logging.info(f'There is no handler for `{msg.subscription}`')
+            logger.info(f'There is no registered handler for subscription: `{msg.subscription}`')
             return
 
         tasks = [asyncio.create_task(
