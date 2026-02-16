@@ -1,6 +1,9 @@
+import logging
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from typing import Awaitable, Any
+
+logger = logging.getLogger(__name__)
 
 
 class AckPolicy(ABC):
@@ -20,7 +23,10 @@ class AckAfterProcessing(AckPolicy):
             process_tasks: Callable[..., Awaitable[list[Any]]]
     ):
         _ = await process_tasks()
-        await ack_message()
+        try:
+            await ack_message()
+        except Exception as e:
+            logger.warning(f"Failed to ack message, expect redelivery from the broker. Error: {e}")
 
 
 class AckBeforeProcessing(AckPolicy):
@@ -29,5 +35,8 @@ class AckBeforeProcessing(AckPolicy):
             ack_message: Callable[..., Awaitable[Any]],
             process_tasks: Callable[..., Awaitable[list[Any]]]
     ):
-        await ack_message()
+        try:
+            await ack_message()
+        except Exception as e:
+            logger.warning(f"Failed to ack message, expect redelivery from the broker. Error: {e}")
         await process_tasks()
