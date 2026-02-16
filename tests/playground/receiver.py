@@ -4,7 +4,7 @@ from typing import Annotated
 from aiokafka import AIOKafkaConsumer
 from pydantic import BaseModel
 
-from dispytch import EventListener, Event, Dependency
+from dispytch import EventDispatcher, Event, Dependency
 from dispytch.kafka import KafkaConsumer
 from dispytch.kafka.consumer import KafkaEventSubscription
 
@@ -33,7 +33,7 @@ async def main():
                                       group_id='test_group', )
     await kafka_consumer.start()
     consumer = KafkaConsumer(kafka_consumer)
-    event_listener = EventListener(consumer)
+    event_listener = EventDispatcher(consumer)
 
     @event_listener.handler(KafkaEventSubscription(topic='test_events'))
     async def handle_event(event: Event[MyEventBody], test: Annotated[int, Dependency(outer_dep)]):

@@ -1,4 +1,4 @@
-from dispytch.listener.trie import TrieNode
+from dispytch.dispatcher.trie import TrieNode
 
 
 def test_get_nonexistent_key_returns_empty_list():

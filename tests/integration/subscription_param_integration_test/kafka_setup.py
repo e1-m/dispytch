@@ -1,7 +1,7 @@
 import pytest_asyncio
 from aiokafka import AIOKafkaConsumer, AIOKafkaProducer
 
-from dispytch import EventEmitter, EventListener
+from dispytch import EventEmitter, EventDispatcher
 from dispytch.kafka import KafkaProducer, KafkaConsumer, KafkaEventRoute, KafkaEventSubscription
 
 from dispytch.serialization.msgpack import MessagePackSerializer, MessagePackDeserializer
@@ -59,7 +59,7 @@ async def emitter_kafka(dispytch_kafka_producer):
 
 @pytest_asyncio.fixture()
 async def listener_kafka(dispytch_kafka_consumer):
-    return EventListener(
+    return EventDispatcher(
         consumer=dispytch_kafka_consumer,
         deserializer=MessagePackDeserializer(),
         route_delimiter='.'

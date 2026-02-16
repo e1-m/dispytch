@@ -1,6 +1,6 @@
-from .listener import EventListener as EventListener
-from .listener import Router as Router
-from .listener import EventSubscription as EventSubscription
+from .dispatcher import EventDispatcher as EventDispatcher
+from .dispatcher import Router as Router
+from .dispatcher import EventSubscription as EventSubscription
 
 from .emitter import EventEmitter as EventEmitter
 from .emitter import EventBase as EventBase

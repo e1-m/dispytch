@@ -1,6 +1,6 @@
 from typing import Callable, Any, Awaitable
 
-from dispytch.listener.handler import EventHandlerContext, NextCall
+from dispytch.dispatcher.handler import EventHandlerContext, NextCall
 
 
 class ExceptionInterceptor:

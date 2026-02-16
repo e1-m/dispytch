@@ -1,6 +1,6 @@
 from unittest.mock import AsyncMock
 import pytest
-from dispytch.listener.handler import EventHandlerContext
+from dispytch.dispatcher.handler import EventHandlerContext
 from dispytch.middleware.exc_interceptor import ExceptionInterceptor
 
 

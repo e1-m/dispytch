@@ -1,4 +1,4 @@
-from dispytch.listener.trie import TrieNode
+from dispytch.dispatcher.trie import TrieNode
 
 
 def test_node_override_wildcard_true_exact_match_found():

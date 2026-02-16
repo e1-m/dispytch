@@ -1,7 +1,7 @@
 import pytest_asyncio
 import aio_pika
 
-from dispytch import EventEmitter, EventListener
+from dispytch import EventEmitter, EventDispatcher
 from dispytch.rabbitmq import RabbitMQProducer, RabbitMQConsumer, RabbitMQEventRoute, RabbitMQEventSubscription
 from dispytch.serialization.msgpack import MessagePackSerializer, MessagePackDeserializer
 
@@ -74,7 +74,7 @@ async def emitter_rabbitmq(dispytch_rabbitmq_producer):
 
 @pytest_asyncio.fixture()
 async def listener_rabbitmq(dispytch_rabbitmq_consumer):
-    return EventListener(
+    return EventDispatcher(
         consumer=dispytch_rabbitmq_consumer,
         deserializer=MessagePackDeserializer(),
         route_delimiter='.'

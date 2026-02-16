@@ -1,7 +1,7 @@
 import pytest_asyncio
 from redis.asyncio import Redis
 
-from dispytch import EventEmitter, EventListener
+from dispytch import EventEmitter, EventDispatcher
 from dispytch.redis import RedisConsumer, RedisProducer, RedisEventRoute, RedisEventSubscription
 from dispytch.serialization.msgpack import MessagePackDeserializer, MessagePackSerializer
 
@@ -43,7 +43,7 @@ async def emitter_redis(dispytch_redis_producer):
 
 @pytest_asyncio.fixture()
 async def listener_redis(dispytch_redis_consumer):
-    return EventListener(
+    return EventDispatcher(
         consumer=dispytch_redis_consumer,
         deserializer=MessagePackDeserializer(),
         route_delimiter='.'

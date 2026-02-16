@@ -1,7 +1,7 @@
 import pytest_asyncio
 from redis.asyncio import Redis
 
-from dispytch import EventEmitter, EventListener
+from dispytch import EventEmitter, EventDispatcher
 from dispytch.redis import RedisConsumer, RedisProducer, RedisEventRoute, RedisEventSubscription
 
 
@@ -41,7 +41,7 @@ async def emitter_redis(producer_redis):
 
 @pytest_asyncio.fixture()
 async def listener_redis(consumer_redis):
-    return EventListener(
+    return EventDispatcher(
         consumer=consumer_redis,
     )
 

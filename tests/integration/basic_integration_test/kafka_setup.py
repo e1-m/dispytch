@@ -1,7 +1,7 @@
 import pytest_asyncio
 from aiokafka import AIOKafkaConsumer, AIOKafkaProducer
 
-from dispytch import EventEmitter, EventListener
+from dispytch import EventEmitter, EventDispatcher
 from dispytch.kafka import KafkaProducer, KafkaConsumer, KafkaEventRoute, KafkaEventSubscription
 
 
@@ -56,7 +56,7 @@ async def emitter_kafka(producer_kafka):
 
 @pytest_asyncio.fixture()
 async def listener_kafka(consumer_kafka):
-    return EventListener(
+    return EventDispatcher(
         consumer=consumer_kafka,
     )
 

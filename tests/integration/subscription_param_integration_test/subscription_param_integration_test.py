@@ -57,7 +57,7 @@ def route(request):
 )
 async def test_dynamic_topics(
         emitter: EventEmitter,
-        listener: EventListener,
+        listener: EventDispatcher,
         subscription: EventSubscription,
         route: EventRoute
 ):
@@ -103,7 +103,7 @@ async def test_dynamic_topics(
 )
 async def test_dynamic_wildcard_topics(
         emitter: EventEmitter,
-        listener: EventListener,
+        listener: EventDispatcher,
         subscription: EventSubscription,
         route: EventRoute
 ):

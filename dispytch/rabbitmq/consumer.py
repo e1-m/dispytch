@@ -6,7 +6,7 @@ from uuid import UUID
 from aio_pika.abc import AbstractIncomingMessage, AbstractQueue
 
 from dispytch import EventSubscription
-from dispytch.listener.consumer import Consumer, Message
+from dispytch.dispatcher.consumer import Consumer, Message
 
 logger = logging.getLogger(__name__)
 

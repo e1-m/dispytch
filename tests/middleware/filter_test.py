@@ -1,6 +1,6 @@
 from unittest.mock import Mock, AsyncMock
 import pytest
-from dispytch.listener.handler import EventHandlerContext
+from dispytch.dispatcher.handler import EventHandlerContext
 from dispytch.middleware.filter import Filter
 
 

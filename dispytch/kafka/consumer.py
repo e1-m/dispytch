@@ -6,7 +6,7 @@ from uuid import UUID
 from aiokafka import AIOKafkaConsumer, ConsumerRecord, TopicPartition
 from aiokafka.errors import KafkaError
 
-from dispytch.listener.consumer import Consumer, Message, EventSubscription
+from dispytch.dispatcher.consumer import Consumer, Message, EventSubscription
 
 logger = logging.getLogger(__name__)
 

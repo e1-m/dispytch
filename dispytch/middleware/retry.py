@@ -3,7 +3,7 @@ import random
 from abc import ABC, abstractmethod
 from typing import Sequence
 
-from dispytch.listener.handler import EventHandlerContext, NextCall
+from dispytch.dispatcher.handler import EventHandlerContext, NextCall
 
 
 class RetryPolicy(ABC):

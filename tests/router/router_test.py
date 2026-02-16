@@ -1,8 +1,8 @@
 import pytest
 from unittest.mock import Mock
-from dispytch.listener import Router
-from dispytch.listener.consumer import EventSubscription
-from dispytch.listener.handler import Middleware, EventHandlerContext, NextCall
+from dispytch.dispatcher import Router
+from dispytch.dispatcher.consumer import EventSubscription
+from dispytch.dispatcher.handler import Middleware, EventHandlerContext, NextCall
 
 
 class MockSubscription(EventSubscription):

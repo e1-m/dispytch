@@ -1,5 +1,5 @@
 import pytest
-from dispytch.listener.trie import Trie
+from dispytch.dispatcher.trie import Trie
 
 
 def handler(name):

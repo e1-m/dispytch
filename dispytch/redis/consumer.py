@@ -4,7 +4,7 @@ from typing import AsyncIterator
 from redis.asyncio.client import PubSub
 
 from dispytch import EventSubscription
-from dispytch.listener.consumer import Consumer, Message
+from dispytch.dispatcher.consumer import Consumer, Message
 
 logger = logging.getLogger(__name__)
 

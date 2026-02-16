@@ -4,7 +4,7 @@ import pytest
 from pydantic import BaseModel
 from typing import Annotated
 
-from dispytch import EventBase, Event, EventEmitter, EventListener, Dependency, EventSubscription
+from dispytch import EventBase, Event, EventEmitter, EventDispatcher, Dependency, EventSubscription
 from dispytch.emitter.producer import EventRoute
 from dispytch.middleware.retry import ExponentialBackoffWithFullJitter, Retry
 
@@ -59,7 +59,7 @@ def route(request):
 )
 async def test_emit_and_receive(
         emitter: EventEmitter,
-        listener: EventListener,
+        listener: EventDispatcher,
         subscription: EventSubscription,
         route: EventRoute
 ):
@@ -103,7 +103,7 @@ async def test_emit_and_receive(
 )
 async def test_multiple_events(
         emitter: EventEmitter,
-        listener: EventListener,
+        listener: EventDispatcher,
         subscription: EventSubscription,
         route: EventRoute
 ):
@@ -151,7 +151,7 @@ async def test_multiple_events(
 )
 async def test_handler_with_retries(
         emitter: EventEmitter,
-        listener: EventListener,
+        listener: EventDispatcher,
         subscription: EventSubscription,
         route: EventRoute
 ):
@@ -197,7 +197,7 @@ async def test_handler_with_retries(
 )
 async def test_handler_with_dependencies(
         emitter: EventEmitter,
-        listener: EventListener,
+        listener: EventDispatcher,
         subscription: EventSubscription,
         route: EventRoute
 ):

@@ -1,16 +1,17 @@
 import asyncio
 import logging
 
-from dispytch.listener.ack_policy import AckPolicy, AckAfterProcessing
-from dispytch.listener.consumer import Consumer, Message, EventSubscription
-from dispytch.listener.handler import Handler, EventHandlerContext, Middleware
-from dispytch.listener.router import Router
-from dispytch.listener.trie import Trie
+from dispytch.dispatcher.consumer import EventSubscription
+from dispytch.dispatcher.ack_policy import AckPolicy, AckAfterProcessing
+from dispytch.dispatcher.consumer import Consumer, Message
+from dispytch.dispatcher.handler import Middleware, Handler, EventHandlerContext
+from dispytch.dispatcher.trie import Trie
+from dispytch.dispatcher.router import Router
 from dispytch.serialization import Deserializer
 from dispytch.serialization.json import JSONDeserializer
 
 
-class EventListener:
+class EventDispatcher:
     """
     Coordinates the dispatch of consumed events to their corresponding handlers.
 
