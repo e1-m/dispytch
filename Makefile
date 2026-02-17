@@ -10,7 +10,7 @@ docker-down:
 	docker-compose -f ./tests/integration/docker-compose.yaml down --volumes
 
 unit-test:
-	python -m pytest --ignore=tests/integration
+	python -m pytest ./tests/unit
 
 integration-test:
 	$(MAKE) docker-up
