@@ -69,7 +69,7 @@ async def test_dynamic_topics(
         received_values.append(value)
         await asyncio.sleep(0.3)
 
-    listener_task = asyncio.create_task(listener.listen())
+    listener_task = asyncio.create_task(listener.start())
 
     await asyncio.sleep(listener_start_up_time)
 
@@ -115,7 +115,7 @@ async def test_dynamic_wildcard_topics(
         received_values.append(event.value)
         await asyncio.sleep(0.3)
 
-    listener_task = asyncio.create_task(listener.listen())
+    listener_task = asyncio.create_task(listener.start())
 
     await asyncio.sleep(listener_start_up_time)
 

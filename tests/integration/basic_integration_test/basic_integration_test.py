@@ -70,7 +70,7 @@ async def test_emit_and_receive(
     async def handle_event(event: Event[MyEventBody]):
         received_events.append(event)
 
-    listener_task = asyncio.create_task(listener.listen())
+    listener_task = asyncio.create_task(listener.start())
     await asyncio.sleep(listener_start_up_time)
 
     test_event = MyEvent(value=42, message="test message")
@@ -115,7 +115,7 @@ async def test_multiple_events(
         received_events.append(event)
         await asyncio.sleep(0.3)
 
-    listener_task = asyncio.create_task(listener.listen())
+    listener_task = asyncio.create_task(listener.start())
 
     await asyncio.sleep(listener_start_up_time)
 
@@ -166,7 +166,7 @@ async def test_handler_with_retries(
             raise ValueError("Simulated failure")
         return "success"
 
-    listener_task = asyncio.create_task(listener.listen())
+    listener_task = asyncio.create_task(listener.start())
 
     await asyncio.sleep(listener_start_up_time)
 
@@ -222,7 +222,7 @@ async def test_handler_with_dependencies(
             "processed_message": processed_message
         })
 
-    listener_task = asyncio.create_task(listener.listen())
+    listener_task = asyncio.create_task(listener.start())
 
     await asyncio.sleep(listener_start_up_time)
 

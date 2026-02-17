@@ -41,7 +41,7 @@ async def main():
         print(test)
         await asyncio.sleep(2)
 
-    await event_listener.listen()
+    await event_listener.start()
 
 
 if __name__ == '__main__':

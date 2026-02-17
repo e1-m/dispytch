@@ -40,7 +40,7 @@ class EventDispatcher:
 
         self._tasks = set()
 
-    async def listen(self):
+    async def start(self):
         """
         Starts an async loop that consumes events and dispatches them to registered handlers.
         """
