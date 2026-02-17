@@ -6,9 +6,13 @@ from pydantic import BaseModel
 from dispytch import Router, Event
 from dispytch.kafka import KafkaEventSubscription
 
+from .middleware import EventsInProgressMiddleware
+
 logger = logging.getLogger(__name__)
 
-router = Router()
+router = Router(
+    middlewares=[EventsInProgressMiddleware()]
+)
 
 
 class StressTestEvent(BaseModel):
@@ -17,5 +21,4 @@ class StressTestEvent(BaseModel):
 
 @router.handler(KafkaEventSubscription(topic='stress_test_events'))
 async def handle_event(event: Event[StressTestEvent]):
-    logger.info(f"Event with id {event.id} arrived")
-    # await asyncio.sleep(0.5)
+    await asyncio.sleep(1)

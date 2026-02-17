@@ -2,6 +2,7 @@ import asyncio
 import logging
 
 from aiokafka import AIOKafkaConsumer
+from prometheus_client import start_http_server
 
 from dispytch import EventDispatcher
 from dispytch.kafka import KafkaConsumer
@@ -22,6 +23,8 @@ async def main():
     consumer = KafkaConsumer(kafka_consumer)
     event_listener = EventDispatcher(consumer, deserializer=JSONDeserializer())
     event_listener.add_router(router)
+
+    start_http_server(8080)
     logger.info("Consumer started")
     await event_listener.start()
 

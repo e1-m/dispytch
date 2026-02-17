@@ -5,9 +5,9 @@ import execution from "k6/execution";
 const BROKERS = ["kafka:9092"];
 const TOPIC = "stress_test_events";
 
-const ITERATION_BATCH = 50;
-const ITERATION_PER_SECOND = 100;
-const DURATION = "10s";
+const ITERATION_BATCH = 100;
+const ITERATION_PER_SECOND = 10;
+const DURATION = "30s";
 
 export const options = {
     scenarios: {
