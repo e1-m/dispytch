@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 from functools import reduce
 from inspect import isawaitable
-from typing import Callable, Any, TypeAlias, Awaitable, Protocol
+from typing import Callable, Any, TypeAlias, Awaitable
+from abc import abstractmethod, ABC
 
 from dispytch.di.context import DIContext
 from dispytch.di.solver import DIResolver
@@ -17,7 +18,8 @@ class EventHandlerContext:
 NextCall: TypeAlias = Callable[[EventHandlerContext], Awaitable[Any]]
 
 
-class Middleware(Protocol):
+class Middleware(ABC):
+    @abstractmethod
     async def dispatch(self, ctx: EventHandlerContext, call_next: NextCall): ...
 
 

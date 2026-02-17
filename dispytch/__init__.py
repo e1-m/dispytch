@@ -6,6 +6,9 @@ logger.addHandler(logging.NullHandler())
 from .dispatcher import EventDispatcher
 from .dispatcher import Router
 from .dispatcher import EventSubscription
+from .dispatcher import Middleware
+from .dispatcher import NextCall
+from .dispatcher import EventHandlerContext
 
 from .emitter import EventEmitter
 from .emitter import EventBase
@@ -23,4 +26,7 @@ __all__ = [
     "Dependency",
     "Event",
     "SubscriptionParam",
+    "Middleware",
+    "NextCall",
+    "EventHandlerContext",
 ]
