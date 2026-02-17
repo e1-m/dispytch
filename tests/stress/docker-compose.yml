@@ -1,5 +1,20 @@
 name: dispytch-stress-test
 services:
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: grafana/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
   kafka:
     image: redpandadata/redpanda:latest
     container_name: dispytch-stress-test-kafka
@@ -21,18 +36,27 @@ services:
 
   k6-flood:
     image: mostafamoradian/xk6-kafka:latest
-    profiles: ["tools"]
+    profiles: [ "tools" ]
     volumes:
       - ./kafka-flood.js:/script.js
     command: [ "run", "/script.js" ]
     depends_on:
       kafka:
         condition: service_healthy
-
-  kafka-observer:
-    image: confluentinc/cp-kafka:latest
-    container_name: kafka-observer
+  consumer-app:
+    build:
+      context: ../../
+      dockerfile: tests/stress/consumer_app/Dockerfile
     depends_on:
       kafka:
         condition: service_healthy
-    entrypoint: [ "bash", "-c", "kafka-console-consumer --bootstrap-server kafka:9092 --topic my-load-test-topic --from-beginning" ]
+    ports:
+      - "8080:8080"
+
+#  kafka-observer:
+#    image: confluentinc/cp-kafka:latest
+#    container_name: kafka-observer
+#    depends_on:
+#      kafka:
+#        condition: service_healthy
+#    entrypoint: [ "bash", "-c", "kafka-console-consumer --bootstrap-server kafka:9092 --topic stress_test_events --from-beginning" ]

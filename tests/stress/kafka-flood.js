@@ -3,7 +3,7 @@ import {b64encode} from "k6/encoding";
 import execution from "k6/execution";
 
 const BROKERS = ["kafka:9092"];
-const TOPIC = "my-load-test-topic";
+const TOPIC = "stress_test_events";
 
 const ITERATION_BATCH = 50;
 const ITERATION_PER_SECOND = 100;
@@ -35,9 +35,7 @@ export default function () {
 
     for (let i = 0; i < ITERATION_BATCH; i++) {
         const payload = JSON.stringify({
-            ts: Date.now(),
-            id: `${baseIter}-${i}`,
-            data: "flood"
+            id: `${baseIter}-${i}`
         });
 
         messages.push({
