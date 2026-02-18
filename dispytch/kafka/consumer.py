@@ -21,7 +21,7 @@ class _MessageCommitInfo:
 
 
 class OffsetManager:
-    def __init__(self, starting_offset: int = -1):
+    def __init__(self, starting_offset: int):
         self.next_expected_offset = starting_offset
         self.last_committed = starting_offset - 1
         self.completed_pool = set()
