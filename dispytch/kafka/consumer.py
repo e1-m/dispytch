@@ -21,35 +21,11 @@ class _MessageCommitInfo:
     offset: int
 
 
-class OffsetManager:
-    def __init__(self, starting_offset: int):
-        self.next_expected_offset = starting_offset
-        self.last_committed = starting_offset - 1
-        self.completed_pool = set()
-
-    def mark_processed(self, offset: int):
-        if offset < self.next_expected_offset:
-            return None
-
-        self.completed_pool.add(offset)
-
-        if offset != self.next_expected_offset:
-            return None
-
-        while self.next_expected_offset in self.completed_pool:
-            self.completed_pool.remove(self.next_expected_offset)
-
-            self.last_committed = self.next_expected_offset
-            self.next_expected_offset += 1
-
-        return self.last_committed
-
-
 class KafkaConsumer(Consumer, ConsumerRebalanceListener):
     def __init__(self, consumer: AIOKafkaConsumer):
         self.consumer = consumer
         self._waiting_for_commit: dict[UUID, _MessageCommitInfo] = {}
-        self._offset_manager: dict[TopicPartition, OffsetManager] = {}
+        self._offset_tracker: dict[TopicPartition, OffsetManager] = {}
 
     async def start(self):
         existing_topics = self.consumer.subscription()
@@ -71,8 +47,8 @@ class KafkaConsumer(Consumer, ConsumerRebalanceListener):
                 offset=message.offset
             )
 
-            if tp not in self._offset_manager:
-                self._offset_manager[tp] = OffsetManager(message.offset)
+            if tp not in self._offset_tracker:
+                self._offset_tracker[tp] = OffsetManager(message.offset)
 
             yield msg
 
@@ -80,7 +56,7 @@ class KafkaConsumer(Consumer, ConsumerRebalanceListener):
         commit_info = self._waiting_for_commit.pop(message.id)
 
         # In case the partition was revoked before the message was processed
-        offset_manager = self._offset_manager.get(commit_info.tp, None)
+        offset_manager = self._offset_tracker.get(commit_info.tp, None)
         if offset_manager is None:
             return
 
@@ -90,8 +66,8 @@ class KafkaConsumer(Consumer, ConsumerRebalanceListener):
 
     async def on_partitions_revoked(self, revoked: list[TopicPartition]):
         for tp in revoked:
-            if tp in self._offset_manager:
-                self._offset_manager.pop(tp)
+            if tp in self._offset_tracker:
+                self._offset_tracker.pop(tp)
 
     async def on_partitions_assigned(self, assigned: list[TopicPartition]):
         ...
