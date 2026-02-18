@@ -40,18 +40,31 @@ class EventDispatcher:
 
         self._tasks = set()
 
-    async def start(self):
+    async def start(self, concurrency_limit: int = 100):
         """
         Starts an async loop that consumes events and dispatches them to registered handlers.
         """
+        semaphore = asyncio.Semaphore(concurrency_limit)
+
+        async def with_release(coro):
+            try:
+                await coro
+            finally:
+                semaphore.release()
 
         async for message in self.consumer.listen():
-            task = asyncio.create_task(self._handle_message(message))
+            await semaphore.acquire()
+            task = asyncio.create_task(
+                with_release(self._handle_message(message))
+            )
             self._tasks.add(task)
             task.add_done_callback(self._tasks.discard)
 
         if self._tasks:
-            await asyncio.wait(self._tasks)
+            done, pending = await asyncio.wait(self._tasks, timeout=30.0)
+
+            if pending:
+                logger.warning(f"Shutting down with {len(pending)} tasks still active.")
 
     async def _handle_message(self, msg: Message):
         event = self.deserializer.deserialize(msg.payload)
