@@ -1,9 +1,9 @@
 from typing import Callable, Any, Awaitable
 
-from dispytch.dispatcher.handler import EventHandlerContext, NextCall
+from dispytch.dispatcher.handler import EventHandlerContext, NextCall, Middleware
 
 
-class ExceptionInterceptor:
+class ExceptionInterceptor(Middleware):
     def __init__(self, handlers: dict[type[Exception], Callable[[EventHandlerContext, Exception], Awaitable[Any]]]):
         self._handlers = handlers
 

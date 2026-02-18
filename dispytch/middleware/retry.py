@@ -3,7 +3,7 @@ import random
 from abc import ABC, abstractmethod
 from typing import Sequence
 
-from dispytch.dispatcher.handler import EventHandlerContext, NextCall
+from dispytch.dispatcher.handler import EventHandlerContext, NextCall, Middleware
 
 
 class RetryPolicy(ABC):
@@ -14,7 +14,7 @@ class RetryPolicy(ABC):
     def get_delay(self, attempt: int, prev_delay: float) -> float: ...
 
 
-class Retry:
+class Retry(Middleware):
     def __init__(self, retry_policy: RetryPolicy):
         self.retry_policy = retry_policy
 

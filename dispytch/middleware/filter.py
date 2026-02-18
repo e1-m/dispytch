@@ -1,9 +1,9 @@
 from typing import Callable
 
-from dispytch.dispatcher.handler import EventHandlerContext, NextCall
+from dispytch.dispatcher.handler import EventHandlerContext, NextCall, Middleware
 
 
-class Filter:
+class Filter(Middleware):
     def __init__(self, filter: Callable[[EventHandlerContext], bool]):
         self.filter = filter
 
