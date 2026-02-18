@@ -6,7 +6,7 @@ from uuid import UUID
 from aiokafka import AIOKafkaConsumer, TopicPartition, ConsumerRebalanceListener
 
 from dispytch.dispatcher.consumer import Consumer, Message, EventSubscription
-from dispytch.kafka.offset_tracker import OffsetManager
+from dispytch.kafka.offset_tracker import OffsetTracker
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +25,7 @@ class KafkaConsumer(Consumer, ConsumerRebalanceListener):
     def __init__(self, consumer: AIOKafkaConsumer):
         self.consumer = consumer
         self._waiting_for_commit: dict[UUID, _MessageCommitInfo] = {}
-        self._offset_tracker: dict[TopicPartition, OffsetManager] = {}
+        self._offset_tracker: dict[TopicPartition, OffsetTracker] = {}
 
     async def start(self):
         existing_topics = self.consumer.subscription()
@@ -48,7 +48,7 @@ class KafkaConsumer(Consumer, ConsumerRebalanceListener):
             )
 
             if tp not in self._offset_tracker:
-                self._offset_tracker[tp] = OffsetManager(message.offset)
+                self._offset_tracker[tp] = OffsetTracker(message.offset)
 
             yield msg
 

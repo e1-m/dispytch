@@ -1,4 +1,4 @@
-class OffsetManager:
+class OffsetTracker:
     def __init__(self, starting_offset: int):
         self.next_expected_offset = starting_offset
         self.last_committed = starting_offset - 1
