@@ -1,5 +1,5 @@
 import pytest
-from dispytch.kafka.consumer import OffsetManager
+from dispytch.kafka.offset_tracker import OffsetManager
 
 
 def test_initial_state():

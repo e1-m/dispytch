@@ -6,6 +6,7 @@ from uuid import UUID
 from aiokafka import AIOKafkaConsumer, TopicPartition, ConsumerRebalanceListener
 
 from dispytch.dispatcher.consumer import Consumer, Message, EventSubscription
+from dispytch.kafka.offset_tracker import OffsetManager
 
 logger = logging.getLogger(__name__)
 
