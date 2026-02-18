@@ -1,16 +1,16 @@
 import pytest
-from dispytch.kafka.offset_tracker import OffsetManager
+from dispytch.kafka.offset_tracker import OffsetTracker
 
 
 def test_initial_state():
-    om = OffsetManager(starting_offset=100)
+    om = OffsetTracker(starting_offset=100)
     assert om.next_expected_offset == 100
     assert om.last_committed == 99
     assert len(om.completed_pool) == 0
 
 
 def test_sequential_processing():
-    om = OffsetManager(starting_offset=100)
+    om = OffsetTracker(starting_offset=100)
 
     assert om.mark_processed(100) == 100
     assert om.next_expected_offset == 101
@@ -22,7 +22,7 @@ def test_sequential_processing():
 
 
 def test_out_of_order_processing():
-    om = OffsetManager(starting_offset=100)
+    om = OffsetTracker(starting_offset=100)
 
     # Gap: 100 is missing, but 101 arrives
     assert om.mark_processed(101) is None
@@ -38,7 +38,7 @@ def test_out_of_order_processing():
 
 
 def test_filling_gap():
-    om = OffsetManager(starting_offset=100)
+    om = OffsetTracker(starting_offset=100)
     om.mark_processed(101)
     om.mark_processed(102)
 
@@ -50,7 +50,7 @@ def test_filling_gap():
 
 
 def test_duplicate_processing():
-    om = OffsetManager(starting_offset=100)
+    om = OffsetTracker(starting_offset=100)
 
     # First time
     assert om.mark_processed(100) == 100
@@ -62,7 +62,7 @@ def test_duplicate_processing():
 
 
 def test_complex_scenario():
-    om = OffsetManager(starting_offset=0)
+    om = OffsetTracker(starting_offset=0)
 
     # Process 1, 3, 4
     om.mark_processed(1)
@@ -84,7 +84,7 @@ def test_complex_scenario():
 
 
 def test_duplicate_processing_revisit():
-    om = OffsetManager(starting_offset=100)
+    om = OffsetTracker(starting_offset=100)
 
     # Process 100
     assert om.mark_processed(100) == 100
