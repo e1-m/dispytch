@@ -22,7 +22,6 @@ async def kafka_consumer(topics, bootstrap_servers):
                                 group_id='test_group',
                                 enable_auto_commit=False,
                                 auto_offset_reset='earliest')
-    await consumer.start()
     yield consumer
     await consumer.stop()
 
@@ -44,7 +43,9 @@ async def producer_kafka(kafka_producer: AIOKafkaProducer):
 
 @pytest_asyncio.fixture()
 async def consumer_kafka(kafka_consumer: AIOKafkaConsumer):
-    return KafkaConsumer(kafka_consumer)
+    consumer = KafkaConsumer(kafka_consumer)
+    await consumer.start()
+    return consumer
 
 
 @pytest_asyncio.fixture()
