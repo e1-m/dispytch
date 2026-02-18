@@ -12,7 +12,7 @@ class AckPolicy(ABC):
             self,
             ack_message: Callable[..., Awaitable[Any]],
             process_tasks: Callable[..., Awaitable[list[Any]]]
-    ):
+    ) -> list[Any]:
         pass
 
 
@@ -21,12 +21,15 @@ class AckAfterProcessing(AckPolicy):
             self,
             ack_message: Callable[..., Awaitable[Any]],
             process_tasks: Callable[..., Awaitable[list[Any]]]
-    ):
-        _ = await process_tasks()
+    ) -> list[Any]:
+        results = await process_tasks()
+
         try:
             await ack_message()
         except Exception as e:
             logger.warning(f"Failed to ack message, expect redelivery from the broker. Error: {e}")
+
+        return results
 
 
 class AckBeforeProcessing(AckPolicy):
@@ -34,9 +37,10 @@ class AckBeforeProcessing(AckPolicy):
             self,
             ack_message: Callable[..., Awaitable[Any]],
             process_tasks: Callable[..., Awaitable[list[Any]]]
-    ):
+    ) -> list[Any]:
         try:
             await ack_message()
         except Exception as e:
             logger.warning(f"Failed to ack message, expect redelivery from the broker. Error: {e}")
-        await process_tasks()
+
+        return await process_tasks()

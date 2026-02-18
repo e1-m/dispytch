@@ -48,9 +48,17 @@ class EventDispatcher:
 
         async def with_release(coro):
             try:
-                await coro
+                return await coro
             finally:
                 semaphore.release()
+
+        def handle_result(t):
+            self._tasks.discard(t)
+
+            exceptions = [res for res in t.result() if isinstance(res, Exception)]
+
+            for exc in exceptions:
+                logger.error(f"Handler failed with error: {exc}", exc_info=exc)
 
         async for message in self.consumer.listen():
             await semaphore.acquire()
@@ -58,7 +66,7 @@ class EventDispatcher:
                 with_release(self._handle_message(message))
             )
             self._tasks.add(task)
-            task.add_done_callback(self._tasks.discard)
+            task.add_done_callback(handle_result)
 
         if self._tasks:
             done, pending = await asyncio.wait(self._tasks, timeout=30.0)
@@ -88,7 +96,7 @@ class EventDispatcher:
             )
         ) for subscription, handler in handlers]
 
-        await ack_policy.execute(
+        return await ack_policy.execute(
             lambda: self.consumer.ack(msg),
             lambda: asyncio.gather(*tasks, return_exceptions=True),
         )
