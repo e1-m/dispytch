@@ -85,7 +85,6 @@ class KafkaConsumer(Consumer, ConsumerRebalanceListener):
 
         offset_to_commit = offset_manager.mark_processed(commit_info.offset)
         if offset_to_commit is not None:
-            logger.info(f"Committing offset {offset_to_commit}")
             await self.consumer.commit({commit_info.tp: offset_to_commit + 1})
 
     async def on_partitions_revoked(self, revoked: list[TopicPartition]):
