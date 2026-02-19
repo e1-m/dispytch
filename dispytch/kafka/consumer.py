@@ -37,6 +37,8 @@ class KafkaConsumer(Consumer, ConsumerRebalanceListener):
         existing_topics = self.consumer.subscription()
         if not existing_topics:
             raise RuntimeError("Consumer must be subscribed to topics before listening.")
+        if self.consumer._enable_auto_commit is True:
+            raise RuntimeError("Consumer must have auto commit disabled before listening.")
 
         self.consumer.subscribe(topics=list(existing_topics), listener=self)
         await self.consumer.start()
