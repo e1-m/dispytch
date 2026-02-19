@@ -6,6 +6,7 @@ from uuid import UUID
 from aiokafka import AIOKafkaConsumer, TopicPartition, ConsumerRebalanceListener
 
 from dispytch.dispatcher.consumer import Consumer, Message, EventSubscription
+from dispytch.kafka.batch_processor import BatchProcessor
 from dispytch.kafka.offset_tracker import OffsetTracker
 
 logger = logging.getLogger(__name__)
@@ -22,8 +23,13 @@ class _MessageCommitInfo:
 
 
 class KafkaConsumer(Consumer, ConsumerRebalanceListener):
-    def __init__(self, consumer: AIOKafkaConsumer):
+    def __init__(self, consumer: AIOKafkaConsumer, batch_timeout_ms: int = 1000, batch_size: int = 10):
         self.consumer = consumer
+        self.batch_processor = BatchProcessor(
+            handler=consumer.commit,
+            batch_timeout_ms=batch_timeout_ms,
+            batch_size=batch_size
+        )
         self._waiting_for_commit: dict[UUID, _MessageCommitInfo] = {}
         self._offset_tracker: dict[TopicPartition, OffsetTracker] = {}
 
@@ -62,7 +68,7 @@ class KafkaConsumer(Consumer, ConsumerRebalanceListener):
 
         offset_to_commit = offset_manager.mark_processed(commit_info.offset)
         if offset_to_commit is not None:
-            await self.consumer.commit({commit_info.tp: offset_to_commit + 1})
+            await self.batch_processor.add(commit_info.tp, offset_to_commit)
 
     async def on_partitions_revoked(self, revoked: list[TopicPartition]):
         for tp in revoked:
