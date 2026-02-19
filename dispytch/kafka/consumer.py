@@ -26,7 +26,7 @@ class KafkaConsumer(Consumer, ConsumerRebalanceListener):
     def __init__(self, consumer: AIOKafkaConsumer, batch_timeout_ms: int = 1000, batch_size: int = 10):
         self.consumer = consumer
         self.batch_processor = BatchProcessor(
-            handler=consumer.commit,
+            handler=self._batch_commit,
             batch_timeout_ms=batch_timeout_ms,
             batch_size=batch_size
         )
@@ -70,7 +70,10 @@ class KafkaConsumer(Consumer, ConsumerRebalanceListener):
 
         offset_to_commit = offset_tracker.mark_processed(commit_info.offset)
         if offset_to_commit is not None:
-            await self.batch_processor.add(commit_info.tp, offset_to_commit)
+            await self.batch_processor.add((commit_info.tp, offset_to_commit))
+
+    async def _batch_commit(self, batch: list[tuple[TopicPartition, int]]):
+        await self.consumer.commit({tp: offset for tp, offset in batch})
 
     async def on_partitions_revoked(self, revoked: list[TopicPartition]):
         for tp in revoked:

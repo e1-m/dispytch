@@ -5,17 +5,17 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class BatchProcessor[K, V]:
-    def __init__(self, handler: Callable[[dict[K, V]], Awaitable[None]], batch_timeout_ms: int, batch_size: int):
+class BatchProcessor[T]:
+    def __init__(self, handler: Callable[[list[T]], Awaitable[None]], batch_timeout_ms: int, batch_size: int):
         self.handler = handler
         self.batch_timeout = batch_timeout_ms / 1000.0
         self.max_batch_size = batch_size
 
-        self._batch: dict[K, V] = {}
+        self._batch: list[T] = []
         self._timer_task: asyncio.Task | None = None
 
-    async def add(self, key: K, value: V):
-        self._batch[key] = value
+    async def add(self, item: T):
+        self._batch.append(item)
 
         if len(self._batch) >= self.max_batch_size:
             await self._commit_batch(reason="size")
@@ -41,5 +41,5 @@ class BatchProcessor[K, V]:
         elif reason == "time":
             self._timer_task = None
 
-        batch, self._batch = self._batch, {}
+        batch, self._batch = self._batch, []
         await self.handler(batch)
