@@ -33,7 +33,7 @@ class EventEmitter:
             await self.producer.send(
                 route=event.__route__.format_dynamic(**event.model_dump()),
                 config=event.__backend_config__,
-                payload=self.serializer.serialize(event.model_dump(mode="json", by_alias=True, exclude={'id'})),
+                payload=self.serializer.serialize(event.model_dump(mode="json", by_alias=True)),
             )
         except ProducerTimeout:
             if isawaitable(res := self._on_timeout(event)):
