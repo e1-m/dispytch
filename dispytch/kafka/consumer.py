@@ -62,11 +62,11 @@ class KafkaConsumer(Consumer, ConsumerRebalanceListener):
         commit_info = self._waiting_for_commit.pop(message.id)
 
         # In case the partition was revoked before the message was processed
-        offset_manager = self._offset_tracker.get(commit_info.tp, None)
-        if offset_manager is None:
+        offset_tracker = self._offset_tracker.get(commit_info.tp, None)
+        if offset_tracker is None:
             return
 
-        offset_to_commit = offset_manager.mark_processed(commit_info.offset)
+        offset_to_commit = offset_tracker.mark_processed(commit_info.offset)
         if offset_to_commit is not None:
             await self.batch_processor.add(commit_info.tp, offset_to_commit)
 
