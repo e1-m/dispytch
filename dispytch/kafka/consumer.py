@@ -70,7 +70,7 @@ class KafkaConsumer(Consumer, ConsumerRebalanceListener):
 
         offset_to_commit = offset_tracker.mark_processed(commit_info.offset)
         if offset_to_commit is not None:
-            await self._batch_processor.add((commit_info.tp, offset_to_commit))
+            await self._batch_processor.add((commit_info.tp, offset_to_commit + 1))
 
     async def _batch_commit(self, batch: list[tuple[TopicPartition, int]]):
         await self.consumer.commit({tp: offset for tp, offset in batch})
