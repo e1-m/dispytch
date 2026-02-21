@@ -39,7 +39,7 @@ class KafkaConsumer(Consumer, ConsumerRebalanceListener):
             batch_size=batch_size
         )
         self._waiting_for_commit: dict[UUID, _MessageCommitInfo] = {}
-        self._offset_tracker: dict[TopicPartition, OffsetTracker] = {}
+        self._offset_trackers: dict[TopicPartition, OffsetTracker] = {}
         self._in_flight_count: dict[TopicPartition, int] = {}
         self._queues: dict[TopicPartition, asyncio.Queue] = {}
         self._running = False
@@ -66,32 +66,29 @@ class KafkaConsumer(Consumer, ConsumerRebalanceListener):
                 offset=message.offset
             )
 
-            if tp not in self._offset_tracker:
-                self._offset_tracker[tp] = OffsetTracker(message.offset)
+            if tp not in self._offset_trackers:
+                self._offset_trackers[tp] = OffsetTracker(message.offset)
 
             yield msg
 
     async def ack(self, message: Message):
         commit_info = self._waiting_for_commit.pop(message.id)
+        tp = commit_info.tp
 
         # In case the partition was revoked before the message was processed
-        offset_tracker = self._offset_tracker.get(commit_info.tp, None)
-        if offset_tracker is None:
-            return
-        # Same
-        if commit_info.tp not in self._in_flight_count:
+        if tp not in self._offset_trackers or tp not in self._in_flight_count:
             return
 
-        self._in_flight_count[commit_info.tp] -= 1
+        self._in_flight_count[tp] -= 1
 
-        offset_to_commit = offset_tracker.mark_processed(commit_info.offset)
+        offset_to_commit = self._offset_trackers[tp].mark_processed(commit_info.offset)
         if offset_to_commit is not None:
-            await self._batch_processor.add((commit_info.tp, offset_to_commit + 1))
+            await self._batch_processor.add((tp, offset_to_commit + 1))
 
     async def on_partitions_revoked(self, revoked: list[TopicPartition]):
         for tp in revoked:
-            if tp in self._offset_tracker:
-                self._offset_tracker.pop(tp)
+            if tp in self._offset_trackers:
+                self._offset_trackers.pop(tp)
             if tp in self._in_flight_count:
                 self._in_flight_count.pop(tp)
             if tp in self._queues:
