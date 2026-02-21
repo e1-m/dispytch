@@ -42,7 +42,9 @@ class KafkaConsumer(Consumer, ConsumerRebalanceListener):
         self._offset_trackers: dict[TopicPartition, OffsetTracker] = {}
         self._in_flight_count: dict[TopicPartition, int] = {}
         self._queues: dict[TopicPartition, asyncio.Queue] = {}
-        self._running = False
+        self._is_running = False
+        self._is_data_available: asyncio.Event | None = None
+        self._fetch_task = None
 
     async def start(self):
         existing_topics = self.consumer.subscription()
@@ -54,25 +56,72 @@ class KafkaConsumer(Consumer, ConsumerRebalanceListener):
         self.consumer.subscribe(topics=list(existing_topics), listener=self)
         await self.consumer.start()
 
+        self._is_data_available = asyncio.Event()
+        self._is_running = True
+        self._fetch_task = asyncio.create_task(self._fetch_loop())
+
+    async def stop(self):
+        self._is_running = False
+
+        if self._is_data_available:
+            self._is_data_available.set()
+
+        if self._fetch_task:
+            self._fetch_task.cancel()
+
+            try:
+                await self._fetch_task
+            except asyncio.CancelledError:
+                pass
+
+        await self.consumer.stop()
+
     async def listen(self) -> AsyncIterator[Message]:
-        async for message in self.consumer:
-            msg = Message(subscription=KafkaEventSubscription(topic=message.topic),
-                          payload=message.value)
+        cycle_idx = 0
 
-            tp = TopicPartition(message.topic, message.partition)
+        while self._is_running:
+            await self._is_data_available.wait()
 
-            self._waiting_for_commit[msg.id] = _MessageCommitInfo(
-                tp=tp,
-                offset=message.offset
-            )
+            # Back to sleep in case a rebalance occurred
+            if not (partitions := list(self._queues.keys())):
+                self._is_data_available.clear()
+                continue
 
-            if tp not in self._offset_trackers:
-                self._offset_trackers[tp] = OffsetTracker(message.offset)
+            yielded_in_cycle = False
 
-            yield msg
+            for _ in range(len(partitions)):
+                tp = partitions[cycle_idx % len(partitions)]
+                cycle_idx += 1
+
+                queue = self._queues.get(tp)
+                if queue is not None and not queue.empty():
+                    kafka_msg = queue.get_nowait()
+
+                    msg = Message(
+                        subscription=KafkaEventSubscription(topic=kafka_msg.topic),
+                        payload=kafka_msg.value
+                    )
+
+                    self._waiting_for_commit[msg.id] = _MessageCommitInfo(
+                        tp=tp,
+                        offset=kafka_msg.offset
+                    )
+
+                    if tp not in self._offset_trackers:
+                        self._offset_trackers[tp] = OffsetTracker(kafka_msg.offset)
+
+                    yield msg
+                    yielded_in_cycle = True
+                    break
+
+            if not yielded_in_cycle:
+                self._is_data_available.clear()
 
     async def ack(self, message: Message):
-        commit_info = self._waiting_for_commit.pop(message.id)
+        commit_info = self._waiting_for_commit.pop(message.id, None)
+        if not commit_info:
+            return
+
         tp = commit_info.tp
 
         # In case the partition was revoked before the message was processed
@@ -101,7 +150,9 @@ class KafkaConsumer(Consumer, ConsumerRebalanceListener):
         await self.consumer.commit({tp: offset for tp, offset in batch})
 
     async def _fetch_loop(self):
-        while self._running:
+        while self._is_running:
+            fetched_any = False
+
             for tp in self.consumer.assignment():
                 # Initialize partition in flight count if tp is seen for the first time
                 if tp not in self._in_flight_count:
@@ -115,12 +166,17 @@ class KafkaConsumer(Consumer, ConsumerRebalanceListener):
                 batches = await self.consumer.getmany(tp, timeout_ms=0, max_records=max_records_to_fetch)
                 records = batches.get(tp, [])
 
-                for record in records:
-                    # Initialize the partition queue if tp is seen for the first time
+                if records:
+                    fetched_any = True
+
                     if tp not in self._queues:
                         self._queues[tp] = asyncio.Queue()
 
-                    self._queues[tp].put_nowait(record)
-                    self._in_flight_count[tp] += 1
+                    for record in records:
+                        self._queues[tp].put_nowait(record)
+                        self._in_flight_count[tp] += 1
+
+            if fetched_any:
+                self._is_data_available.set()
 
             await asyncio.sleep(self.fetch_interval_ms / 1000.0)
