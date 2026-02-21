@@ -25,7 +25,6 @@ async def kafka_consumer(bootstrap_servers, topics):
                                 enable_auto_commit=False,
                                 auto_offset_reset='earliest')
     yield consumer
-    await consumer.stop()
 
 
 @pytest_asyncio.fixture()
@@ -45,9 +44,10 @@ async def dispytch_kafka_producer(kafka_producer: AIOKafkaProducer):
 
 @pytest_asyncio.fixture()
 async def dispytch_kafka_consumer(kafka_consumer: AIOKafkaConsumer):
-    consumer = KafkaConsumer(kafka_consumer)
+    consumer = KafkaConsumer(kafka_consumer, batch_size=1)
     await consumer.start()
-    return consumer
+    yield consumer
+    await consumer.stop()
 
 
 @pytest_asyncio.fixture()
