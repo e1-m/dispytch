@@ -1,12 +1,12 @@
 import asyncio
 import logging
 
-from dispytch.dispatcher.consumer import EventSubscription
 from dispytch.dispatcher.ack_policy import AckPolicy, AckAfterProcessing
 from dispytch.dispatcher.consumer import Consumer, Message
+from dispytch.dispatcher.consumer import EventSubscription
 from dispytch.dispatcher.handler import Middleware, Handler, EventHandlerContext
-from dispytch.dispatcher.trie import Trie
 from dispytch.dispatcher.router import Router
+from dispytch.dispatcher.trie import Trie
 from dispytch.serialization import Deserializer
 from dispytch.serialization.json import JSONDeserializer
 
@@ -40,17 +40,10 @@ class EventDispatcher:
 
         self._tasks = set()
 
-    async def start(self, concurrency_limit: int = 100):
+    async def start(self):
         """
         Starts an async loop that consumes events and dispatches them to registered handlers.
         """
-        semaphore = asyncio.Semaphore(concurrency_limit)
-
-        async def with_release(coro):
-            try:
-                return await coro
-            finally:
-                semaphore.release()
 
         def handle_result(t):
             self._tasks.discard(t)
@@ -61,9 +54,8 @@ class EventDispatcher:
                 logger.error(f"Handler failed with error: {exc}", exc_info=exc)
 
         async for message in self.consumer.listen():
-            await semaphore.acquire()
             task = asyncio.create_task(
-                with_release(self._handle_message(message))
+                self._handle_message(message)
             )
             self._tasks.add(task)
             task.add_done_callback(handle_result)
@@ -83,7 +75,7 @@ class EventDispatcher:
         ack_policy = policies[0] if len(policies) > 0 else self.default_ack_policy
 
         if not handlers:
-            logger.info(f'There is no registered handler for subscription: `{msg.subscription}`')
+            logger.warning(f'There is no registered handler for subscription: `{msg.subscription}`')
             return
 
         tasks = [asyncio.create_task(
