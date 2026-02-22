@@ -1,0 +1,62 @@
+name: dispytch-benchmark
+services:
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+  grafana:
+    image: grafana/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    volumes:
+      - dispytch-benchmark-grafana-storage:/var/lib/grafana
+  kafka:
+    image: redpandadata/redpanda:latest
+    container_name: dispytch-benchmark-kafka
+    command:
+      - redpanda
+      - start
+      - --kafka-addr=INSIDE://0.0.0.0:9092,OUTSIDE://0.0.0.0:19092
+      - --advertise-kafka-addr=INSIDE://kafka:9092,OUTSIDE://localhost:19092
+    ports:
+      - "9092:9092"
+      - "9644:9644"
+      - "19092:19092"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9644/v1/status/ready" ]
+      interval: 5s
+      retries: 5
+      start_period: 10s
+      timeout: 5s
+  k6-flood:
+    image: mostafamoradian/xk6-kafka:latest
+    volumes:
+      - ./kafka-flood.js:/script.js
+    command: [ "run", "/script.js" ]
+    depends_on:
+      kafka:
+        condition: service_healthy
+  benchmark-app:
+    build:
+      context: ../
+      dockerfile: benchmark/benchmark_app/Dockerfile
+    depends_on:
+      kafka:
+        condition: service_healthy
+      k6-flood:
+        condition: service_completed_successfully
+      prometheus:
+        condition: service_started
+      grafana:
+        condition: service_started
+    ports:
+      - "8080:8080"
+
+volumes:
+  dispytch-benchmark-grafana-storage:
