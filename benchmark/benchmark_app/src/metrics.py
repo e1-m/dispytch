@@ -5,7 +5,7 @@ EVENTS_IN_PROGRESS = Gauge('events_in_progress', 'Number of events in progress')
 PROCESSING_LATENCY = Histogram(
     'processing_latency_seconds',
     'Time spent processing a single message',
-    buckets=[0.01, 0.05, 0.1, 0.5, 1.0, 5.0]
+    buckets=[0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1.0, 2.5, 5.0, 7.5, 10.0]
 )
 
 EVENT_PROCESSED_TOTAL = Counter(
