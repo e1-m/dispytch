@@ -47,6 +47,10 @@ class KafkaConsumer(Consumer, ConsumerRebalanceListener):
         self._fetch_task = None
 
     async def start(self):
+        if self._is_running:
+            logger.warning("Attempting to start an already running consumer.")
+            return
+
         existing_topics = self.consumer.subscription()
         if not existing_topics:
             raise RuntimeError("Consumer must be subscribed to topics before listening.")
@@ -61,6 +65,10 @@ class KafkaConsumer(Consumer, ConsumerRebalanceListener):
         self._fetch_task = asyncio.create_task(self._fetch_loop())
 
     async def stop(self):
+        if not self._is_running:
+            logger.warning("Attempting to stop a non-running consumer.")
+            return
+
         self._is_running = False
 
         if self._is_data_available:
