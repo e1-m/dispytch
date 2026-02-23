@@ -60,11 +60,11 @@ services:
         condition: service_healthy
       kafka-init:
         condition: service_completed_successfully
-  benchmark-app:
+  consumer-app:
     build:
       context: ../
-      dockerfile: benchmark/benchmark_app/Dockerfile
-    container_name: benchmark-app
+      dockerfile: benchmark/consumer-app/Dockerfile
+    container_name: consumer-app
     environment:
       - SCENARIO=${SCENARIO}
       - IN_FLIGHT_MSG_LIMIT_PER_PARTITION=${IN_FLIGHT_MSG_LIMIT_PER_PARTITION}

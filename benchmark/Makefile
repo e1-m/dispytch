@@ -1,4 +1,4 @@
-BENCHMARK_SERVICES = benchmark-app k6-flood kafka kafka-init
+BENCHMARK_SERVICES = consumer-app k6-flood kafka kafka-init
 
 cleanup:
 	@echo "Cleaning up benchmark containers, keeping observability alive..."

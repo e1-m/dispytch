@@ -22,7 +22,7 @@ RUN uv sync --no-group docs --extra kafka
 
 WORKDIR /app/test
 
-COPY ./benchmark/benchmark_app/src src
+COPY ./benchmark/consumer-app/src src
 
 CMD ["./../.venv/bin/python", "-m", "src.main"]
 

@@ -12,11 +12,11 @@ from .middleware import EventsInProgressMiddleware, LatencyMiddleware, TotalCoun
 from .config import config
 
 if config.SCENARIO == "raw":
-    from .routers.raw_throughput import router
+    from .routers.raw import router
 elif config.SCENARIO == "with-io":
-    from .routers.io_simulation import router
+    from .routers.with_io_simulation import router
 elif config.SCENARIO == "with-resource-pool":
-    from .routers.resource_pool_simulation import router
+    from .routers.with_resource_pool_simulation import router
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
