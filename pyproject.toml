@@ -14,6 +14,7 @@ dependencies = [
 [dependency-groups]
 dev = [
     "prometheus-client>=0.24.1",
+    "pydantic-settings>=2.13.1",
     "pytest-asyncio>=1.1.0",
     "pytest-cov>=6.2.1",
 ]
