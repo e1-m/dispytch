@@ -1,5 +1,5 @@
 import pytest_asyncio
-from aiokafka import AIOKafkaConsumer, AIOKafkaProducer
+from aiokafka import AIOKafkaConsumer, AIOKafkaProducer, TopicPartition
 
 from dispytch import EventEmitter, EventDispatcher
 from dispytch.kafka import KafkaProducer, KafkaConsumer, KafkaEventRoute, KafkaEventSubscription
@@ -46,6 +46,22 @@ async def consumer_kafka(kafka_consumer: AIOKafkaConsumer):
     await consumer.start()
     yield consumer
     await consumer.stop()
+
+
+@pytest_asyncio.fixture()
+async def get_committed_offset(topics, consumer_kafka):
+    tps = consumer_kafka.consumer.assignment()
+
+    if len(tps) != 1:
+        raise ValueError(f"Expected 1 topic, got {tps}")
+
+    tp = next(iter(tps))
+
+    async def inner():
+        offset = await consumer_kafka.consumer.committed(tp)
+        return offset if offset is not None else 0
+
+    return inner
 
 
 @pytest_asyncio.fixture()
