@@ -18,7 +18,7 @@ ENV PATH="/home/appuser/.local/bin:$PATH"
 COPY pyproject.toml uv.lock README.md ./
 COPY dispytch ./dispytch
 
-RUN uv sync --no-group docs --extra kafka --extra orjson
+RUN uv sync --no-group docs --extra kafka
 
 WORKDIR /app/test
 
