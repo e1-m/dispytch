@@ -29,7 +29,11 @@ async def main():
         enable_auto_commit=False,
         group_id='test_group',
         auto_offset_reset='earliest',
-        fetch_max_bytes=(config.MESSAGE_SIZE_BYTES * 2) * config.IN_FLIGHT_MSG_LIMIT_PER_PARTITION * 10,
+        fetch_max_bytes=(
+                (config.MESSAGE_SIZE_BYTES * 2)
+                * config.IN_FLIGHT_MSG_LIMIT_PER_PARTITION
+                * config.KAFKA_PARTITIONS
+        ),
         max_partition_fetch_bytes=(config.MESSAGE_SIZE_BYTES * 2) * config.IN_FLIGHT_MSG_LIMIT_PER_PARTITION,
     )
 

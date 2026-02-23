@@ -74,6 +74,8 @@ services:
       - MAX_PROCESSING_TIME_MS=${MAX_PROCESSING_TIME_MS}
       - MIN_PROCESSING_TIME_MS=${MIN_PROCESSING_TIME_MS}
       - MAX_RESOURCE_POOL_SIZE=${MAX_RESOURCE_POOL_SIZE}
+
+      - KAFKA_PARTITIONS=${KAFKA_PARTITIONS}
     depends_on:
       kafka:
         condition: service_healthy

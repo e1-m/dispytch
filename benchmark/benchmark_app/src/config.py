@@ -20,5 +20,7 @@ class Config(BaseSettings):
     # with-resource-pool
     MAX_RESOURCE_POOL_SIZE: int
 
+    KAFKA_PARTITIONS: int
+
 
 config = Config()
