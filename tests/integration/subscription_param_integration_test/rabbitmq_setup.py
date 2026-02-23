@@ -61,7 +61,10 @@ async def dispytch_rabbitmq_producer(rabbitmq_exchange):
 
 @pytest_asyncio.fixture()
 async def dispytch_rabbitmq_consumer(rabbitmq_queue):
-    return RabbitMQConsumer(rabbitmq_queue)
+    consumer = RabbitMQConsumer(rabbitmq_queue)
+    await consumer.start()
+    yield consumer
+    await consumer.stop()
 
 
 @pytest_asyncio.fixture()
