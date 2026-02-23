@@ -34,18 +34,46 @@ services:
       retries: 5
       start_period: 10s
       timeout: 5s
+  kafka-init:
+    image: redpandadata/redpanda:latest
+    container_name: dispytch-benchmark-kafka-init
+    entrypoint: ""
+    command: sh -c "rpk topic create benchmark_events -p ${KAFKA_PARTITIONS} -r 1 --brokers kafka:9092 || true"
+    depends_on:
+      kafka:
+        condition: service_healthy
   k6-flood:
     image: mostafamoradian/xk6-kafka:latest
     volumes:
       - ./kafka-flood.js:/script.js
     command: [ "run", "/script.js" ]
+    environment:
+      - K6_MESSAGE_SIZE_BYTES=${K6_MESSAGE_SIZE_BYTES}
+      - ITERATION_BATCH_SIZE=${ITERATION_BATCH_SIZE}
+      - ITERATION_PER_SECOND=${ITERATION_PER_SECOND}
+      - DURATION=${DURATION}
     depends_on:
       kafka:
         condition: service_healthy
+      kafka-init:
+        condition: service_completed_successfully
   benchmark-app:
     build:
       context: ../
       dockerfile: benchmark/benchmark_app/Dockerfile
+    container_name: benchmark-app
+    environment:
+      - SCENARIO=${SCENARIO}
+      - IN_FLIGHT_MSG_LIMIT_PER_PARTITION=${IN_FLIGHT_MSG_LIMIT_PER_PARTITION}
+      - FETCH_INTERVAL_MS=${FETCH_INTERVAL_MS}
+      - MESSAGE_SIZE_BYTES=${MESSAGE_SIZE_BYTES}
+
+      - BATCH_COMMIT_BATCH_SIZE=${BATCH_COMMIT_BATCH_SIZE}
+      - BATCH_COMMIT_TIMEOUT_MS=${BATCH_COMMIT_TIMEOUT_MS}
+
+      - MAX_PROCESSING_TIME_MS=${MAX_PROCESSING_TIME_MS}
+      - MIN_PROCESSING_TIME_MS=${MIN_PROCESSING_TIME_MS}
+      - MAX_RESOURCE_POOL_SIZE=${MAX_RESOURCE_POOL_SIZE}
     depends_on:
       kafka:
         condition: service_healthy

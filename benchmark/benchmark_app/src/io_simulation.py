@@ -23,6 +23,6 @@ async def handle_event(event: Event[BenchmarkEvent]):
     await asyncio.sleep(
         random.uniform(
             config.MIN_PROCESSING_TIME_MS / 1000,
-            config.MAX_PROCESSING_TIME_SECONDS / 1000
+            config.MIN_PROCESSING_TIME_MS / 1000
         )
     )

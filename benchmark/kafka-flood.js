@@ -2,20 +2,22 @@ import {Writer} from "k6/x/kafka";
 import {b64encode} from "k6/encoding";
 import execution from "k6/execution";
 
-const BROKERS = ["kafka:9092"];
-const TOPIC = "benchmark_events";
+const brokers = ["kafka:9092"];
+const topic = "benchmark_events";
 
-const ITERATION_BATCH = 30000;
-const ITERATION_PER_SECOND = 1;
-const DURATION = "10s";
+
+const msgSize = parseInt(__ENV.K6_MESSAGE_SIZE_BYTES, 10);
+const iteration_batch_size = parseInt(__ENV.ITERATION_BATCH_SIZE, 10);
+const iteration_per_second = parseInt(__ENV.ITERATION_PER_SECOND, 10);
+const duration = __ENV.DURATION;
 
 export const options = {
     scenarios: {
         flood: {
             executor: "constant-arrival-rate",
-            rate: ITERATION_PER_SECOND,
+            rate: iteration_per_second,
             timeUnit: "1s",
-            duration: DURATION,
+            duration: duration,
             preAllocatedVUs: 50,
             maxVUs: 200,
         },
@@ -23,20 +25,20 @@ export const options = {
 };
 
 const writer = new Writer({
-    brokers: BROKERS,
-    topic: TOPIC,
+    brokers: brokers,
+    topic: topic,
     batchTimeout: 1000,
-    batchSize: ITERATION_BATCH,
+    batchSize: iteration_batch_size,
 });
 
 export default function () {
     const messages = [];
     const baseIter = execution.scenario.iterationInTest;
 
-    for (let i = 0; i < ITERATION_BATCH; i++) {
+    for (let i = 0; i < iteration_batch_size; i++) {
         const payload = JSON.stringify({
             id: `${baseIter}-${i}`,
-            payload: "x".repeat(512)
+            payload: "x".repeat(msgSize)
         });
 
         messages.push({

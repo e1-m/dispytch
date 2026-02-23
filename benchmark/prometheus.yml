@@ -1,5 +1,5 @@
 scrape_configs:
-  - job_name: 'dispytch-stress-test'
+  - job_name: 'dispytch-benchmark'
     scrape_interval: 500ms
     static_configs:
       - targets: [ 'host.docker.internal:8080' ]
