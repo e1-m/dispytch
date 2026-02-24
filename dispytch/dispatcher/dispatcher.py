@@ -40,10 +40,42 @@ class EventDispatcher:
 
         self._tasks = set()
 
-    async def start(self):
+    async def start(self, concurrency_limit: int | None = None):
         """
         Starts an async loop that consumes events and dispatches them to registered handlers.
+
+        Args:
+            concurrency_limit (int | None): The maximum number of concurrent message handlers allowed
+                to run at the same time. If `None`, concurrency is unbounded.
+
+                  WARNING: Risk of Starvation
+                Using a global application-level concurrency limit can lead to starvation (head-of-line
+                blocking). If the limit is exhausted by tasks that cannot make progress (e.g., handlers
+                waiting on an `AsyncLock`), the loop stops fetching new messages. Consequently,
+                messages in the underlying consumer that could be processed immediately are blocked.
+
+                  BEST PRACTICE: Prefer Consumer-Level Limits
+                Whenever possible, limit concurrency at the consumer/broker level instead (e.g., setting
+                a `prefetch_count` in RabbitMQ or a limit per partition in Kafka). This mitigates
+                the starvation problem provided that memory is not a bottleneck and the limit is set relatively high
+
+                  WHEN TO USE THIS PARAMETER:
+                This parameter exists to prevent the "unbounded concurrency trap"
+                (OOM errors or system overload) in scenarios where consumer-level backpressure is impossible.
+                For example, when
+                using brokers that lack built-in consumer limits (e.g., Redis Pub/Sub)
+                or using an ack policy where a message is acknowledged before processing completes.
+                In this case, the underlying consumer has no visibility into the number of in-flight messages and
+                cannot provide native backpressure.
         """
+        semaphore = asyncio.Semaphore(concurrency_limit) if concurrency_limit is not None else None
+
+        async def with_release(coro):
+            try:
+                return await coro
+            finally:
+                if semaphore is not None:
+                    semaphore.release()
 
         def handle_result(t):
             self._tasks.discard(t)
@@ -54,8 +86,11 @@ class EventDispatcher:
                 logger.error(f"Handler failed with error: {exc}", exc_info=exc)
 
         async for message in self.consumer.listen():
+            if semaphore is not None:
+                await semaphore.acquire()
+
             task = asyncio.create_task(
-                self._handle_message(message)
+                with_release(self._handle_message(message))
             )
             self._tasks.add(task)
             task.add_done_callback(handle_result)
@@ -134,6 +169,9 @@ class EventDispatcher:
                 )
 
     def set_ack_policy(self, subscription: EventSubscription, policy: AckPolicy):
+        """
+            Sets a particular ``AckPolicy`` to be applied to the ``subscription``.
+        """
         self._ack_policies.insert(
             subscription.get_route_segments(self.route_delimiter),
             policy
