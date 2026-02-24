@@ -14,7 +14,7 @@ class _SemaphoreEntry:
 class AsyncLock(Middleware):
     def __init__(
             self,
-            key_extractor: Callable[[EventHandlerContext], Hashable],
+            key_extractor: Callable[[EventHandlerContext], Hashable] = None,
             concurrency_limit: int = 1
     ):
         self.key_extractor = key_extractor
@@ -23,7 +23,7 @@ class AsyncLock(Middleware):
         self._semaphores: dict[Hashable, _SemaphoreEntry] = {}
 
     async def dispatch(self, ctx: EventHandlerContext, call_next: NextCall):
-        key = self.key_extractor(ctx)
+        key = self.key_extractor(ctx) if self.key_extractor else "__GLOBAL_LOCK__"
 
         if key not in self._semaphores:
             self._semaphores[key] = _SemaphoreEntry(semaphore=asyncio.Semaphore(self.concurrency_limit), ref_count=0)
