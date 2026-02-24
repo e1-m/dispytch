@@ -65,6 +65,31 @@ async def test_async_lock_different_keys():
 
 
 @pytest.mark.asyncio
+async def test_async_lock_without_key_extractor(ctx):
+    lock_middleware = AsyncLock(concurrency_limit=1)
+
+    counter = 0
+
+    async def call_next_with_counter(c):
+        nonlocal counter
+        counter += 1
+        await asyncio.sleep(0.1)
+
+    t1 = asyncio.create_task(lock_middleware.dispatch(ctx, call_next_with_counter))
+    await asyncio.sleep(0.05)
+    assert counter == 1
+
+    t2 = asyncio.create_task(lock_middleware.dispatch(ctx, call_next_with_counter))
+    await asyncio.sleep(0.02)
+    assert counter == 1  # Still 1 because t2 is blocked
+
+    await t1
+    await asyncio.sleep(0.01)  # Give t2 a chance to enter
+    assert counter == 2
+    await t2
+
+
+@pytest.mark.asyncio
 async def test_async_lock_concurrency_limit(ctx):
     lock_middleware = AsyncLock(key_extractor=lambda c: c.event["data"], concurrency_limit=2)
 
