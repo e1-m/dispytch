@@ -1,6 +1,6 @@
 from typing import Callable
 
-from dispytch.dispatcher.handler import EventHandlerContext, NextCall, Middleware
+from dispytch.dispatcher.middleware import EventHandlerContext, NextCall, Middleware
 
 
 class Filter(Middleware):

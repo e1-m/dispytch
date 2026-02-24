@@ -1,6 +1,7 @@
 import pytest
 from typing import Any
-from dispytch.dispatcher.handler import Handler, EventHandlerContext, NextCall, Middleware
+from dispytch.dispatcher.handler import Handler
+from dispytch.dispatcher.middleware import EventHandlerContext, NextCall, Middleware
 from dispytch.di.event import Event
 
 

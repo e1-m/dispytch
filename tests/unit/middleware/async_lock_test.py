@@ -1,7 +1,7 @@
 import asyncio
 import pytest
 from dispytch.middleware.async_lock import AsyncLock
-from dispytch.dispatcher.handler import EventHandlerContext
+from dispytch.dispatcher import EventHandlerContext
 
 
 @pytest.fixture

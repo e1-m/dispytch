@@ -1,6 +1,6 @@
 import time
 
-from dispytch import Middleware, NextCall, EventHandlerContext
+from dispytch.dispatcher import EventHandlerContext, NextCall, Middleware
 from .metrics import EVENTS_IN_PROGRESS, PROCESSING_LATENCY, EVENT_PROCESSED_TOTAL
 
 

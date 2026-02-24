@@ -1,7 +1,7 @@
 import asyncio
 from unittest.mock import Mock, AsyncMock, call, patch
 import pytest
-from dispytch.dispatcher.handler import EventHandlerContext
+from dispytch.dispatcher import EventHandlerContext
 from dispytch.middleware.retry import Retry
 
 

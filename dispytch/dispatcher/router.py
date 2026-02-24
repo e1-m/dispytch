@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from typing import Callable, Any
 
 from dispytch.dispatcher.consumer import EventSubscription
-from dispytch.dispatcher.handler import Middleware
+from dispytch.dispatcher.middleware import Middleware
 
 
 @dataclass

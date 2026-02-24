@@ -2,7 +2,7 @@ import asyncio
 from dataclasses import dataclass
 from typing import Callable, Hashable
 
-from dispytch import Middleware, EventHandlerContext, NextCall
+from dispytch.dispatcher.middleware import EventHandlerContext, NextCall, Middleware
 
 
 @dataclass

@@ -4,7 +4,8 @@ import logging
 from dispytch.dispatcher.ack_policy import AckPolicy, AckAfterProcessing
 from dispytch.dispatcher.consumer import Consumer, Message
 from dispytch.dispatcher.consumer import EventSubscription
-from dispytch.dispatcher.handler import Middleware, Handler, EventHandlerContext
+from dispytch.dispatcher.handler import Handler
+from dispytch.dispatcher.middleware import EventHandlerContext, Middleware, MiddlewarePipeline
 from dispytch.dispatcher.router import Router
 from dispytch.dispatcher.trie import Trie
 from dispytch.serialization import Deserializer
@@ -34,10 +35,13 @@ class EventDispatcher:
         self.route_delimiter: str = route_delimiter
         self.deserializer = deserializer or JSONDeserializer()
         self.default_ack_policy = default_ack_policy or AckAfterProcessing()
-        self._middlewares = middlewares if middlewares else []
         self._handlers: Trie[Handler] = Trie()
         self._ack_policies: Trie[AckPolicy] = Trie()
 
+        self._middleware_pipeline = MiddlewarePipeline(
+            self._execute_handlers,
+            middlewares
+        )
         self._tasks = set()
 
     async def start(self, concurrency_limit: int | None = None):
@@ -105,27 +109,31 @@ class EventDispatcher:
         event = self.deserializer.deserialize(msg.payload)
         event_route = msg.subscription.get_route_segments(self.route_delimiter)
 
-        handlers = self._handlers.get(event_route)
         policies = self._ack_policies.get(event_route)
         ack_policy = policies[0] if len(policies) > 0 else self.default_ack_policy
 
-        if not handlers:
-            logger.warning(f'There is no registered handler for subscription: `{msg.subscription}`')
-            return
-
-        tasks = [asyncio.create_task(
-            handler.handle(
-                EventHandlerContext(
-                    event=event,
-                    event_route=event_route
-                )
-            )
-        ) for handler in handlers]
+        ctx = EventHandlerContext(
+            event=event,
+            event_route=event_route
+        )
 
         return await ack_policy.execute(
             lambda: self.consumer.ack(msg),
-            lambda: asyncio.gather(*tasks, return_exceptions=True),
+            lambda: self._middleware_pipeline.execute(ctx),
         )
+
+    async def _execute_handlers(self, ctx: EventHandlerContext):
+        handlers = self._handlers.get(ctx.event_route)
+
+        if not handlers:
+            logger.warning(f'There is no registered handler for route: `{ctx.event_route}`')
+            return None
+
+        tasks = [asyncio.create_task(
+            handler.handle(ctx)
+        ) for handler in handlers]
+
+        return await asyncio.gather(*tasks, return_exceptions=True)
 
     def handler(
             self,
@@ -146,7 +154,7 @@ class EventDispatcher:
                 Handler(
                     func=callback,
                     subscription_pattern=subscription_pattern,
-                    middlewares=self._middlewares + middlewares
+                    middlewares=middlewares
                 )
             )
             return callback
@@ -168,7 +176,7 @@ class EventDispatcher:
                     subscription_pattern,
                     Handler(handler_data.func,
                             subscription_pattern,
-                            self._middlewares + handler_data.middlewares)
+                            handler_data.middlewares)
                 )
 
     def set_ack_policy(self, subscription: EventSubscription, policy: AckPolicy):

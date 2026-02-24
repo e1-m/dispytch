@@ -1,7 +1,7 @@
 from .dispatcher import EventDispatcher
 from .router import Router
 from .consumer import EventSubscription
-from .handler import Middleware, NextCall, EventHandlerContext
+from .middleware import EventHandlerContext, NextCall, Middleware
 
 __all__ = [
     "EventDispatcher",
