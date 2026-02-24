@@ -8,8 +8,7 @@ from dispytch.middleware.exc_interceptor import ExceptionInterceptor
 def ctx():
     return EventHandlerContext(
         event={"test": "data"},
-        subscription_pattern=("test",),
-        actual_event_route=("test",)
+        event_route=("test",)
     )
 
 

@@ -8,12 +8,11 @@ from dispytch.di.event import Event
 def ctx():
     return EventHandlerContext(
         event={"key": "value"},
-        subscription_pattern=("test",),
-        actual_event_route=("test",)
+        event_route=("test",)
     )
 
 
-class AppendMiddleware:
+class AppendMiddleware(Middleware):
     def __init__(self, value: str):
         self.value = value
 
@@ -25,7 +24,7 @@ class AppendMiddleware:
         return await call_next(ctx)
 
 
-class EarlyReturnMiddleware:
+class EarlyReturnMiddleware(Middleware):
     async def dispatch(self, ctx: EventHandlerContext, call_next: NextCall) -> Any:
         return None
 
@@ -35,7 +34,7 @@ async def test_handler_works_without_middlewares(ctx):
     async def target_func(event: Event):
         assert event.get("key", None) == "value"
 
-    handler = Handler(func=target_func, middlewares=None)
+    handler = Handler(func=target_func, subscription_pattern=("test",), middlewares=None)
 
     await handler.handle(ctx)
 
@@ -46,7 +45,7 @@ async def test_handler_applies_single_middleware(ctx):
         assert event["order"] == ["m1"]
 
     middleware = AppendMiddleware("m1")
-    handler = Handler(func=target_func, middlewares=[middleware])
+    handler = Handler(func=target_func, subscription_pattern=("test",), middlewares=[middleware])
 
     await handler.handle(ctx)
 
@@ -62,7 +61,7 @@ async def test_handler_applies_multiple_middlewares_in_correct_order(ctx):
     m2 = AppendMiddleware("m2")
     m3 = AppendMiddleware("m3")
 
-    handler = Handler(func=target_func, middlewares=[m1, m2, m3])
+    handler = Handler(func=target_func, subscription_pattern=("test",), middlewares=[m1, m2, m3])
 
     await handler.handle(ctx)
 
@@ -76,7 +75,7 @@ async def test_middleware_can_return_early(ctx):
         executed = True
         return "base"
 
-    handler = Handler(func=target_func, middlewares=[EarlyReturnMiddleware()])
+    handler = Handler(func=target_func, subscription_pattern=("test",), middlewares=[EarlyReturnMiddleware()])
 
     await handler.handle(ctx)
 

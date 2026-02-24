@@ -9,8 +9,7 @@ from dispytch.middleware.retry import Retry
 def ctx():
     return EventHandlerContext(
         event={"test": "data"},
-        subscription_pattern=("test",),
-        actual_event_route=("test",)
+        event_route=("test",)
     )
 
 

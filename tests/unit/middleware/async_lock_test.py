@@ -8,8 +8,7 @@ from dispytch.dispatcher.handler import EventHandlerContext
 def ctx():
     return EventHandlerContext(
         event={"data": "test"},
-        subscription_pattern=("test",),
-        actual_event_route=("test",)
+        event_route=("test",)
     )
 
 
@@ -49,8 +48,8 @@ async def test_async_lock_different_keys():
         counter += 1
         await asyncio.sleep(0.1)
 
-    ctx1 = EventHandlerContext(event={"key": "key1"}, subscription_pattern=(), actual_event_route=())
-    ctx2 = EventHandlerContext(event={"key": "key2"}, subscription_pattern=(), actual_event_route=())
+    ctx1 = EventHandlerContext(event={"key": "key1"}, event_route=())
+    ctx2 = EventHandlerContext(event={"key": "key2"}, event_route=())
 
     # Start two tasks for different keys
     t1 = asyncio.create_task(lock_middleware.dispatch(ctx1, call_next))
@@ -203,7 +202,7 @@ async def test_async_lock_stress():
 
     tasks = []
     for i in range(num_requests):
-        ctx = EventHandlerContext(event={"key": f"key_{i % num_keys}"}, subscription_pattern=(), actual_event_route=())
+        ctx = EventHandlerContext(event={"key": f"key_{i % num_keys}"}, event_route=())
         tasks.append(asyncio.create_task(lock_middleware.dispatch(ctx, call_next)))
 
     results = await asyncio.gather(*tasks)

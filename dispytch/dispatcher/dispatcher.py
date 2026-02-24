@@ -35,7 +35,7 @@ class EventDispatcher:
         self.deserializer = deserializer or JSONDeserializer()
         self.default_ack_policy = default_ack_policy or AckAfterProcessing()
         self._middlewares = middlewares if middlewares else []
-        self._handlers: Trie[tuple[EventSubscription, Handler]] = Trie()
+        self._handlers: Trie[Handler] = Trie()
         self._ack_policies: Trie[AckPolicy] = Trie()
 
         self._tasks = set()
@@ -117,11 +117,10 @@ class EventDispatcher:
             handler.handle(
                 EventHandlerContext(
                     event=event,
-                    actual_event_route=event_route,
-                    subscription_pattern=subscription.get_route_segments(self.route_delimiter),
+                    event_route=event_route
                 )
             )
-        ) for subscription, handler in handlers]
+        ) for handler in handlers]
 
         return await ack_policy.execute(
             lambda: self.consumer.ack(msg),
@@ -140,14 +139,14 @@ class EventDispatcher:
         middlewares = middlewares if middlewares else []
 
         def decorator(callback):
+            subscription_pattern = subscription.get_route_segments(self.route_delimiter)
+
             self._handlers.insert(
-                subscription.get_route_segments(self.route_delimiter),
-                (
-                    subscription,
-                    Handler(
-                        func=callback,
-                        middlewares=self._middlewares + middlewares
-                    )
+                subscription_pattern,
+                Handler(
+                    func=callback,
+                    subscription_pattern=subscription_pattern,
+                    middlewares=self._middlewares + middlewares
                 )
             )
             return callback
@@ -163,9 +162,13 @@ class EventDispatcher:
         """
         for subscription in router.get_subscriptions():
             for handler_data in router.get_handlers(subscription):
+                subscription_pattern = subscription.get_route_segments(self.route_delimiter)
+
                 self._handlers.insert(
-                    subscription.get_route_segments(self.route_delimiter),
-                    (subscription, Handler(handler_data.func, self._middlewares + handler_data.middlewares))
+                    subscription_pattern,
+                    Handler(handler_data.func,
+                            subscription_pattern,
+                            self._middlewares + handler_data.middlewares)
                 )
 
     def set_ack_policy(self, subscription: EventSubscription, policy: AckPolicy):

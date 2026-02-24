@@ -8,8 +8,7 @@ from dispytch.middleware.filter import Filter
 def ctx():
     return EventHandlerContext(
         event={"test": "data"},
-        subscription_pattern=("test",),
-        actual_event_route=("test",)
+        event_route=("test",)
     )
 
 

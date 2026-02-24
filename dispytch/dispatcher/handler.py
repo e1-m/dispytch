@@ -11,8 +11,7 @@ from dispytch.di.solver import DIResolver
 @dataclass
 class EventHandlerContext:
     event: dict
-    subscription_pattern: tuple[str, ...]
-    actual_event_route: tuple[str, ...]
+    event_route: tuple[str, ...]
 
 
 NextCall: TypeAlias = Callable[[EventHandlerContext], Awaitable[Any]]
@@ -57,6 +56,7 @@ class Handler:
     def __init__(
             self,
             func: Callable[..., Any],
+            subscription_pattern: tuple[str, ...],
             middlewares: list[Middleware] = None,
     ):
         self._user_func = func
@@ -64,6 +64,7 @@ class Handler:
             target_handler=self._invoke_with_injection,
             middlewares=middlewares
         )
+        self.subscription_pattern = subscription_pattern
 
     async def handle(self, ctx: EventHandlerContext):
         return await self._pipeline.execute(ctx)
@@ -72,8 +73,8 @@ class Handler:
         resolver = DIResolver(
             DIContext(
                 event=ctx.event,
-                subscription_pattern=ctx.subscription_pattern,
-                actual_event_route=ctx.actual_event_route,
+                actual_event_route=ctx.event_route,
+                subscription_pattern=self.subscription_pattern,
             )
         )
 
