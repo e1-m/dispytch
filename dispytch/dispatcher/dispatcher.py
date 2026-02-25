@@ -109,7 +109,7 @@ class EventDispatcher:
         event = self.deserializer.deserialize(msg.payload)
         event_route = msg.subscription.get_route_segments(self.route_delimiter)
 
-        policies = self._ack_policies.get(event_route)
+        policies = self._ack_policies.get(event_route, override_wildcard=True)
         ack_policy = policies[0] if len(policies) > 0 else self.default_ack_policy
 
         ctx = EventHandlerContext(
