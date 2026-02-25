@@ -7,11 +7,7 @@ from dispytch.emitter import EventEmitter
 
 
 class EventRouteTest(EventRoute):
-    def __init__(self, topic: str):
-        self.topic = topic
-
-    def format_dynamic(self, **kwargs):
-        return EventRouteTest(topic=self.topic)
+    topic: str
 
 
 class DummyEvent(EventBase):
