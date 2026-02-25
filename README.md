@@ -131,17 +131,6 @@ async def example_emit(emitter):
 
 ---
 
-## ⚠️ Limitations
-
-While dispytch is a great choice for most usecases there are some limitations to be aware of:
-
-🧾 No schema-on-write support
-Dispytch uses a schema-on-read model. Formats like Avro, Protobuf, or Thrift aren’t supported yet.
-
-🕵️ No dead-letter queue (DLQ)
-Failed messages are retried using built-in logic, but there’s no DLQ or fallback mechanism after final retries yet.
-
----
 💡 See something missing?
 Some features aren’t here yet—but with your help, they could be. Contributions welcome via PRs or discussions.
 
