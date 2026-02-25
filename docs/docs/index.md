@@ -4,25 +4,31 @@
 
 ---
 
-**Dispytch** is a lightweight, async Python framework for event-handling.
-It’s designed to streamline the development of clean and testable event-driven services.
+**Dispytch** is an asynchronous Python framework designed to streamline the development of event-driven services.
 
 ## 🚀 Features
 
 * 🧠 **Async core** – built for modern Python I/O
 * 🔌 **FastAPI-style dependency injection** – clean, decoupled handlers
-* 📬 **Backend-flexible** – with Kafka, RabbitMQ and Redis PubSub out-of-the-box
-* 🧾 **Pydantic-based validation** – event schemas are validated using pydantic
+* 📬 **Pluggable transport layer** – with Kafka, RabbitMQ and Redis PubSub out-of-the-box
+* 🧾 **Pydantic v2 validation** – event schemas are validated using pydantic
 * 🔁 **Built-in retry logic** – configurable, resilient, no boilerplate
-* ✅ **Automatic acknowledgement** – events are acknowledged automatically after successful processing
+* ✅ **Automatic acknowledgement** – events are acknowledged automatically
+* ⚠️ **Error Handling** – handle failures and prevent message loss with DLQ
+* ⚖️ **Composable Middleware** – set up logging, metrics, filtering, observability
 
 ## ✨ Example: Emitting Events
 
 ```python
+import asyncio
 import uuid
 from datetime import datetime
+
+from aiokafka import AIOKafkaProducer
 from pydantic import BaseModel
-from dispytch import EventBase
+
+from dispytch import EventEmitter, EventBase
+from dispytch.kafka import KafkaProducer, KafkaEventRoute
 
 
 class User(BaseModel):
@@ -31,10 +37,15 @@ class User(BaseModel):
     name: str
 
 
-class UserRegistered(EventBase):
-    __topic__ = "user_events"
-    __event_type__ = "user_registered"
+class UserEvent(EventBase):
+    __route__ = KafkaEventRoute(
+        topic="user_events"
+    )
 
+
+class UserRegistered(UserEvent):
+    type: str = "user_registered"
+    
     user: User
     timestamp: int
 
@@ -56,10 +67,30 @@ async def example_emit(emitter):
 
 ```python
 from typing import Annotated
-from pydantic import BaseModel
-from dispytch import Event, Dependency, HandlerGroup
-from service import UserService, get_user_service
 
+from pydantic import BaseModel
+from dispytch import Event, Dependency, Router
+
+from dispytch.kafka import KafkaEventSubscription
+from dispytch.middleware import Filter
+
+
+# Service Dependency
+
+class UserService:
+    def __init__(self):
+        self.users = []
+
+    async def do_smth_with_the_user(self, user):
+        print("Doing something with user", user)
+        self.users.append(user)
+
+
+def get_user_service():
+    return UserService()
+
+
+# Event Schemas 
 
 class User(BaseModel):
     id: str
@@ -67,22 +98,30 @@ class User(BaseModel):
     name: str
 
 
-# Define event body schema
 class UserCreatedEvent(BaseModel):
+    type: str
     user: User
     timestamp: int
 
 
-user_events = HandlerGroup()
+# Event handler
+
+user_events = Router()
 
 
-@user_events.handler(topic='user_events', event='user_registered')
+@user_events.handler(
+    KafkaEventSubscription(topic="user_events"),
+    middlewares=[Filter(lambda ctx: ctx.event["type"] == "user_registered")]
+)
 async def handle_user_registered(
         event: Event[UserCreatedEvent],
         user_service: Annotated[UserService, Dependency(get_user_service)]
 ):
-    user = event.body.user
-    timestamp = event.body.timestamp
+    user = event.user
+    timestamp = event.timestamp
+
     print(f"[User Registered] {user.id} - {user.email} at {timestamp}")
+
     await user_service.do_smth_with_the_user(user)
+
 ```
