@@ -201,7 +201,7 @@ from dispytch.redis import RedisProducer, RedisEventRoute
 
 class SystemAlert(EventBase):
     __route__ = RedisEventRoute(
-      channel="system.alerts"
+        channel="system.alerts"
     )
 
     level: str
@@ -243,10 +243,3 @@ def handle_timeout(event):
 ```
 
 The callback can be sync or async, and receives the original `EventBase` instance that timed out.
-
----
-
-## 📦 Serialization
-
-* Dispytch automatically **serializes the payload** as JSON by default. To change the default serializer you can
-  pass included `MessagePackSerializer` to the EventEmitter or write one on your own
