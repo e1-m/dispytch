@@ -1,10 +1,9 @@
 # ⚙️ Backend-Specific Event Settings
 
 Events often need fine-grained control over how they’re published—things like partitioning, headers, priorities,
-timestamps, etc. Dispytch supports this via the optional `__backend_config__` class attribute on any `EventBase`
-subclass.
+timestamps, etc. Dispytch supports this via the optional `__backend_config__` attribute on any `EventBase` object.
 
-This lets you define backend-specific settings *inside* your event instance in a clean, declarative way.
+This lets you define backend-specific settings inside your event instance in a clean way.
 
 ---
 
@@ -16,25 +15,29 @@ RabbitMQ, Redis, etc.) can define its own config schema.
 ### 🔎 Example
 
 ```python
-class UserCreated(EventBase):
-    __topic__ = "user_events"
-    __event_type__ = "user_created"
+from datetime import datetime
+from dispytch import EventBase, EventEmitter
+from dispytch.kafka import KafkaEventConfig, KafkaEventRoute
 
-    user: User
+
+class UserCreated(EventBase):
+    __route__ = KafkaEventRoute(
+        topic="user_events"
+    )
+
+    username: str
     timestamp: int
 
 
-async def example_emit(emitter: EventEmitter, user: User):
-    await emitter.emit(
-        UserCreated(
-            user=user,
-            timestamp=int(datetime.now().timestamp()),
-            __backend_config__=KafkaEventConfig(
-                partition_key=user.id,
-            )
-        )
-
+async def example_emit(emitter: EventEmitter, username: str):
+    event = UserCreated(
+        username=username,
+        timestamp=int(datetime.now().timestamp()),
     )
+    event.__backend_config__ = KafkaEventConfig(
+        partition_key=username,
+    )
+    await emitter.emit(event)
 ```
 
 ---
