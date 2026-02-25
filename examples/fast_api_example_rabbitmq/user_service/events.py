@@ -1,8 +1,11 @@
 from dispytch import EventBase
+from dispytch.rabbitmq import RabbitMQEventRoute
 
 
 class UserCreatedEvent(EventBase):
-    __topic__ = "user_events"
-    __event_type__ = "user_created"
+    __route__ = RabbitMQEventRoute(
+        exchange="user.events",
+        routing_key="user.created"
+    )
 
     name: str

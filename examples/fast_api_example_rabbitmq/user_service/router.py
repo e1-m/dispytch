@@ -2,9 +2,9 @@ import logging
 
 from fastapi import APIRouter
 
-from user_service.deps import EmitterDep
-from user_service.events import UserCreatedEvent
-from user_service.schemas import UserOut, UserIn
+from .deps import EmitterDep
+from .events import UserCreatedEvent
+from .schemas import UserOut, UserIn
 
 router = APIRouter(
     prefix="/users",

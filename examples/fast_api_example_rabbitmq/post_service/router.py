@@ -2,9 +2,9 @@ import logging
 
 from fastapi import APIRouter
 
-from post_service.deps import EmitterDep
-from post_service.events import PostCreatedEvent
-from post_service.schemas import PostOut, PostIn
+from .deps import EmitterDep
+from .events import PostCreatedEvent
+from .schemas import PostOut, PostIn
 
 router = APIRouter(
     prefix="/posts",
