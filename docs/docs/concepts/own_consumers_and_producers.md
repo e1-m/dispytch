@@ -16,13 +16,13 @@ To build your own event emitter backend, implement the `Producer` interface.
 ```python
 class Producer(ABC):
     @abstractmethod
-    async def send(self, topic: str, payload: bytes, config: BaseModel | None = None):
+    async def send(self, payload: bytes, route: EventRoute, config: BaseModel | None = None):
         ...
 ```
 
 ### 💡 Notes
 
-* `topic`: where the event goes
+* `route`: where the event goes, you define the structure
 * `payload`: bytes containing the event payload
 * `config`: optional backend-specific config, usually declared in the event as `__backend_config__`
 * If your send logic times out raise `ProducerTimeout`
@@ -30,12 +30,21 @@ class Producer(ABC):
 ### ✅ Example (Pseudocode!!!)
 
 ```python
-from dispytch.emitter.producer import ProducerTimeout, Producer
+from dispytch.emitter.producer import ProducerTimeout, Producer, EventRoute
+
+
+class RedisStreamsEventRoute(EventRoute):
+    stream: str
 
 
 class RedisProducer(Producer):
-    async def send(self, topic: str, payload: bytes, config: BaseModel | None = None):
-        result = await redis_client.xadd(topic, payload)
+    async def send(self, payload: bytes, route: EventRoute, config: BaseModel | None = None):
+        if not isinstance(route, RedisStreamsEventRoute):
+            raise TypeError(
+                f"Expected a RedisStreamsEventRoute when using RedisProducer got {type(route).__name__}"
+            )
+
+        result = await redis_client.xadd(route.stream, payload)
         if not result:
             raise ProducerTimeout("Redis XADD failed")
 ```
@@ -63,13 +72,17 @@ class Consumer(ABC):
 
 * `listen()` must yield `Message` objects. This is an **async generator**.
 
-* `ack()` is called when Dispytch successfully processes an event. Use it to mark the event as handled (e.g., ack a
+* `ack()` is called on message acknowledgment defined by AckPolicy. Use it to mark the event as handled (e.g., ack a
   Kafka offset or delete a message from a queue).
 
 ### ✅ Example (Pseudocode!!!)
 
 ```python
-from dispytch.listener.consumer import Consumer, Message
+from dispytch.dispatcher.consumer import Consumer, Message, EventSubscription
+
+
+class RedisStreamsSubscription(EventSubscription):
+    stream: str
 
 
 class RedisConsumer(Consumer):
@@ -77,7 +90,7 @@ class RedisConsumer(Consumer):
         while True:
             raw = await redis_client.xread(...)
             yield Message(
-                topic=raw["stream"],
+                subscription=RedisStreamsSubscription(stream=raw["stream"]),
                 payload=raw["payload"]
             )
 
@@ -90,4 +103,4 @@ class RedisConsumer(Consumer):
 
 ## 🛠️ Use Your Custom Classes
 
-Once implemented, you can use your custom producer and consumer classes directly in `EventEmitter` and `EventListener`
+Once implemented, you can use your custom producer and consumer classes directly in `EventEmitter` and `EventDispatcher`
