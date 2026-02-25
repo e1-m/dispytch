@@ -47,8 +47,8 @@ nav:
       - Dependency Injection: concepts/di.md
       - Events:
           - Emitting Events: concepts/emitter.md
-          - Handling Events: concepts/listener.md
-          - Dynamic Topics: concepts/dynamic_topics.md
+          - Handling Events: concepts/dispatcher.md
+          - Dynamic Routes: concepts/dynamic_routes.md
           - Serialization: concepts/serialization.md
       - Advanced Usage:
           - Custom Producers & Consumers: concepts/own_consumers_and_producers.md
