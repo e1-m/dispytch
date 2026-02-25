@@ -1,3 +1,5 @@
+from dispytch import EventSubscription
+
 # 🧪 Dependency Injection (DI)
 
 Dispytch supports a FastAPI-style Dependency Injection system to cleanly manage your handler dependencies—keeping your
@@ -33,7 +35,7 @@ async def get_service() -> Service:
     await service.cleanup()
 
 
-@handler_group.handler(topic="test_events", event="event_type")
+@router.handler(EventSubscription(topic="test_events"))
 async def handle_event(
         # Validates the event payload using EventBody model
         event: Event[EventBody],
@@ -41,19 +43,17 @@ async def handle_event(
         # Injects the result of get_service(); supports automatic cleanup when using context managers
         service: Annotated[Service, Dependency(get_service)]
 ):
-    print(f"Name = {event.body.name} | Value = {event.body.value}")
-    await service.do_smth(event.body.value)
+    print(f"Name = {event.name} | Value = {event.value}")
+    await service.do_smth(event.value)
 ```
 
 At runtime, Dispytch:
 
-1. Parses the handler signature.
+1. Resolves dependencies using the provided factory functions (both sync and async).
 
-2. Resolves dependencies using the provided factory functions (sync or async).
+2. Injects results directly into the handler.
 
-3. Injects results directly into the handler.
-
-4. Handles cleanup automatically for context-manager-based dependencies.
+3. Handles cleanup automatically for context-manager-based dependencies.
 
 ---
 
@@ -79,7 +79,7 @@ async def get_service(config: Annotated[Config, Dependency(get_config)]):
     await service.cleanup()
 
 
-@handler_group.handler(topic="nested", event="example")
+@router.handler(EventSubscription(topic="test_events"))
 async def handle_nested(
         event: Event[Any],
         service: Annotated[Service, Dependency(get_service)]
@@ -97,8 +97,8 @@ async def handle_nested(
 
 ## 🌐 Context-Aware Dependencies
 
-Dependency functions can receive contextual information about the current event—such as its topic, type, or payload—by
-accepting a typed `Event[T]` as an argument.
+Dependency functions can receive contextual information about the current event
+by accepting a typed `Event[T]` as an argument.
 
 ---
 
@@ -110,21 +110,19 @@ class Payload(BaseModel):
     action: str
 
 
-async def get_logger(event: Event[Payload]) -> Logger:
-    # Logger initialized with event metadata
+def get_logger(event: Event[Payload]) -> Logger:
+    # Logger initialized with event data
     return Logger(context={
-        "topic": event.__topic__,
-        "type": event.__event_type__,
-        "user_id": event.body.user_id
+        "user_id": event.user_id
     })
 
 
-@handler_group.handler(topic="loggable", event="ctx_aware")
+@router.handler(EventSubscription(topic="log_events"))
 async def handle_event_with_logger(
         event: Event[Payload],
         logger: Annotated[Logger, Dependency(get_logger)]
 ):
-    logger.info(f"User {event.body.user_id} performed action: {event.body.action}")
+    logger.info(f"User {event.user_id} performed action: {event.action}")
 ```
 
 ---
@@ -140,11 +138,11 @@ As an alternative for the `Annotated[T, Dependency(...)]` style, Dispytch lets y
 ### ✍️ Example
 
 ```python
-async def get_service() -> Service:
+def get_service() -> Service:
     return Service()
 
 
-@handler_group.handler(topic="alt_usage", event="example")
+@router.handler(EventSubscription(topic="alt_usage"))
 async def handler_two(
         event: Event,
         service=Dependency(get_service)  # Injected via default argument
