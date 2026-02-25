@@ -1,24 +1,28 @@
 import asyncio
 
 from aiokafka import AIOKafkaConsumer
-from dispytch import EventListener
+from dispytch import EventDispatcher
 from dispytch.kafka import KafkaConsumer
 
-from handlers import user_events
+from routers import user_events
 
 
 async def main():
-    kafka_consumer = AIOKafkaConsumer('user_events',
-                                      bootstrap_servers='localhost:19092',
-                                      enable_auto_commit=False,
-                                      group_id='consumer_group_id', )
-    await kafka_consumer.start()  # DO NOT FORGET THIS LINE.
-    # Without it, you'll be staring at an empty console as nothing is gonna be consumed before the consumer starts
+    kafka_consumer = KafkaConsumer(
+        AIOKafkaConsumer('user_events',
+                         bootstrap_servers='localhost:19092',
+                         enable_auto_commit=False,  # must be false, dispytch handles offsets
+                         group_id='consumer_group_id',
+                         auto_offset_reset='earliest'
+                         )
+    )
+    await kafka_consumer.start()  # IMPORTANT! REMEMBER TO START THE CONSUMER.
 
-    listener = EventListener(KafkaConsumer(kafka_consumer))
-    listener.add_handler_group(user_events)
+    dispatcher = EventDispatcher(kafka_consumer)
+    dispatcher.add_router(user_events)
 
-    await listener.listen()
+    print("Starting dispatcher")
+    await dispatcher.start()
 
 
 if __name__ == '__main__':

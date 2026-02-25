@@ -6,7 +6,7 @@ from aiokafka import AIOKafkaProducer
 from pydantic import BaseModel
 
 from dispytch import EventEmitter, EventBase
-from dispytch.kafka import KafkaProducer
+from dispytch.kafka import KafkaProducer, KafkaEventRoute
 
 
 class User(BaseModel):
@@ -16,20 +16,20 @@ class User(BaseModel):
 
 
 class UserEvent(EventBase):
-    __topic__ = "user_events"
+    __route__ = KafkaEventRoute(
+        topic="user_events"
+    )
 
 
 class UserRegistered(UserEvent):
-    __event_type__ = "user_registered"
-
+    type: str = "user_registered"
     user: User
     timestamp: int
 
 
 async def main():
     kafka_producer = AIOKafkaProducer(bootstrap_servers='localhost:19092')
-    await kafka_producer.start()  # DO NOT FORGET THIS LINE.
-    # Without it, you'll be staring at an empty console as nothing is gonna be sent before the producer starts
+    await kafka_producer.start()  # IMPORTANT! REMEMBER TO START THE PRODUCER.
 
     emitter = EventEmitter(KafkaProducer(kafka_producer))
 
