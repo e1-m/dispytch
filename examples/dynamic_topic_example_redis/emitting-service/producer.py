@@ -1,8 +1,17 @@
 import asyncio
 from redis.asyncio import Redis  # !!! Important: Use the asyncio-compatible Redis client from redis.asyncio
-from dispytch.redis import RedisProducer
-from dispytch import EventEmitter
-from events import UserNotificationEvent
+from dispytch import EventEmitter, EventBase
+from dispytch.redis import RedisEventRoute, RedisProducer
+
+
+class UserNotificationEvent(EventBase):
+    __route__ = RedisEventRoute(
+        channel="user.{user_id}.notification"
+    )
+
+    value: int
+    user_id: int
+    message: str
 
 
 async def main():
