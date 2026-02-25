@@ -1,6 +1,6 @@
 # 📤 `EventEmitter`
 
-The `EventEmitter` is a core component of Dispytch used to emit (publish) events to an underlying message broker such as
+The `EventEmitter` is a core component of Dispytch used to publish events to an underlying message broker such as
 RabbitMQ, Kafka, or Redis. It abstracts away the details of the producer backend and allows you to send events
 with minimal boilerplate.
 
@@ -14,13 +14,13 @@ with minimal boilerplate.
 
 * **Consistency & safety:** Typed events with `EventBase` ensure your payloads are validated and predictable.
 
-* **Plug & play with multiple backends:** Whether you want to use Kafka or RabbitMQ, `EventEmitter` lets you
+* **Multiple backends:** Whether you want to use Kafka or RabbitMQ, `EventEmitter` lets you
   switch between or postpone backend decisions with substantially less overhead.
 
 * **Testability:** Emitting an event is just calling a method on an object you can mock or swap out—making your code
   easier to test and reason about.
 
-**Bottom line:** `EventEmitter` turns noisy, complex event publishing into a streamlined, reliable, and
+**Bottom line:** `EventEmitter` turns event publishing into a streamlined, reliable, and
 developer-friendly interface. Without it, you’re stuck juggling broker APIs, serialization, and error-prone glue code.
 
 ---
@@ -41,73 +41,83 @@ transport layer.
 
 * `MyEvent` inherits from `EventBase` and defines:
 
-    * `__topic__`: Target topic for the event.
-    * `__event_type__`: Identifier for the type of event.
+    * `__route__`: Target route for the event.
+    * `__backend_config__`: Identifier for the type of event.
     * Event payload fields using standard `pydantic` model syntax.
 
 Example:
 
+//// tab | Kafka
+
 ```python
 from dispytch import EventBase
+from dispytch.kafka import KafkaEventRoute
 
 
 class MyEvent(EventBase):
-    __topic__ = "my_topic"
-    __event_type__ = "something_happened"
+    __route__ = KafkaEventRoute(
+        topic="my_topic",
+    )
 
     user_id: str
     value: int
 ```
 
+////  
+//// tab | RabbitMQ
+
+```python
+from dispytch import EventBase
+from dispytch.rabbitmq import RabbitMQEventRoute
+
+
+class MyEvent(EventBase):
+    __route__ = RabbitMQEventRoute(
+        exchange="my.exchange",
+        routing_key="my.routing.key",
+    )
+
+    user_id: str
+    value: int
+```
+
+////
+
+//// tab | Redis Pub/Sub
+
+```python
+from dispytch import EventBase
+from dispytch.redis import RedisEventRoute
+
+
+class MyEvent(EventBase):
+    __route__ = RedisEventRoute(
+        channel="my.channel",
+    )
+
+    user_id: str
+    value: int
+```
+
+////
+
+
 ---
 
 ## ✍️ Example: Setting Up Event Emitter
 
-//// tab | RabbitMQ
-
-```python
-import aio_pika
-from dispytch import EventEmitter, EventBase
-from dispytch.rabbitmq import RabbitMQProducer
-
-
-class MyEvent(EventBase):
-    __topic__ = 'notifications'
-    __event_type__ = 'user_registered'
-
-    user_id: str
-    email: str
-
-
-async def main():
-    connection = await aio_pika.connect('amqp://guest:guest@localhost:5672')
-    channel = await connection.channel()
-    exchange = await channel.declare_exchange('notifications', aio_pika.ExchangeType.DIRECT)
-
-    producer = RabbitMQProducer(exchange)
-    emitter = EventEmitter(producer)
-
-    await emitter.emit(
-        MyEvent(user_id="abc123",
-                email="user@example.com")
-    )
-    print("Event sent!")
-```
-
-💡 **Note**: `__topic__` will be used as a routing key when published to exchange
-
-////  
 //// tab | Kafka
 
 ```python
 from aiokafka import AIOKafkaProducer
 from dispytch import EventEmitter, EventBase
-from dispytch.kafka import KafkaProducer
+from dispytch.kafka import KafkaProducer, KafkaEventRoute
 
 
 class MyEvent(EventBase):
-    __topic__ = 'user_events'
-    __event_type__ = 'user_logged_in'
+    __route__ = KafkaEventRoute(
+        topic="user_events",
+    )
 
     user_id: str
     timestamp: str
@@ -115,8 +125,7 @@ class MyEvent(EventBase):
 
 async def main():
     kafka_raw_producer = AIOKafkaProducer(bootstrap_servers="localhost:19092")
-    # The next line is essential. 
-    await kafka_raw_producer.start()  # DO NOT FORGET 
+    await kafka_raw_producer.start()  # REMEMBER TO START THE PRODUCER!
 
     producer = KafkaProducer(kafka_raw_producer)
     emitter = EventEmitter(producer)
@@ -145,18 +154,55 @@ events will not be published, and you won’t get any errors—they’ll just si
 So don’t skip it. Don’t forget it. Your future self will thank you.
 
 ////
+
+//// tab | RabbitMQ
+
+```python
+import aio_pika
+from dispytch import EventEmitter, EventBase
+from dispytch.rabbitmq import RabbitMQProducer, RabbitMQEventRoute
+
+
+class MyEvent(EventBase):
+    __route__ = RabbitMQEventRoute(
+        exchange="my.exchange",
+        routing_key="my.routing.key",
+    )
+
+    user_id: str
+    email: str
+
+
+async def main():
+    connection = await aio_pika.connect('amqp://guest:guest@localhost:5672')
+    channel = await connection.channel()
+    exchange = await channel.declare_exchange('my.exchange', aio_pika.ExchangeType.DIRECT)
+
+    producer = RabbitMQProducer([exchange])
+    emitter = EventEmitter(producer)
+
+    await emitter.emit(
+        MyEvent(user_id="abc123",
+                email="user@example.com")
+    )
+    print("Event sent!")
+```
+
+////
+
 //// tab | Redis Pub/Sub
 
 ```python
 # !!! Important: Use the asyncio-compatible Redis client from redis.asyncio
 from redis.asyncio import Redis
 from dispytch import EventEmitter, EventBase
-from dispytch.redis import RedisProducer
+from dispytch.redis import RedisProducer, RedisEventRoute
 
 
 class SystemAlert(EventBase):
-    __topic__ = "system.alerts"
-    __event_type__ = "system_alert"
+    __route__ = RedisEventRoute(
+      channel="system.alerts"
+    )
 
     level: str
     message: str
@@ -164,7 +210,7 @@ class SystemAlert(EventBase):
 
 async def main():
     redis = Redis()
-    
+
     producer = RedisProducer(redis)
     emitter = EventEmitter(producer)
 
@@ -193,15 +239,14 @@ metrics, retries, alerts), you can register a callback using `on_timeout()`:
 ```python
 @emitter.on_timeout
 def handle_timeout(event):
-    print(f"Event {event.id} failed to emit!")
+    save_failed_event(event)
 ```
 
 The callback can be sync or async, and receives the original `EventBase` instance that timed out.
 
 ---
 
-## 📌 Notes
+## 📦 Serialization
 
 * Dispytch automatically **serializes the payload** as JSON by default. To change the default serializer you can
   pass included `MessagePackSerializer` to the EventEmitter or write one on your own
-* Event ordering and delivery guarantees — depend on the underlying broker (Kafka/RabbitMQ/Redis), not Dispytch.
