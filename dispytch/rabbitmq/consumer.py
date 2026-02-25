@@ -83,5 +83,4 @@ class RabbitMQConsumer(Consumer):
             yield msg
 
     async def ack(self, message: Message):
-        message = self._waiting_for_ack.pop(message.id)
-        await message.ack()
+        await self._waiting_for_ack.pop(message.id).ack()
