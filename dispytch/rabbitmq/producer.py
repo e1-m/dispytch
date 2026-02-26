@@ -5,12 +5,11 @@ from typing import Any
 
 from aio_pika import Message
 from aio_pika.abc import AbstractExchange, DeliveryMode
-from pydantic import BaseModel
 
-from dispytch.emitter.producer import Producer, ProducerTimeout, EventRoute
+from dispytch.emitter.producer import Producer, ProducerTimeout, EventRoute, BackendConfig
 
 
-class RabbitMQEventConfig(BaseModel):
+class RabbitMQEventConfig(BackendConfig):
     delivery_mode: DeliveryMode | int | None = None
     priority: int | None = None
     expiration: int | datetime | float | timedelta | None = None
@@ -39,7 +38,7 @@ class RabbitMQProducer(Producer):
         self.exchanges = {exchange.name: exchange for exchange in exchanges}
         self.timeout = timeout
 
-    async def send(self, payload: bytes, route: EventRoute, config: BaseModel | None = None):
+    async def send(self, payload: bytes, route: EventRoute, config: BackendConfig | None = None):
         if config is not None and not isinstance(config, RabbitMQEventConfig):
             raise TypeError(
                 f"Expected a RabbitMQEventConfig when using RabbitMQProducer got {type(config).__name__}"

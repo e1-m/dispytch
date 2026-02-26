@@ -2,12 +2,11 @@ from typing import Optional, Any
 
 from aiokafka import AIOKafkaProducer
 from aiokafka.errors import KafkaTimeoutError
-from pydantic import BaseModel
 
-from dispytch.emitter.producer import Producer, ProducerTimeout, EventRoute
+from dispytch.emitter.producer import Producer, ProducerTimeout, EventRoute, BackendConfig
 
 
-class KafkaEventConfig(BaseModel):
+class KafkaEventConfig(BackendConfig):
     partition_key: Optional[Any] = None
     partition: Optional[int] = None
     timestamp_ms: Optional[int] = None
@@ -22,7 +21,7 @@ class KafkaProducer(Producer):
     def __init__(self, producer: AIOKafkaProducer) -> None:
         self.producer = producer
 
-    async def send(self, payload: bytes, route: EventRoute, config: BaseModel | None = None) -> None:
+    async def send(self, payload: bytes, route: EventRoute, config: BackendConfig | None = None) -> None:
         if config is not None and not isinstance(config, KafkaEventConfig):
             raise TypeError(
                 f"Expected a KafkaEventConfig when using KafkaProducer got {type(config).__name__}"
