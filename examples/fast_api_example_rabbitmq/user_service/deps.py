@@ -10,7 +10,8 @@ from fastapi import Depends as FastAPIDependency, Request
 def emitter(request: Request):
     return EventEmitter(
         RabbitMQProducer(
-            exchange=request.app.state.rabbitmq.user_exchange,  # this service will send events to user events exchange
+            exchanges=[request.app.state.rabbitmq.user_exchange],
+            # this service will send events to user events exchange
         )
     )
 

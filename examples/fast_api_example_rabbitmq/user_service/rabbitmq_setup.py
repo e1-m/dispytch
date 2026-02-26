@@ -1,6 +1,6 @@
 import aio_pika
 
-from user_service.config import rabbit_mq_config, settings
+from .config import rabbit_mq_config, settings
 
 
 class RabbitMQResources:
@@ -24,7 +24,7 @@ async def init_rabbit_mq() -> RabbitMQResources:
                                                    aio_pika.ExchangeType.DIRECT)
 
     post_queue = await channel.declare_queue(rabbit_mq_config.POST_EVENTS_QUEUE_NAME)
-    await post_queue.bind(post_exchange, rabbit_mq_config.POST_EVENTS_ROUTING_KEY)
+    await post_queue.bind(post_exchange, rabbit_mq_config.POST_CREATED_ROUTING_KEY)
 
     return RabbitMQResources(
         connection,

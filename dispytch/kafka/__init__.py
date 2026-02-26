@@ -1,3 +1,13 @@
-from .consumer import KafkaConsumer as KafkaConsumer
-from .producer import KafkaProducer as KafkaProducer
-from .producer import KafkaEventConfig as KafkaEventConfig
+from .consumer import KafkaConsumer
+from .consumer import KafkaEventSubscription
+from .producer import KafkaProducer
+from .producer import KafkaEventRoute
+from .producer import KafkaEventConfig
+
+__all__ = [
+    "KafkaConsumer",
+    "KafkaEventSubscription",
+    "KafkaProducer",
+    "KafkaEventRoute",
+    "KafkaEventConfig",
+]

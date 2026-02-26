@@ -1,0 +1,95 @@
+name: dispytch-benchmark
+services:
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    volumes:
+      - dispytch-benchmark-grafana-storage:/var/lib/grafana
+  kafka:
+    image: redpandadata/redpanda:latest
+    container_name: dispytch-benchmark-kafka
+    command:
+      - redpanda
+      - start
+      - --kafka-addr=INSIDE://0.0.0.0:9092,OUTSIDE://0.0.0.0:19092
+      - --advertise-kafka-addr=INSIDE://kafka:9092,OUTSIDE://localhost:19092
+    ports:
+      - "9092:9092"
+      - "9644:9644"
+      - "19092:19092"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9644/v1/status/ready" ]
+      interval: 5s
+      retries: 5
+      start_period: 10s
+      timeout: 5s
+  kafka-init:
+    image: redpandadata/redpanda:latest
+    container_name: dispytch-benchmark-kafka-init
+    entrypoint: ""
+    command: sh -c "rpk topic create benchmark_events -p ${KAFKA_PARTITIONS} -r 1 --brokers kafka:9092 || true"
+    depends_on:
+      kafka:
+        condition: service_healthy
+  k6-flood:
+    image: mostafamoradian/xk6-kafka:latest
+    container_name: k6-flood
+    volumes:
+      - ./kafka-flood.js:/script.js
+    command: [ "run", "/script.js" ]
+    environment:
+      - K6_MESSAGE_SIZE_BYTES=${K6_MESSAGE_SIZE_BYTES}
+      - ITERATION_BATCH_SIZE=${ITERATION_BATCH_SIZE}
+      - ITERATION_PER_SECOND=${ITERATION_PER_SECOND}
+      - DURATION=${DURATION}
+    depends_on:
+      kafka:
+        condition: service_healthy
+      kafka-init:
+        condition: service_completed_successfully
+  consumer-app:
+    build:
+      context: ../
+      dockerfile: benchmark/consumer-app/Dockerfile
+    container_name: consumer-app
+    environment:
+      - SCENARIO=${SCENARIO}
+      - IN_FLIGHT_MSG_LIMIT_PER_PARTITION=${IN_FLIGHT_MSG_LIMIT_PER_PARTITION}
+      - FETCH_INTERVAL_MS=${FETCH_INTERVAL_MS}
+      - MESSAGE_SIZE_BYTES=${MESSAGE_SIZE_BYTES}
+
+      - BATCH_COMMIT_BATCH_SIZE=${BATCH_COMMIT_BATCH_SIZE}
+      - BATCH_COMMIT_TIMEOUT_MS=${BATCH_COMMIT_TIMEOUT_MS}
+
+      - MAX_PROCESSING_TIME_MS=${MAX_PROCESSING_TIME_MS}
+      - MIN_PROCESSING_TIME_MS=${MIN_PROCESSING_TIME_MS}
+      - MAX_RESOURCE_POOL_SIZE=${MAX_RESOURCE_POOL_SIZE}
+
+      - KAFKA_PARTITIONS=${KAFKA_PARTITIONS}
+    depends_on:
+      kafka:
+        condition: service_healthy
+      k6-flood:
+        condition: service_completed_successfully
+      prometheus:
+        condition: service_started
+      grafana:
+        condition: service_started
+    ports:
+      - "8080:8080"
+
+volumes:
+  dispytch-benchmark-grafana-storage:

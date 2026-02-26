@@ -2,15 +2,15 @@ import asyncio
 import logging
 from contextlib import asynccontextmanager
 
-from dispytch import EventListener
+from dispytch import EventDispatcher
 from dispytch.rabbitmq import RabbitMQConsumer
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from user_service.config import settings
-from user_service.handlers import post_events
-from user_service.rabbitmq_setup import init_rabbit_mq
-from user_service.router import router
+from .config import settings
+from .handlers import post_events
+from .rabbitmq_setup import init_rabbit_mq
+from .router import router
 
 logging.basicConfig(level=logging.INFO)
 
@@ -21,15 +21,17 @@ async def lifespan(app: FastAPI):
 
     app.state.rabbitmq = rabbitmq
 
-    listener = EventListener(
-        RabbitMQConsumer(
-            rabbitmq.post_queue,
-        )
+    consumer = RabbitMQConsumer(
+        rabbitmq.post_queue,
     )
 
-    listener.add_handler_group(post_events)
+    await consumer.start()
 
-    asyncio.create_task(listener.listen())
+    listener = EventDispatcher(consumer)
+
+    listener.add_router(post_events)
+
+    asyncio.create_task(listener.start())
 
     yield
 

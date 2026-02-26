@@ -1,9 +1,12 @@
 from dispytch import EventBase
+from dispytch.rabbitmq import RabbitMQEventRoute
 
 
 class PostCreatedEvent(EventBase):
-    __topic__ = "post_events"
-    __event_type__ = "post_created"
+    __route__ = RabbitMQEventRoute(
+        exchange="post.events",
+        routing_key="post.created"
+    )
 
     title: str
     content: str

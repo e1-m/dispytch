@@ -1,10 +1,15 @@
 import asyncio
 from typing import Annotated
+from pydantic import BaseModel
 from redis.asyncio import Redis  # !!! Important: Use the asyncio-compatible Redis client from redis.asyncio
-from dispytch import EventListener, TopicSegment, Event
-from dispytch.redis import RedisConsumer
 
-from events import UserNotification
+from dispytch import EventDispatcher, SubscriptionParam, Event
+from dispytch.redis import RedisConsumer, RedisEventSubscription
+
+
+class UserNotification(BaseModel):
+    value: int
+    message: str
 
 
 async def main():
@@ -14,20 +19,15 @@ async def main():
 
     consumer = RedisConsumer(pubsub)
 
-    listener = EventListener(consumer,
-                             topic_delimiter='.')
+    listener = EventDispatcher(consumer, route_delimiter='.')
 
-    @listener.handler(topic="user.{user_id}.notification", event="user_notification")
-    async def handle_user_event(event: Event[UserNotification],
-                                user_id: Annotated[int, TopicSegment()]):
-        print(f"📬 Received notification from user {user_id}: {event.body.message}")
+    @listener.handler(RedisEventSubscription(channel="user.{user_id}.notification"))
+    async def handle_user_event(event: Event[UserNotification], user_id: Annotated[int, SubscriptionParam()]):
+        print(f"📬 Received notification from user {user_id}: {event.message}")
 
     print("👂 Listening for user notifications...")
-    await listener.listen()
+    await listener.start()
 
 
 if __name__ == "__main__":
-    try:
-        asyncio.run(main())
-    except KeyboardInterrupt:
-        print("👋 Shutting down...")
+    asyncio.run(main())

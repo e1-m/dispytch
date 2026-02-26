@@ -1,7 +1,7 @@
 [project]
 name = "dispytch"
-version = "0.10.1"
-description = "Lightweight Python framework for writing clean and testable event-driven services"
+version = "0.11.0"
+description = "Python framework for writing clean and testable event-driven services"
 authors = [
     { name = "Ivan Mihun" }
 ]
@@ -13,10 +13,18 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "mike>=2.1.3",
-    "mkdocs-material>=9.6.15",
+    "prometheus-client>=0.24.1",
+    "pydantic-settings>=2.13.1",
     "pytest-asyncio>=1.1.0",
     "pytest-cov>=6.2.1",
+]
+docs = [
+    "mike>=2.1.3",
+    "mkdocs-material>=9.6.15",
+]
+examples = [
+    "fastapi>=0.133.0",
+    "uvicorn>=0.41.0",
 ]
 
 [project.optional-dependencies]

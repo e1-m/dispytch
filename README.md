@@ -2,16 +2,24 @@
 
 ---
 
-**Dispytch** is a lightweight, async Python framework for event-handling.
-It’s designed to streamline the development of clean and testable event-driven services.
+**Dispytch** is an asynchronous Python framework designed to streamline the development of event-driven services.
 
-## 🚀 Highlights
+## 🚀 Features
 
-* 🔌 **FastAPI-style dependency injection** – clean, decoupled handlers
 * 🧠 **Async core** – built for modern Python I/O
-* 📬 **Backend-flexible** – with Kafka, RabbitMQ and Redis PubSub out-of-the-box
-* 🧾 **Pydantic-based validation** – event schemas are validated using pydantic
+* 🔌 **FastAPI-style dependency injection** – clean, decoupled handlers
+* 📬 **Pluggable transport layer** – with Kafka, RabbitMQ and Redis PubSub out-of-the-box
+* 🧾 **Pydantic v2 validation** – event schemas are validated using pydantic
 * 🔁 **Built-in retry logic** – configurable, resilient, no boilerplate
+* ✅ **Automatic acknowledgement** – events are acknowledged automatically
+* ⚠️ **Error Handling** – handle failures and prevent message loss with DLQ
+* ⚖️ **Composable Middleware** – set up logging, metrics, filtering, observability
+
+---
+
+### 💡 See something missing?
+
+Some features aren’t here yet—but with your help, they could be. Contributions welcome via PRs or discussions.
 
 ---
 
@@ -52,10 +60,28 @@ Full documentation is available:
 from typing import Annotated
 
 from pydantic import BaseModel
-from dispytch import Event, Dependency, HandlerGroup
+from dispytch import Event, Dependency, Router
 
-from service import UserService, get_user_service
+from dispytch.kafka import KafkaEventSubscription
+from dispytch.middleware import Filter
 
+
+# Service Dependency
+
+class UserService:
+    def __init__(self):
+        self.users = []
+
+    async def do_smth_with_the_user(self, user):
+        print("Doing something with user", user)
+        self.users.append(user)
+
+
+def get_user_service():
+    return UserService()
+
+
+# Event Schemas 
 
 class User(BaseModel):
     id: str
@@ -64,25 +90,30 @@ class User(BaseModel):
 
 
 class UserCreatedEvent(BaseModel):
+    type: str
     user: User
     timestamp: int
 
 
-user_events = HandlerGroup()
+# Event handler
+
+user_events = Router()
 
 
-@user_events.handler(topic='user_events', event='user_registered')
+@user_events.handler(
+    KafkaEventSubscription(topic="user_events"),
+    middlewares=[Filter(lambda ctx: ctx.event["type"] == "user_registered")]
+)
 async def handle_user_registered(
         event: Event[UserCreatedEvent],
         user_service: Annotated[UserService, Dependency(get_user_service)]
 ):
-    user = event.body.user
-    timestamp = event.body.timestamp
+    user = event.user
+    timestamp = event.timestamp
 
     print(f"[User Registered] {user.id} - {user.email} at {timestamp}")
 
-    await user_service.do_smth_with_the_user(event.body.user)
-
+    await user_service.do_smth_with_the_user(user)
 ```
 
 ---
@@ -90,12 +121,13 @@ async def handle_user_registered(
 ## ✨ Emitter example
 
 ```python
-
 import uuid
 from datetime import datetime
 
 from pydantic import BaseModel
-from dispytch import EventBase
+
+from dispytch import EventEmitter, EventBase
+from dispytch.kafka import KafkaEventRoute
 
 
 class User(BaseModel):
@@ -105,17 +137,19 @@ class User(BaseModel):
 
 
 class UserEvent(EventBase):
-    __topic__ = "user_events"
+    __route__ = KafkaEventRoute(
+        topic="user_events"
+    )
 
 
 class UserRegistered(UserEvent):
-    __event_type__ = "user_registered"
+    type: str = "user_registered"
 
     user: User
     timestamp: int
 
 
-async def example_emit(emitter):
+async def example_emit(emitter: EventEmitter):
     await emitter.emit(
         UserRegistered(
             user=User(
@@ -126,22 +160,4 @@ async def example_emit(emitter):
             timestamp=int(datetime.now().timestamp()),
         )
     )
-
 ```
-
----
-
-## ⚠️ Limitations
-
-While dispytch is a great choice for most usecases there are some limitations to be aware of:
-
-🧾 No schema-on-write support
-Dispytch uses a schema-on-read model. Formats like Avro, Protobuf, or Thrift aren’t supported yet.
-
-🕵️ No dead-letter queue (DLQ)
-Failed messages are retried using built-in logic, but there’s no DLQ or fallback mechanism after final retries yet.
-
----
-💡 See something missing?
-Some features aren’t here yet—but with your help, they could be. Contributions welcome via PRs or discussions.
-

@@ -1,2 +1,8 @@
-from .deserializer import JSONDeserializer as JSONDeserializer
-from .serializer import JSONSerializer as JSONSerializer
+from .deserializer import JSONDeserializer
+from .serializer import JSONSerializer
+
+__all__ = [
+    "JSONDeserializer",
+    "JSONSerializer",
+]
+

@@ -6,14 +6,21 @@ from pydantic import BaseModel, TypeAdapter, ValidationError
 
 from dispytch.di.dependency import Dependency
 from dispytch.di.event import Event
-from dispytch.di.context import EventHandlerContext
-from dispytch.di.topic_segment import TopicSegment
+from dispytch.di.context import DIContext
+from dispytch.di.subscription_param import SubscriptionParam
 
 
 def extract_dependencies(func: Callable[..., Any]) -> dict[str, Dependency]:
     dependencies = _extract_user_defined_dependencies(func)
     dependencies.update(_extract_event_dependencies(func))
-    dependencies.update(_extract_topic_segment_dependencies(func))
+    dependencies.update(_extract_subscription_param_dependencies(func))
+
+    return dependencies
+
+
+def extract_internal_dependencies(func: Callable[..., Any]) -> dict[str, Dependency]:
+    dependencies = _extract_event_dependencies(func)
+    dependencies.update(_extract_subscription_param_dependencies(func))
 
     return dependencies
 
@@ -47,29 +54,29 @@ def _extract_event_dependencies(func: Callable[..., Any]) -> dict[str, Dependenc
     hints.pop('return', None)
 
     for name, annotation in hints.items():
-        if get_origin(annotation) is Event:
-            event_body_model, *_ = get_args(annotation)
-            if not issubclass(event_body_model, BaseModel):
-                raise TypeError(f"Event body model must be a subclass of pydantic.BaseModel, got {event_body_model}")
-            deps[name] = _make_event_dependency(body_model=event_body_model)
-
-        elif annotation is Event:
+        if annotation is Event:
             deps[name] = _make_event_dependency(body_model=dict)
+
+        elif get_origin(annotation) is Event:
+            event_body_model, *_ = get_args(annotation)
+
+            if not issubclass(event_body_model, BaseModel):
+                raise TypeError(
+                    f"Event body model must be a subclass of pydantic.BaseModel, got {event_body_model}"
+                )
+            deps[name] = _make_event_dependency(body_model=event_body_model)
 
     return deps
 
 
 def _make_event_dependency(body_model):
-    def context_to_event(ctx: EventHandlerContext) -> Event:
-        event_data = asdict(ctx.event)
-        body = event_data.pop('body')
-
-        return Event(body=body_model(**body), **event_data)
+    def context_to_event(ctx: DIContext) -> Event:
+        return body_model(**ctx.event)
 
     return Dependency(context_to_event)
 
 
-def _extract_topic_segment_dependencies(func: Callable[..., Any]) -> dict[str, Dependency]:
+def _extract_subscription_param_dependencies(func: Callable[..., Any]) -> dict[str, Dependency]:
     deps = {}
 
     sig = inspect.signature(func)
@@ -77,8 +84,8 @@ def _extract_topic_segment_dependencies(func: Callable[..., Any]) -> dict[str, D
         default = param.default
         annotation = param.annotation
 
-        if isinstance(default, TopicSegment):
-            deps[name] = _make_topic_dependency(
+        if isinstance(default, SubscriptionParam):
+            deps[name] = _make_subscription_param_dependency(
                 segment_name=default.validation_alias or default.alias or name,
                 field=Annotated[annotation, default]
             )
@@ -87,14 +94,14 @@ def _extract_topic_segment_dependencies(func: Callable[..., Any]) -> dict[str, D
             base_type, *metadata = get_args(annotation)
 
             for meta in metadata:
-                if isinstance(meta, TopicSegment):
-                    deps[name] = _make_topic_dependency(
+                if isinstance(meta, SubscriptionParam):
+                    deps[name] = _make_subscription_param_dependency(
                         segment_name=meta.validation_alias or meta.alias or name,
                         field=annotation
                     )
                     break
-                elif meta is TopicSegment:
-                    deps[name] = _make_topic_dependency(
+                elif meta is SubscriptionParam:
+                    deps[name] = _make_subscription_param_dependency(
                         segment_name=name,
                         field=base_type
                     )
@@ -103,27 +110,25 @@ def _extract_topic_segment_dependencies(func: Callable[..., Any]) -> dict[str, D
     return deps
 
 
-def _make_topic_dependency(segment_name, field):
-    def extract_field_from_topic(ctx: EventHandlerContext):
-        value = _extract_segment(
-            actual=ctx.event.topic,
-            pattern=ctx.topic_pattern,
-            delimiter=ctx.topic_delimiter,
+def _make_subscription_param_dependency(segment_name, field):
+    def extract_field_from_subscription_pattern(ctx: DIContext):
+        value = _extract_param(
+            actual=ctx.actual_event_route,
+            pattern=ctx.subscription_pattern,
             segment_name=segment_name
         )
 
         return _validate_field(value, field)
 
-    return Dependency(extract_field_from_topic)
+    return Dependency(extract_field_from_subscription_pattern)
 
 
-def _extract_segment(actual: str,
-                     delimiter: str,
-                     pattern: str,
-                     segment_name: str) -> str:
+def _extract_param(actual: tuple[str, ...],
+                   pattern: tuple[str, ...],
+                   segment_name: str) -> str:
     try:
-        index = pattern.split(delimiter).index(f"{{{segment_name}}}")
-        value = actual.split(delimiter)[index]
+        index = pattern.index(f"{{{segment_name}}}")
+        value = actual[index]
 
         return value
     except ValueError:

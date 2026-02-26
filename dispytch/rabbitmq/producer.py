@@ -5,13 +5,11 @@ from typing import Any
 
 from aio_pika import Message
 from aio_pika.abc import AbstractExchange, DeliveryMode
-from pydantic import BaseModel
 
-from dispytch.emitter.producer import Producer, ProducerTimeout
+from dispytch.emitter.producer import Producer, ProducerTimeout, EventRoute, BackendConfig
 
 
-class RabbitMQEventConfig(BaseModel):
-    exchange: str | None = None
+class RabbitMQEventConfig(BackendConfig):
     delivery_mode: DeliveryMode | int | None = None
     priority: int | None = None
     expiration: int | datetime | float | timedelta | None = None
@@ -28,6 +26,11 @@ class RabbitMQEventConfig(BaseModel):
     app_id: str | None = None
 
 
+class RabbitMQEventRoute(EventRoute):
+    exchange: str
+    routing_key: str
+
+
 class RabbitMQProducer(Producer):
     def __init__(self,
                  exchanges: list[AbstractExchange],
@@ -35,15 +38,20 @@ class RabbitMQProducer(Producer):
         self.exchanges = {exchange.name: exchange for exchange in exchanges}
         self.timeout = timeout
 
-    async def send(self, topic: str, payload: bytes, config: BaseModel | None = None):
+    async def send(self, payload: bytes, route: EventRoute, config: BackendConfig | None = None):
         if config is not None and not isinstance(config, RabbitMQEventConfig):
-            raise ValueError(
+            raise TypeError(
                 f"Expected a RabbitMQEventConfig when using RabbitMQProducer got {type(config).__name__}"
             )
         config = config or RabbitMQEventConfig()
 
+        if not isinstance(route, RabbitMQEventRoute):
+            raise TypeError(
+                f"Expected a RabbitMQEventRoute when using RabbitMQProducer got {type(route).__name__}"
+            )
+
         try:
-            await self.exchanges[config.exchange or next(iter(self.exchanges))].publish(
+            await self.exchanges[route.exchange].publish(
                 Message(
                     body=payload,
                     delivery_mode=config.delivery_mode,
@@ -60,7 +68,7 @@ class RabbitMQProducer(Producer):
                     user_id=config.user_id,
                     app_id=config.app_id,
                 ),
-                routing_key=topic,
+                routing_key=route.routing_key,
                 timeout=self.timeout,
             )
         except TimeoutError:

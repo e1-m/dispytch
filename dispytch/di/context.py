@@ -4,7 +4,7 @@ from dispytch.di.event import Event
 
 
 @dataclass
-class EventHandlerContext:
-    event: Event[dict]
-    topic_pattern: str
-    topic_delimiter: str
+class DIContext:
+    event: dict
+    subscription_pattern: tuple[str, ...]
+    actual_event_route: tuple[str, ...]

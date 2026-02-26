@@ -3,14 +3,14 @@ from typing import AsyncIterator
 
 from redis.asyncio.client import PubSub
 
-from dispytch.listener.consumer import Consumer, Message
+from dispytch import EventSubscription
+from dispytch.dispatcher.consumer import Consumer, Message
 
 logger = logging.getLogger(__name__)
 
 
 class RedisConsumer(Consumer):
-    def __init__(self,
-                 pubsub: PubSub):
+    def __init__(self, pubsub: PubSub):
         self.pubsub = pubsub
 
     async def listen(self) -> AsyncIterator[Message]:
@@ -19,9 +19,13 @@ class RedisConsumer(Consumer):
                 continue
 
             yield Message(
-                topic=message['channel'].decode('utf-8'),
+                subscription=RedisEventSubscription(channel=message['channel'].decode('utf-8')),
                 payload=message['data'],
             )
 
     async def ack(self, message: Message):
         ...
+
+
+class RedisEventSubscription(EventSubscription):
+    channel: str = "*"
