@@ -9,8 +9,8 @@ This lets you define backend-specific settings inside your event instance in a c
 
 ## 🧩 What Is `__backend_config__`?
 
-`__backend_config__` is an optional `BaseModel` that lets you pass custom options to your producer. Each backend (Kafka,
-RabbitMQ, Redis, etc.) can define its own config schema.
+`__backend_config__` is an optional field on `EventBase` instance that lets you pass custom options to your producer. Each backend (Kafka,
+RabbitMQ, Redis, etc.) defines its own config schema.
 
 ### 🔎 Example
 
@@ -24,6 +24,9 @@ class UserCreated(EventBase):
     __route__ = KafkaEventRoute(
         topic="user_events"
     )
+    __backend_config__ = KafkaEventConfig(
+        partition_key="{username}",
+    )
 
     username: str
     timestamp: int
@@ -33,9 +36,6 @@ async def example_emit(emitter: EventEmitter, username: str):
     event = UserCreated(
         username=username,
         timestamp=int(datetime.now().timestamp()),
-    )
-    event.__backend_config__ = KafkaEventConfig(
-        partition_key=username,
     )
     await emitter.emit(event)
 ```
@@ -47,7 +47,7 @@ async def example_emit(emitter: EventEmitter, username: str):
 Use this config to control how events are sent to Kafka.
 
 ```python
-class KafkaEventConfig(BaseModel):
+class KafkaEventConfig(BackendConfig):
     partition_key: Optional[Any] = None
     partition: Optional[int] = None
     timestamp_ms: Optional[int] = None
@@ -61,7 +61,7 @@ class KafkaEventConfig(BaseModel):
 RabbitMQ gives you full control over message delivery via its rich AMQP options.
 
 ```python
-class RabbitMQEventConfig(BaseModel):
+class RabbitMQEventConfig(BackendConfig):
     delivery_mode: int | None = None
     priority: int | None = None
     expiration: int | datetime | float | timedelta | None = None
@@ -80,7 +80,7 @@ If you're writing a custom producer (see [Writing Custom Producers & Consumers](
 your own config schema:
 
 ```python
-class MyCustomConfig(BaseModel):
+class MyCustomConfig(BackendConfig):
     foo: str
     retries: int = 3
 ```

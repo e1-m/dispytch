@@ -16,7 +16,7 @@ To build your own event emitter backend, implement the `Producer` interface.
 ```python
 class Producer(ABC):
     @abstractmethod
-    async def send(self, payload: bytes, route: EventRoute, config: BaseModel | None = None):
+    async def send(self, payload: bytes, route: EventRoute, config: BackendConfig | None = None):
         ...
 ```
 
@@ -30,7 +30,11 @@ class Producer(ABC):
 ### ✅ Example (Pseudocode!!!)
 
 ```python
-from dispytch.emitter.producer import ProducerTimeout, Producer, EventRoute
+from dispytch.emitter.producer import ProducerTimeout, Producer, EventRoute, BackendConfig
+
+
+class RedisStreamsEventConfig(BackendConfig):
+    config_field: str
 
 
 class RedisStreamsEventRoute(EventRoute):
@@ -38,13 +42,17 @@ class RedisStreamsEventRoute(EventRoute):
 
 
 class RedisProducer(Producer):
-    async def send(self, payload: bytes, route: EventRoute, config: BaseModel | None = None):
+    async def send(self, payload: bytes, route: EventRoute, config: BackendConfig | None = None):
         if not isinstance(route, RedisStreamsEventRoute):
             raise TypeError(
                 f"Expected a RedisStreamsEventRoute when using RedisProducer got {type(route).__name__}"
             )
+        if not isinstance(config, RedisStreamsEventConfig):
+            raise TypeError(
+                f"Expected a RedisStreamsEventConfig when using RedisProducer got {type(route).__name__}"
+            )
 
-        result = await redis_client.xadd(route.stream, payload)
+        result = await redis_client.xadd(route.stream, payload, config.config_field)
         if not result:
             raise ProducerTimeout("Redis XADD failed")
 ```
