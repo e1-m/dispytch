@@ -1,5 +1,3 @@
-from dispytch import EventSubscription
-
 # 📥 `EventDispatcher`
 
 `EventDispatcher` is Dispytch’s high-level abstraction for consuming events from a message broker
@@ -20,10 +18,10 @@ decoupled, and dependency-injected.
   split logic into small, testable, reusable functions that plug into the handler automatically.
 
 * **Async execution:** Handlers fully support async execution. Whether you're processing 5 events or 5,000,
-  `EventDispatcher`
-  doesn’t block on I/O.
+  `EventDispatcher` doesn’t block on I/O unless explicitly told to do so.
 
-* **Flexible retry logic:** Failures happen. With per-handler retry middleware, you decide what’s worth retrying and how
+* **Configurable retry logic:** Failures happen. With per-handler retry middleware, you decide what’s worth retrying and
+  how
   persistent to be—without bloating your handler code.
 
 * **Organized routing:** With `Router`, you can group related handlers by concern, making
@@ -59,6 +57,62 @@ Where:
 ---
 
 ## ✍️ Example: Setting Up Event Listener
+
+//// tab | Kafka
+
+```python
+from aiokafka import AIOKafkaConsumer
+from typing import Annotated
+from pydantic import BaseModel
+
+from dispytch import EventDispatcher, Event, Dependency
+from dispytch.kafka import KafkaConsumer, KafkaEventSubscription
+from dispytch.middleware import Filter
+
+
+class MyEventBody(BaseModel):
+    type: str
+    action: str
+    value: int
+
+
+async def parse_value(event: Event[MyEventBody]):
+    yield event.value
+
+
+async def main():
+    raw_consumer = AIOKafkaConsumer(
+        "user_events",
+        bootstrap_servers="localhost:19092",
+        enable_auto_commit=False,
+        group_id="listener_group"
+    )
+    consumer = KafkaConsumer(raw_consumer)
+    await consumer.start()  # REMEMBER TO START YOUR CONSUMER
+    
+    dispatcher = EventDispatcher(consumer)
+
+    @dispatcher.handler(
+        KafkaEventSubscription(topic="user_events"),
+        middlewares=[Filter(lambda ctx: ctx.event["type"] == "user_logged_in")]
+    )
+    async def handle_login(
+            value: Annotated[int, Dependency(parse_value)]
+    ):
+        print(f"Login action with value: {value}")
+
+    await dispatcher.start()()
+```
+
+⚠️ **Important**:
+
+When using Kafka with EventListener, you must manually start your KafkaConsumer instance.
+
+```python
+await consumer.start()
+```
+
+////
 
 //// tab | RabbitMQ
 
@@ -97,60 +151,6 @@ async def main():
         print(f"Received registration for user {user_id}")
 
     await dispatcher.start()
-```
-
-////
-//// tab | Kafka
-
-```python
-from aiokafka import AIOKafkaConsumer
-from typing import Annotated
-from pydantic import BaseModel
-
-from dispytch import EventDispatcher, Event, Dependency
-from dispytch.kafka import KafkaConsumer, KafkaEventSubscription
-from dispytch.middleware import Filter
-
-
-class MyEventBody(BaseModel):
-    type: str
-    action: str
-    value: int
-
-
-async def parse_value(event: Event[MyEventBody]):
-    yield event.value
-
-
-async def main():
-    raw_consumer = AIOKafkaConsumer(
-        "user_events",
-        bootstrap_servers="localhost:19092",
-        enable_auto_commit=False,
-        group_id="listener_group"
-    )
-    consumer = KafkaConsumer(raw_consumer)
-    await consumer.start()  # REMEMBER TO START YOUR CONSUMER
-    dispatcher = EventDispatcher(consumer)
-
-    @dispatcher.handler(
-        KafkaEventSubscription(topic="user_events"),
-        middlewares=[Filter(lambda ctx: ctx.event["type"] == "user_logged_in")]
-    )
-    async def handle_login(
-            value: Annotated[int, Dependency(parse_value)]
-    ):
-        print(f"Login action with value: {value}")
-
-    await dispatcher.start()()
-```
-
-⚠️ **Important**:
-
-When using Kafka with EventListener, you must manually start the underlying KafkaConsumer.
-
-```python
-await consumer.start()
 ```
 
 ////
@@ -226,7 +226,7 @@ from dispytch import Router
 from dispytch.middleware import Retry, ExponentialBackoffWithFullJitter
 
 router = Router(
-  middlewares=[Retry(ExponentialBackoffWithFullJitter(retries=5, retry_on=[RetriableError], base_delay_sec=1.25))]
+    middlewares=[Retry(ExponentialBackoffWithFullJitter(retries=5, retry_on=[RetriableError], base_delay_sec=1.25))]
 )
 
 
