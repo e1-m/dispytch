@@ -1,5 +1,3 @@
-from dispytch import EventDispatcher
-
 # 🧠 Dynamic Routes
 
 Dispytch makes event routing flexible and expressive through **dynamic routes**. This allows you to define parameterized
