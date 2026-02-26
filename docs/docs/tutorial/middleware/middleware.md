@@ -100,7 +100,7 @@ dispatcher = EventDispatcher(
 
 ### 📍 Local Middleware (Per Handler)
 
-Local middleware is applied *after* the dispatcher has successfully routed an event to one or more matching handlers. \
+Local middleware is applied *after* the dispatcher has successfully routed an event to one or more matching handlers.
 Every matching handler runs its set of middleware. 
 
 You can apply local middleware in two convenient ways: 
