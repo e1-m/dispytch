@@ -100,6 +100,10 @@ You must implement two abstract methods:
 2. `get_delay(attempt: int, prev_delay: float) -> float`: Returns the number of seconds to `asyncio.sleep` before making
    the next attempt.
 
+Note on Attempts: The attempt counter starts at 0. 
+If the downstream processing fails for the first time, 
+the should_retry and get_delay methods will receive 0 as the attempt value.
+
 ```python
 from dispytch.middleware import RetryPolicy
 
