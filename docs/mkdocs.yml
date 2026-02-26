@@ -43,13 +43,18 @@ nav:
   - Getting Started:
       - Installation: getting-started/installation.md
       - Quickstart: getting-started/quickstart.md
-  - Core Concepts:
-      - Dependency Injection: concepts/di.md
+  - Tutorial:
+      - Dependency Injection: tutorial/di/di.md
       - Events:
-          - Emitting Events: concepts/emitter.md
-          - Handling Events: concepts/dispatcher.md
-          - Dynamic Routes: concepts/dynamic_routes.md
-          - Serialization: concepts/serialization.md
+          - Emitting Events: tutorial/events/emitter.md
+          - Handling Events: tutorial/events/dispatcher.md
+          - Dynamic Routes: tutorial/events/dynamic_routes.md
+          - Serialization: tutorial/events/serialization.md
+      - Middleware:
+          - General: tutorial/middleware/middleware.md
+          - Retries: tutorial/middleware/retries.md
+          - Exception Handling: tutorial/middleware/exception_handling.md
+          - Filtering: tutorial/middleware/filter.md
       - Advanced Usage:
-          - Custom Producers & Consumers: concepts/own_consumers_and_producers.md
-          - Backend Configuration: concepts/backend_specific_event_configs.md
+          - Custom Producers & Consumers: tutorial/advanced/own_consumers_and_producers.md
+          - Backend Configuration: tutorial/advanced/backend_specific_event_configs.md

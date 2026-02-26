@@ -1,5 +1,3 @@
-from dispytch import EventSubscription
-
 # 🧪 Dependency Injection (DI)
 
 Dispytch supports a FastAPI-style Dependency Injection system to cleanly manage your handler dependencies—keeping your
