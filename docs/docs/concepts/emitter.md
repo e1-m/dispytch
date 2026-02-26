@@ -42,7 +42,7 @@ transport layer.
 * `MyEvent` inherits from `EventBase` and defines:
 
     * `__route__`: Target route for the event.
-    * `__backend_config__`: Identifier for the type of event.
+    * `__backend_config__`: See [Backend-Specific Configuration](./backend_specific_event_configs.md).
     * Event payload fields using standard `pydantic` model syntax.
 
 Example:
@@ -114,7 +114,7 @@ from dispytch import EventEmitter, EventBase
 from dispytch.kafka import KafkaProducer, KafkaEventRoute
 
 
-class MyEvent(EventBase):
+class UserEvent(EventBase):
     __route__ = KafkaEventRoute(
         topic="user_events",
     )
@@ -124,15 +124,15 @@ class MyEvent(EventBase):
 
 
 async def main():
-    kafka_raw_producer = AIOKafkaProducer(bootstrap_servers="localhost:19092")
-    await kafka_raw_producer.start()  # REMEMBER TO START THE PRODUCER!
+    raw_kafka_producer = AIOKafkaProducer(bootstrap_servers="localhost:19092")
+    await raw_kafka_producer.start()  # REMEMBER TO START THE PRODUCER!
 
-    producer = KafkaProducer(kafka_raw_producer)
+    producer = KafkaProducer(raw_kafka_producer)
     emitter = EventEmitter(producer)
 
     await emitter.emit(
-        MyEvent(user_id="abc123",
-                timestamp="2025-07-07T12:00:00Z")
+        UserEvent(user_id="abc123",
+                  timestamp="2025-07-07T12:00:00Z")
     )
     print("Event emitted!")
 
@@ -146,12 +146,12 @@ Dispytch does not start it for you.
 If you forget to call:
 
 ```python
-await kafka_raw_producer.start()
+await raw_kafka_producer.start()
 ```
 
 events will not be published, and you won’t get any errors—they’ll just silently vanish into the void.
 
-So don’t skip it. Don’t forget it. Your future self will thank you.
+So don’t skip it.
 
 ////
 
@@ -163,10 +163,10 @@ from dispytch import EventEmitter, EventBase
 from dispytch.rabbitmq import RabbitMQProducer, RabbitMQEventRoute
 
 
-class MyEvent(EventBase):
+class UserEvent(EventBase):
     __route__ = RabbitMQEventRoute(
-        exchange="my.exchange",
-        routing_key="my.routing.key",
+        exchange="user.events",
+        routing_key="user.email-changed",
     )
 
     user_id: str
@@ -176,14 +176,14 @@ class MyEvent(EventBase):
 async def main():
     connection = await aio_pika.connect('amqp://guest:guest@localhost:5672')
     channel = await connection.channel()
-    exchange = await channel.declare_exchange('my.exchange', aio_pika.ExchangeType.DIRECT)
+    exchange = await channel.declare_exchange('user.events', aio_pika.ExchangeType.DIRECT)
 
     producer = RabbitMQProducer([exchange])
     emitter = EventEmitter(producer)
 
     await emitter.emit(
-        MyEvent(user_id="abc123",
-                email="user@example.com")
+        UserEvent(user_id="abc123",
+                  email="user@example.com")
     )
     print("Event sent!")
 ```
