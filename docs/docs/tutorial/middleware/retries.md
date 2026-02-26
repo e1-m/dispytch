@@ -6,7 +6,7 @@ exceptions and automatically re-attempts processing the event based on a defined
 
 ---
 
-### 🚀 How to Use the Retry Middleware
+## 🚀 How to Use the Retry Middleware
 
 To use the retry functionality, you must instantiate the `Retry` middleware and provide it with a `RetryPolicy`.
 Dispytch includes an exponential backoff policy out of the box called `ExponentialBackoffWithFullJitter`.
@@ -40,7 +40,7 @@ async def fetch_user_avatar(event: dict):
 
 ---
 
-### ⚠️ The Critical Importance of Order
+## ⚠️ The Critical Importance of Order
 
 When defining your middleware lists, **placement of the `Retry` middleware is crucial.**
 
@@ -53,7 +53,7 @@ attempt**.
 * If you place a logging middleware **after** the `Retry` middleware, it will log the event repeatedly every time a
   retry is triggered.
 
-### 💣 The Danger of Nested Retries
+## 💣 The Danger of Nested Retries
 
 Because middleware pipelines are nested, you must be extremely careful not to apply multiple `Retry` middlewares to the
 same execution path.
@@ -65,7 +65,7 @@ Always ensure your retry logic is applied at the appropriate scope to prevent ex
 
 ---
 
-### 🧠 Retry Policies
+## 🧠 Retry Policies
 
 A retry policy is the brain behind the middleware.
 It dictates exactly *when* an event should be retried and *how long* the system should wait between attempts.
@@ -88,7 +88,7 @@ You can configure it with the following parameters:
 
 ---
 
-### 🛠️ Writing Your Own Retry Policy
+## 🛠️ Writing Your Own Retry Policy
 
 If you need a different retry strategy, you can easily write your own policy by inheriting from the abstract
 `RetryPolicy` class.

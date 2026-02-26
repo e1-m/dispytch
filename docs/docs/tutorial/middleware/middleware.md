@@ -7,7 +7,7 @@ You can think of middleware as a series of layers wrapped around your core event
 passes through each middleware layer before reaching the handler, and the response (or exception) passes back through
 those same layers on its way out.
 
-### ❓ Why Use Middleware?
+## ❓ Why Use Middleware?
 
 Middleware is ideal for cross-cutting concerns—functionality that you need to apply across many different event handlers
 without duplicating code. Common use cases include:
@@ -32,7 +32,7 @@ The `dispatch` method receives two arguments:
 2. **`call_next: NextCall`**: A callable that triggers the next step in the pipeline. This could be the next middleware
    in the chain, or, if this is the last middleware, the actual event handler.
 
-### 📝 Example: Simple Logging Middleware
+## 📝 Example: Simple Logging Middleware
 
 Here is how you can write a middleware that logs the route of an incoming event, measures how long it takes to process,
 and catches any errors.
