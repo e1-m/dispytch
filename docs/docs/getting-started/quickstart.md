@@ -75,10 +75,10 @@ from dispytch.kafka import KafkaProducer, KafkaEventRoute
 
 
 async def main():
-    kafka_raw_producer = AIOKafkaProducer(bootstrap_servers="localhost:19092")
-    await kafka_raw_producer.start()  # REMEMBER TO START THE PRODUCER!
+    raw_kafka_producer = AIOKafkaProducer(bootstrap_servers="localhost:19092")
+    await raw_kafka_producer.start()  # REMEMBER TO START THE PRODUCER!
 
-    producer = KafkaProducer(kafka_raw_producer)
+    producer = KafkaProducer(raw_kafka_producer)
     emitter = EventEmitter(producer)
 
     await emitter.emit(
@@ -216,7 +216,7 @@ async def handle_user_event(event: Event[MyEvent]):
 
 ## 4. Start the Dispatcher
 
-Connect your backend consumer to an `EventDispatcher`, register your handler group(s), then listen for incoming events:
+Connect your backend consumer to an `EventDispatcher`, register your router(s) and start the dispatcher:
 
 //// tab | Kafka
 
@@ -238,7 +238,7 @@ async def main():
             auto_offset_reset='earliest'
         )
     )
-    await consumer.start()
+    await consumer.start() # Remember to start the consumer
 
     dispatcher = EventDispatcher(consumer)
     dispatcher.add_router(my_router)
@@ -255,15 +255,28 @@ if __name__ == "__main__":
 
 ```python
 import asyncio
+import aio_pika
 from dispytch.dispatcher import EventDispatcher
 from dispytch.rabbitmq import RabbitMQConsumer
 from routers import my_router
-from queues import queue_one, queue_two
+
+
+async def setup_queue():
+    connection = await aio_pika.connect_robust("amqp://guest:guest@localhost:5672")
+    channel = await connection.channel()
+
+    exchange = await channel.declare_exchange("my.exchange", aio_pika.ExchangeType.DIRECT)
+    queue = await channel.declare_queue("my.events.queue", durable=True)
+    await queue.bind(exchange, routing_key="my.routing.key")
+
+    return queue
 
 
 async def main():
-    consumer = RabbitMQConsumer(queue_one, queue_two)
-    await consumer.start()
+    queue = await setup_queue()
+
+    consumer = RabbitMQConsumer(queue)
+    await consumer.start()  # Remember to start the consumer
 
     dispatcher = EventDispatcher(consumer)
     dispatcher.add_router(my_router)
@@ -293,7 +306,6 @@ async def main():
 
     consumer = RedisConsumer(pubsub)
 
-
     dispatcher = EventDispatcher(consumer)
     dispatcher.add_router(my_router)
     await dispatcher.start()
@@ -309,4 +321,5 @@ if __name__ == "__main__":
 
 ## That’s It!
 
-Define events, emit them, handle them asynchronously — all wired up with di and middleware.
+And there you have it: Events defined, emitted, and handled. 
+Fully decoupled via DI and middleware. Simple, clean, and async
