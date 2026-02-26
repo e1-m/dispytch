@@ -55,6 +55,8 @@ nav:
           - Retries: tutorial/middleware/retries.md
           - Exception Handling: tutorial/middleware/exception_handling.md
           - Filtering: tutorial/middleware/filter.md
+          - Async Lock: tutorial/middleware/async_lock.md
+      - Async Processing: tutorial/async_processing/async_processing.md
       - Advanced Usage:
           - Custom Producers & Consumers: tutorial/advanced/own_consumers_and_producers.md
           - Backend Configuration: tutorial/advanced/backend_specific_event_configs.md
