@@ -24,8 +24,8 @@ class Producer(ABC):
 
 * `route`: where the event goes, you define the structure
 * `payload`: bytes containing the event payload
-* `config`: optional backend-specific config, usually declared in the event as `__backend_config__`
-* If your send logic times out raise `ProducerTimeout`
+* `config`: optional backend-specific config, declared in the event as `__backend_config__`
+* If your sending logic times out raise `ProducerTimeout`
 
 ### ✅ Example (Pseudocode!!!)
 
