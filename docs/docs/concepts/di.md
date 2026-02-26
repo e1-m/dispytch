@@ -3,7 +3,7 @@ from dispytch import EventSubscription
 # 🧪 Dependency Injection (DI)
 
 Dispytch supports a FastAPI-style Dependency Injection system to cleanly manage your handler dependencies—keeping your
-logic modular, testable, and DRY.
+logic decoupled, testable, and DRY.
 
 ---
 
@@ -35,7 +35,7 @@ async def get_service() -> Service:
     await service.cleanup()
 
 
-@router.handler(EventSubscription(topic="test_events"))
+@router.handler(...)
 async def handle_event(
         # Validates the event payload using EventBody model
         event: Event[EventBody],
@@ -79,7 +79,7 @@ async def get_service(config: Annotated[Config, Dependency(get_config)]):
     await service.cleanup()
 
 
-@router.handler(EventSubscription(topic="test_events"))
+@router.handler(...)
 async def handle_nested(
         event: Event[Any],
         service: Annotated[Service, Dependency(get_service)]
@@ -117,7 +117,7 @@ def get_logger(event: Event[Payload]) -> Logger:
     })
 
 
-@router.handler(EventSubscription(topic="log_events"))
+@router.handler(...)
 async def handle_event_with_logger(
         event: Event[Payload],
         logger: Annotated[Logger, Dependency(get_logger)]
@@ -132,9 +132,6 @@ async def handle_event_with_logger(
 As an alternative for the `Annotated[T, Dependency(...)]` style, Dispytch lets you inject dependencies by assigning a
 `Dependency` instance directly as a default value for a handler parameter.
 
-> 📋 Note: This injection method **does not work** for the `Event` parameter. You must use explicit type hints for
-`Event` to enable proper injection.
-
 ### ✍️ Example
 
 ```python
@@ -142,10 +139,13 @@ def get_service() -> Service:
     return Service()
 
 
-@router.handler(EventSubscription(topic="alt_usage"))
+@router.handler(...)
 async def handler_two(
         event: Event,
         service=Dependency(get_service)  # Injected via default argument
 ):
     await service.do_smth()
 ```
+
+> 📋 Note: This injection method **does not work** for the `Event` parameter. You must use explicit type hints for
+`Event` to enable proper injection.
