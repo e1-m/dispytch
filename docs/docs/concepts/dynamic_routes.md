@@ -29,7 +29,7 @@ Some common use cases include:
 
 ## 🧯 Broker Compatibility
 
-Dynamic topics are supported with **all brokers** in Dispytch. However, keep in mind:
+Dynamic routing is supported with **all brokers** in Dispytch. However, keep in mind:
 
 * **Redis** (with `psubscribe`) and **AMQP** (with topic exchange routing) are well-suited due to native support for
   wildcards.
@@ -40,7 +40,10 @@ Dynamic topics are supported with **all brokers** in Dispytch. However, keep in 
     * Poor scalability with high topic cardinality
 
 **If you're using Kafka, prefer fewer topics and use event payloads for context and partitions for scalability.**
-But if your use case truly needs dynamic topics (e.g., for multi-tenancy separation), you *can* use dynamic topics.
+But if your use case truly needs dynamic topics (e.g., for multi-tenancy separation), you *can* use dynamic routing.
+
+Dynamic routing is an application-level feature of Dispytch, independent of your broker’s internal routing.
+Dispytch can only process the events your broker is configured to deliver
 
 ---
 
@@ -85,7 +88,8 @@ You're not allowed to forget the parentheses using this one xD
 
 ## 🪞 Aliases in Dynamic Segments
 
-By default, Dispytch binds the segment name in the topic (e.g., `user_id`) to the **parameter name** in your function.
+By default, Dispytch binds the segment name in the subscription (e.g., `user_id`) to the **parameter name** in your
+function.
 You can override this using aliases.
 
 ### 🏷️ `alias`
@@ -104,8 +108,8 @@ Even though your handler uses `uid`, Dispytch will map `user_id` from the subscr
 
 ### 🧪 `validation_alias`
 
-You can also use `validation_alias`. If you use both `alias` and `validation_alias` then **`validation_alias` takes
-precedence**.
+You can also use `validation_alias`. If you use both `alias` and `validation_alias` then `validation_alias` takes
+precedence.
 
 ```python
 @router.handler(EventSubscription(channel="user.{user_id}.notification"))
@@ -119,10 +123,13 @@ def handler(uid: int = SubscriptionParam(validation_alias="user_id")):
 
 ```python
 from typing import Annotated
-from dispytch import Event, SubscriptionParam
+from dispytch import Event, SubscriptionParam, Router
+from dispytch.redis import RedisEventSubscription
+
+router = Router()
 
 
-@router.handler(EventSubscription(channel="user.{user_id}.notification"))
+@router.handler(RedisEventSubscription(channel="user.{user_id}.notification"))
 async def handle_notification(event: Event, user_id: Annotated[int, SubscriptionParam()]):
     print(f"🔔 Notification for user {user_id}: {event.body}")
 ```
@@ -137,9 +144,13 @@ Dispytch will extract `user_id=42` and pass it to the handler.
 
 ```python
 from typing import Annotated
-from dispytch import Event, SubscriptionParam
+from dispytch import Event, SubscriptionParam, Router
+from dispytch.redis import RedisEventSubscription
 
-@router.handler(EventSubscription(channel="user.{uid}.notification"))
+router = Router()
+
+
+@router.handler(RedisEventSubscription(channel="user.{uid}.notification"))
 async def handler(user_id: Annotated[int, SubscriptionParam(alias="uid")]):
     print(f"User ID: {user_id}")
 ```
@@ -158,7 +169,7 @@ from dispytch import EventBase
 
 class UserNotification(EventBase):
     __router__ = EventRoute(
-      channel="user.{user_id}.notification"
+        channel="user.{user_id}.notification"
     )
 
     user_id: int
@@ -167,11 +178,11 @@ class UserNotification(EventBase):
 
 ---
 
-## 📤 Emitting Dynamic Events
+## 📤 Emitting Dynamically Routed Events
 
 ```python
 await emitter.emit(
-  UserNotification(user_id=42, message="Hey there!")
+    UserNotification(user_id=42, message="Hey there!")
 )
 ```
 
@@ -183,11 +194,10 @@ Dispytch will automatically interpolate the route:
 
 ---
 
-## 🧪 Validating Topic Parameters
+## 🧪 Validating Subscription Parameters
 
-Dynamic topic segments in Dispytch aren't just dumb markers. Under the hood, `TopicSegment()` has the properties of
-a **Pydantic `Field`**, which means you can apply **validation constraints** directly to values extracted from the
-route.
+Under the hood, `SubscriptionParam` has the properties of a **Pydantic `Field`**, 
+which means you can apply **validation constraints** directly to values extracted from the route.
 
 This is useful when:
 
@@ -227,10 +237,10 @@ If the route resolves to `value=130`, validation fails and Dispytch raises an er
 
 ---
 
-## 🔗 Topic Delimiters in `EventDispatcher`
+## 🔗 Route Delimiter in `EventDispatcher`
 
-When using dynamic routes, Dispytch needs a way to **split subscription patterns** into segments — this is done using the
-`route_delimiter` argument in the `EventDispatcher`.
+When using dynamic routes, Dispytch needs a way to **split subscription patterns** into segments —
+this is done using the `route_delimiter` argument in the `EventDispatcher`.
 
 ```python
 dispatcher = EventDispatcher(consumer, route_delimiter='.')
@@ -246,7 +256,7 @@ This tells Dispytch to treat route segments as dot-separated:
 
 ### ⚠️ Important Caveat: Avoid Using the Delimiter in Substituted Values
 
-When you emit or receive an event with a dynamic topic, **substituted values must not contain the delimiter**.
+When you emit or receive an event with a dynamic route, **substituted values must not contain the delimiter**.
 For example:
 
 ```python
@@ -265,7 +275,7 @@ This will break matching — because Dispytch will incorrectly split it into:
 ["user", "7", "45", "notification"]
 ```
 
-So you shouldn't use values that contain the delimiter, like `7.45` with `'.'` or `"user_id"` with `'_'`.
+Avoid using values that contain your delimiter, like `7.45` with `'.'` or `"user_id"` with `'_'`.
 
 ---
 
