@@ -76,7 +76,7 @@ Using this config, you can set AMQP-specific things
 
 ## 🔨 Implementing Custom Configs
 
-If you're writing a custom producer (see [Writing Custom Producers & Consumers](../own_consumers_and_producers/)), you can define
+If you're writing a custom producer (see [Writing Custom Producers & Consumers](./own_consumers_and_producers.md)), you can define
 your own config schema:
 
 ```python

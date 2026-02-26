@@ -42,7 +42,7 @@ transport layer.
 * `MyEvent` inherits from `EventBase` and defines:
 
     * `__route__`: Target route for the event.
-    * `__backend_config__`: See [Backend-Specific Configuration](./backend_specific_event_configs.md).
+    * `__backend_config__`: See [Backend-Specific Configuration](../advanced/backend_specific_event_configs.md).
     * Event payload fields using standard `pydantic` model syntax.
 
 Example:
